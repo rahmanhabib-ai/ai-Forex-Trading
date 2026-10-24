@@ -1,0 +1,8 @@
+{
+  "name": "Forex AI News V2.2",
+  "description": "Institutional Forex & Gold Macro Trading Terminal with live CPI/NFP analysis, Jerome Powell FOMC tracking, and WhatsApp dispatch",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cm_01",
+    "playbookId": "pb_gold_ny_sweep",
+    "authorId": "usr_trader_01",
+    "authorName": "Karim (Gold Scalper)",
+    "commentText": "ভাই এই নিউইয়র্ক ওপেন সুইপ স্ট্র্যাটেজি দিয়ে আমি গত সপ্তাহে পরপর ৪টা ট্রেড উইন করেছি! বিশেষ করে ৮:৩০ এর নিউজ ক্যান্ডেল শেষ হওয়া পর্যন্ত অপেক্ষা করাটাই আসল ফিল্টার।",
+    "createdAt": "2026-10-21T14:20:00.000Z"
+  },
+  {
+    "id": "cm_02",
+    "playbookId": "pb_gold_ny_sweep",
+    "authorId": "usr_admin_master",
+    "authorName": "Chief Quant Analyst",
+    "commentText": "ধন্যবাদ করিম! এক্সিলেন্ট ডিসিপ্লিন। নিউজ ক্যান্ডেল শেষ হওয়ার আগেই যারা এন্ট্রি নেয় তারাই লিকুইডিটি হয়ে যায়। সবসময় ১৫ মিনিটের ক্যান্ডেল ক্লোজ নিশ্চিত করুন।",
+    "createdAt": "2026-10-21T15:05:00.000Z"
+  },
+  {
+    "id": "cm_03",
+    "playbookId": "pb_london_breakout",
+    "authorId": "usr_trader_02",
+    "authorName": "Tanvir Rahman",
+    "commentText": "লন্ডন ব্রেকআউটে রিটেস্ট কনফার্মেশনের জন্য কোন ক্যান্ডেলস্টিক প্যাটার্ন সবচেয়ে বেশি কাজে দেয়?",
+    "createdAt": "2026-10-22T08:15:00.000Z"
+  },
+  {
+    "id": "cm_1792765498927_6rt3",
+    "playbookId": "pb_gold_ny_sweep",
+    "authorId": "usr_admin_master",
+    "authorName": "Chief Institutional Administrator",
+    "commentText": "This setup aligns with our 15m order flow strategy.",
+    "createdAt": "2026-10-23T14:24:58.927Z"
+  }
+]

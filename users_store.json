@@ -1,0 +1,177 @@
+[
+  {
+    "id": "usr_admin_master",
+    "email": "contact@aibangla.com.bd",
+    "name": "Chief Institutional Administrator",
+    "role": "admin",
+    "passwordSalt": "3975366df32c93cd7486f726d136f57c",
+    "passwordHash": "906d7676a87a545b2060c630dbe200e88f3dbea45d8c2d8cae2ebf9b2fb4195a6d0f1f5b9161ac82356ee308154ea1570ad586500caa1a3d7b97e2c059c09bd0",
+    "whatsappPhone": "8801819123456",
+    "isPhoneVerified": true,
+    "createdAt": "2026-10-17T09:41:23.977Z",
+    "lastLoginAt": "2026-10-17T10:05:58.975Z",
+    "aiConfig": {
+      "hasApiKey": false,
+      "encryptedApiKey": "",
+      "apiKeyIv": "",
+      "apiKeyTag": "",
+      "maskedApiKey": "",
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-r1",
+      "dailyBudgetUsd": 25,
+      "monthlyBudgetUsd": 250,
+      "currentDaySpendUsd": 0,
+      "currentMonthSpendUsd": 0,
+      "lastSpendResetDate": "2026-10-17"
+    },
+    "subscriptions": {
+      "isEnabled": true,
+      "autoAiForecast": true,
+      "impactFilter": [
+        "High",
+        "Medium"
+      ],
+      "currencies": [
+        "USD",
+        "EUR",
+        "GBP",
+        "JPY",
+        "CAD",
+        "AUD",
+        "CHF",
+        "NZD"
+      ],
+      "offsets": [
+        15,
+        8,
+        5,
+        2
+      ],
+      "enablePostRelease": true
+    },
+    "usageHistory": []
+  },
+  {
+    "id": "usr_demo_user_a",
+    "email": "trader.a@amaderforex.com",
+    "name": "Institutional Trader A (BYOK Enabled)",
+    "role": "user",
+    "passwordSalt": "8b6169d11485aa41f7821e06f5ecb9f7",
+    "passwordHash": "18d6635d28f8e633e026261b9e5b54ba3ea2b758ee8f0cc97b3865c530920337fc0f5ca13ac7342a901454b9561fffebd88c5045a1f0f6d26cd4597b8be91142",
+    "whatsappPhone": "8801711223344",
+    "isPhoneVerified": true,
+    "createdAt": "2026-10-17T09:41:23.986Z",
+    "lastLoginAt": "2026-10-23T16:54:57.289Z",
+    "aiConfig": {
+      "hasApiKey": false,
+      "encryptedApiKey": "",
+      "apiKeyIv": "",
+      "apiKeyTag": "",
+      "maskedApiKey": "",
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-r1",
+      "dailyBudgetUsd": 5,
+      "monthlyBudgetUsd": 50,
+      "currentDaySpendUsd": 0,
+      "currentMonthSpendUsd": 0.00036,
+      "lastSpendResetDate": "2026-10-18"
+    },
+    "subscriptions": {
+      "isEnabled": true,
+      "autoAiForecast": true,
+      "impactFilter": [
+        "High"
+      ],
+      "currencies": [
+        "USD",
+        "EUR",
+        "GBP"
+      ],
+      "offsets": [
+        15,
+        8,
+        5,
+        2
+      ],
+      "enablePostRelease": true
+    },
+    "usageHistory": [
+      {
+        "id": "usg_5aeb942bdddbb12b",
+        "timestamp": "2026-10-17T10:21:37.220Z",
+        "forecastId": "fc_1792232497220",
+        "eventTitle": "Private Macro Event User A",
+        "provider": "deterministic",
+        "model": "institutional-rules-v2.2",
+        "tokensUsed": 0,
+        "estimatedCostUsd": 0,
+        "status": "FAILED"
+      },
+      {
+        "id": "usg_904d8abd3b6a8520",
+        "timestamp": "2026-10-17T10:12:35.760Z",
+        "forecastId": "fc_1792231955760",
+        "eventTitle": "Private Macro Event User A",
+        "provider": "gemini",
+        "model": "gemini-3.8-flash",
+        "tokensUsed": 240,
+        "estimatedCostUsd": 0.00018,
+        "status": "SUCCESS"
+      },
+      {
+        "id": "usg_32c67c994cd705ff",
+        "timestamp": "2026-10-17T10:10:02.179Z",
+        "forecastId": "fc_1792231802179",
+        "eventTitle": "Private Macro Event User A",
+        "provider": "gemini",
+        "model": "gemini-3.8-flash",
+        "tokensUsed": 240,
+        "estimatedCostUsd": 0.00018,
+        "status": "SUCCESS"
+      }
+    ]
+  },
+  {
+    "id": "usr_demo_user_b",
+    "email": "trader.b@amaderforex.com",
+    "name": "Retail Trader B (Free Reminders)",
+    "role": "user",
+    "passwordSalt": "70564bb381e86728afab23384ba57718",
+    "passwordHash": "05497676e65f874713a2bde7ebd7186e759f52a6cc00b6953bdb584973beb72894ac762e5854fdc04ba66b7f6b26e5a0458b29c4cd2a5bf049294580dc82b263",
+    "whatsappPhone": "8801911998877",
+    "isPhoneVerified": true,
+    "createdAt": "2026-10-17T09:41:23.992Z",
+    "lastLoginAt": "2026-10-23T16:54:57.375Z",
+    "aiConfig": {
+      "hasApiKey": false,
+      "encryptedApiKey": "",
+      "apiKeyIv": "",
+      "apiKeyTag": "",
+      "maskedApiKey": "",
+      "provider": "openrouter",
+      "model": "deepseek/deepseek-r1",
+      "dailyBudgetUsd": 0,
+      "monthlyBudgetUsd": 0,
+      "currentDaySpendUsd": 0,
+      "currentMonthSpendUsd": 0,
+      "lastSpendResetDate": "2026-10-17"
+    },
+    "subscriptions": {
+      "isEnabled": true,
+      "autoAiForecast": false,
+      "impactFilter": [
+        "High"
+      ],
+      "currencies": [
+        "USD",
+        "EUR"
+      ],
+      "offsets": [
+        15,
+        2
+      ],
+      "enablePostRelease": false
+    },
+    "usageHistory": []
+  }
+]

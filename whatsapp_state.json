@@ -1,0 +1,9 @@
+{
+  "status": "disconnected",
+  "phone": "",
+  "isConnected": false,
+  "logs": [
+    "Institutional Baileys multi-device gateway operational.",
+    "Awaiting WhatsApp QR pairing from mobile device."
+  ]
+}
