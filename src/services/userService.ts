@@ -53,6 +53,8 @@ export interface UserRecord {
   email: string;
   name: string;
   role: "admin" | "user";
+  package?: string;
+  packageId?: string;
   passwordHash: string;
   passwordSalt: string;
   whatsappPhone: string;
@@ -436,6 +438,8 @@ export function sanitizeUserRecord(user: UserRecord): any {
     email: user.email,
     name: user.name,
     role: user.role,
+    package: user.package || user.packageId || "free_starter",
+    packageId: user.packageId || user.package || "free_starter",
     whatsappPhone: user.whatsappPhone,
     isPhoneVerified: user.isPhoneVerified,
     createdAt: user.createdAt,
@@ -454,6 +458,30 @@ export function sanitizeUserRecord(user: UserRecord): any {
     subscriptions: user.subscriptions || {},
     usageHistoryCount: Array.isArray(user.usageHistory) ? user.usageHistory.length : 0,
   };
+}
+
+export function updateUserRoleAndPackage(
+  userId: string,
+  updates: { role?: "admin" | "user"; package?: string; packageId?: string }
+): UserRecord | null {
+  let user = usersCache.get(userId);
+  if (!user) {
+    const found = Array.from(usersCache.values()).find(
+      (u) => u.id === userId || u.email.toLowerCase() === userId.toLowerCase().trim()
+    );
+    if (found) user = found;
+  }
+  if (!user) return null;
+  if (updates.role) {
+    user.role = updates.role;
+  }
+  if (updates.package || updates.packageId) {
+    const pkg = updates.package || updates.packageId || "free_starter";
+    user.package = pkg;
+    user.packageId = pkg;
+  }
+  saveUsersStore();
+  return user;
 }
 
 // Update User AI Configuration & Key Encryption

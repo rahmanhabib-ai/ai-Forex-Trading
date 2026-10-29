@@ -31,13 +31,20 @@ import {
   sanitizeUserRecord,
   updateUserAiConfig,
   updateUserSubscriptions,
+  updateUserRoleAndPackage,
 } from "./src/services/userService.ts";
+import {
+  getAllPayments,
+  getPaymentsByUserId,
+  submitPayment,
+  updatePaymentStatus,
+} from "./src/services/paymentService.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
@@ -595,6 +602,23 @@ app.post("/api/user/ai-test", async (req: Request, res: Response) => {
   });
 });
 
+// Admin User Management & Package Sync Endpoint
+app.post("/api/admin/users/update", (req: Request, res: Response) => {
+  const { userId, role, package: pkg, packageId } = req.body;
+  if (!userId) {
+    return res.status(400).json({ success: false, error: "userId is required" });
+  }
+  const updated = updateUserRoleAndPackage(userId, {
+    role,
+    package: pkg || packageId,
+    packageId: packageId || pkg,
+  });
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "User not found" });
+  }
+  return res.json({ success: true, user: sanitizeUserRecord(updated) });
+});
+
 // OpenRouter Dynamic Model Catalog & Validation Endpoint
 const OPENROUTER_MODEL_CATALOG = [
   {
@@ -1025,6 +1049,55 @@ app.post("/api/ctrader/mcp/disconnect", (_req: Request, res: Response) => {
   res.json({ success: true });
 });
 
+// -----------------------------------------------------------------------------
+// Multi-Broker Live Bridge Endpoints (Exness, NinjaTrader 8, Vantage Markets)
+// -----------------------------------------------------------------------------
+let brokerWebhookFeed: Record<string, any> = {
+  exness: { isConnected: false, lastSync: null, trades: [], balance: 0, equity: 0 },
+  ninjatrader: { isConnected: false, lastSync: null, trades: [], balance: 0, equity: 0 },
+  vantage: { isConnected: false, lastSync: null, trades: [], balance: 0, equity: 0 },
+};
+
+app.get("/api/broker/status", (req: Request, res: Response) => {
+  const broker = String(req.query.broker || "exness").toLowerCase();
+  res.json({ success: true, broker, data: brokerWebhookFeed[broker] || null });
+});
+
+app.post("/api/broker/webhook", (req: Request, res: Response) => {
+  const broker = String(req.query.broker || req.body.broker || "exness").toLowerCase();
+  const { trades, balance, equity, accountNumber, server } = req.body;
+  if (!brokerWebhookFeed[broker]) {
+    brokerWebhookFeed[broker] = {};
+  }
+  brokerWebhookFeed[broker] = {
+    isConnected: true,
+    lastSync: new Date().toISOString(),
+    accountNumber: accountNumber || "LIVE-SYNC",
+    server: server || "Default",
+    balance: balance ?? 0,
+    equity: equity ?? 0,
+    trades: Array.isArray(trades) ? trades : [],
+  };
+  res.json({
+    success: true,
+    message: `${broker.toUpperCase()} live data stream received successfully!`,
+    receivedCount: Array.isArray(trades) ? trades.length : 0,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.post("/api/broker/ping", (req: Request, res: Response) => {
+  const broker = String(req.body.broker || "exness").toLowerCase();
+  res.json({
+    success: true,
+    broker,
+    ping: "pong",
+    status: "online",
+    webhookUrl: `/api/broker/webhook?broker=${broker}`,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Blockchain Explorer
 app.get("/api/blockchain/wallet-data", (req: Request, res: Response) => {
   res.json({
@@ -1082,8 +1155,12 @@ app.get("/api/user/config", (req: Request, res: Response) => {
 app.post("/api/user/config", (req: Request, res: Response) => {
   const user = getAuthUser(req);
   if (!user) return res.status(401).json({ success: false, error: "Unauthorized" });
+  if (req.body.whatsappPhone !== undefined || req.body.phone !== undefined) {
+    updateUserSubscriptions(user.id, {}, req.body.whatsappPhone || req.body.phone);
+  }
   const updated = updateUserAiConfig(user.id, req.body);
-  res.json({ success: true, user: updated?.user || null });
+  const freshUser = getUserById(user.id);
+  res.json({ success: true, user: freshUser ? sanitizeUserRecord(freshUser) : updated?.user || null });
 });
 
 app.get("/api/user/subscriptions", (req: Request, res: Response) => {
@@ -1095,8 +1172,12 @@ app.get("/api/user/subscriptions", (req: Request, res: Response) => {
 app.post("/api/user/subscriptions", (req: Request, res: Response) => {
   const user = getAuthUser(req);
   if (!user) return res.status(401).json({ success: false, error: "Unauthorized" });
-  const updated = updateUserSubscriptions(user.id, req.body);
-  res.json({ success: true, subscriptions: updated?.user?.subscriptions || null });
+  const updated = updateUserSubscriptions(
+    user.id,
+    req.body,
+    req.body.whatsappPhone !== undefined ? req.body.whatsappPhone : req.body.phone
+  );
+  res.json({ success: true, subscriptions: updated?.user?.subscriptions || null, user: updated?.user || null });
 });
 
 app.get("/api/user/usage", (req: Request, res: Response) => {
@@ -1409,10 +1490,29 @@ app.post("/api/playbook", (req: Request, res: Response) => {
 app.put("/api/playbook/:id", (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
-    const authUser = getAuthUser(req, true);
+    const authUser = getAuthUser(req, false);
+    const queryAuthorId = (req.body?.authorId as string) || (req.headers["x-user-id"] as string);
+    const queryRole = (req.body?.role as string) || (req.headers["x-user-role"] as string);
+
+    let effectiveUserId = queryAuthorId || authUser?.id || "usr_guest";
+    let effectiveRole: string = "user";
+
+    if (authUser?.role === "admin" || effectiveUserId === "usr_admin_master") {
+      effectiveRole = "admin";
+    } else {
+      const dbUser = getUserById(effectiveUserId);
+      if (dbUser?.role === "admin") {
+        effectiveRole = "admin";
+      } else if (queryRole === "admin" && !dbUser) {
+        effectiveRole = "admin";
+      } else if (dbUser?.role) {
+        effectiveRole = dbUser.role;
+      }
+    }
+
     const user = {
-      id: (req.body?.authorId as string) || authUser?.id || "usr_admin_master",
-      role: authUser?.role || "admin",
+      id: effectiveUserId,
+      role: effectiveRole,
     };
     const result = updatePlaybook(id, req.body, user);
     if (!result.success) {
@@ -1427,10 +1527,29 @@ app.put("/api/playbook/:id", (req: Request, res: Response) => {
 app.delete("/api/playbook/:id", (req: Request, res: Response) => {
   try {
     const id = String(req.params.id);
-    const authUser = getAuthUser(req, true);
+    const authUser = getAuthUser(req, false);
+    const queryAuthorId = (req.query.authorId as string) || (req.headers["x-user-id"] as string);
+    const queryRole = (req.query.role as string) || (req.headers["x-user-role"] as string);
+
+    let effectiveUserId = queryAuthorId || authUser?.id || "usr_guest";
+    let effectiveRole: string = "user";
+
+    if (authUser?.role === "admin" || effectiveUserId === "usr_admin_master") {
+      effectiveRole = "admin";
+    } else {
+      const dbUser = getUserById(effectiveUserId);
+      if (dbUser?.role === "admin") {
+        effectiveRole = "admin";
+      } else if (queryRole === "admin" && !dbUser) {
+        effectiveRole = "admin";
+      } else if (dbUser?.role) {
+        effectiveRole = dbUser.role;
+      }
+    }
+
     const user = {
-      id: (req.query.authorId as string) || authUser?.id || "usr_admin_master",
-      role: authUser?.role || "admin",
+      id: effectiveUserId,
+      role: effectiveRole,
     };
     const result = deletePlaybook(id, user);
     if (!result.success) {
@@ -1496,6 +1615,76 @@ app.post("/api/playbook/upload", (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(400).json({ success: false, error: err.message });
   }
+});
+
+// -----------------------------------------------------------------------------
+// Payment Gateway & Subscription Package Endpoints
+// (Binance Pay, Bybit Pay, and Offline bKash/Nagad/Bank Transfer)
+// -----------------------------------------------------------------------------
+app.get("/api/payments", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  if (authUser && authUser.role === "admin") {
+    return res.json({ success: true, payments: getAllPayments() });
+  }
+  const userId = authUser?.id || (req.query.userId as string) || "usr_trader_guest";
+  res.json({ success: true, payments: getPaymentsByUserId(userId) });
+});
+
+app.post("/api/payments/submit", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const {
+    packageId,
+    packageName,
+    amountUsd,
+    method,
+    senderAccount,
+    transactionId,
+    notes,
+  } = req.body;
+
+  if (!transactionId) {
+    return res.status(400).json({
+      success: false,
+      error: "Transaction ID (TxID) আবশ্যক (Transaction ID is required).",
+    });
+  }
+
+  const selectedMethod: "binance" | "bybit" = method === "bybit" ? "bybit" : "binance";
+
+  const record = submitPayment({
+    userId: authUser?.id || "usr_trader_guest",
+    userName: authUser?.name || "Community Trader",
+    userPhone: authUser?.whatsappPhone || "",
+    packageId: packageId || "standard",
+    packageName: packageName || "স্ট্যান্ডার্ড ট্রেডার ($29/মাস)",
+    amountUsd: Number(amountUsd) || 29,
+    method: selectedMethod,
+    senderAccount: senderAccount || "",
+    transactionId: String(transactionId).trim(),
+    notes: notes || "",
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "ক্রিপ্টো পেমেন্ট প্রমাণ সফলভাবে জমা হয়েছে। পর্যালোচনার পর অনুমোদন করা হবে। (Crypto payment submitted successfully!)",
+    payment: record,
+  });
+});
+
+app.post("/api/payments/status", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { id, status } = req.body;
+  if (!id || (status !== "APPROVED" && status !== "REJECTED")) {
+    return res.status(400).json({ success: false, error: "Invalid payment ID or status." });
+  }
+  const updated = updatePaymentStatus(id, status);
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "Payment record not found." });
+  }
+  res.json({ success: true, payment: updated });
 });
 
 // -----------------------------------------------------------------------------
