@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.production
+.secrets
+
+# Temporary WhatsApp & Baileys Session Auth
+baileys_auth_info
+whatsapp_auth
+whatsapp_state.json
+
+# Build outputs & caches
+dist
+build
+.cache
+.aistudio
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
