@@ -1859,7 +1859,7 @@ function startRealMarketPolling(onTick) {
 var __filename = fileURLToPath(import.meta.url);
 var __dirname = path5.dirname(__filename);
 var app = express();
-var PORT = Number(process.env.PORT) || 3e3;
+var PORT = process.env.PORT || 3e3;
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use("/assets", express.static(path5.join(__dirname, "assets")));
@@ -3292,6 +3292,6 @@ app.use((req, res) => {
   }
   res.sendFile(path5.join(__dirname, "index.html"));
 });
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`[Forex AI News V2.2] Server active and listening on http://0.0.0.0:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`[Forex AI News V2.2] Server active and listening on ${PORT}`);
 });
