@@ -1,0 +1,136 @@
+[
+  {
+    "id": "free_starter",
+    "nameBn": "৭ দিন ফ্রি ট্রায়াল (Free Starter)",
+    "nameEn": "7-Day Free Trial (Starter)",
+    "priceUsd": 0,
+    "originalPriceUsd": 0,
+    "discountBadge": "নতুন ট্রেডারদের জন্য",
+    "periodBn": "৭ দিন সম্পূর্ণ ফ্রি",
+    "periodEn": "7 Days Free Trial",
+    "tagBn": "নতুনদের জন্য",
+    "tagEn": "Starter Trial",
+    "color": "emerald",
+    "descBn": "ফরেক্স এআই প্ল্যাটফর্ম পরখ করে দেখতে নতুন ট্রেডারদের জন্য বিশেষ ৭ দিনের ফ্রি ট্রায়াল।",
+    "descEn": "Experience institutional pre-market alerts completely free for your first 7 days.",
+    "features": [
+      "প্রতিদিনের হাই-ইমপ্যাক্ট ফরেক্স নিউজ অ্যালার্ট",
+      "বেসিক সেন্ট্রাল এআই ম্যাক্রো সেন্টিমেন্ট ওভারভিউ",
+      "হোয়াটসঅ্যাপ টেস্ট ভেরিফিকেশন ও সংযোগ",
+      "লাইভ ইকোনমিক ক্যালেন্ডার ও টাইমলাইন",
+      "কোনো পেমেন্ট ছাড়াই ইনস্ট্যান্ট অ্যাক্টিভেশন"
+    ],
+    "limitations": {
+      "dailyNotesLimit": 3,
+      "playbookStrategiesLimit": 2,
+      "aiForecastsLimit": 5,
+      "socialMediaAutoPost": false
+    },
+    "isActive": true,
+    "isTestingMode": false,
+    "testingNotice": "",
+    "isFree": true
+  },
+  {
+    "id": "standard",
+    "nameBn": "স্ট্যান্ডার্ড ট্রেডার (Standard Trader)",
+    "nameEn": "Standard Trader (Monthly)",
+    "priceUsd": 29,
+    "originalPriceUsd": 49,
+    "discountBadge": "🔥 ৪০% স্পেশাল অফার",
+    "offerEndsAt": "2026-11-07T09:32:39.323Z",
+    "periodBn": "প্রতি মাসে (29 USDT / Month)",
+    "periodEn": "29 USDT / Month",
+    "tagBn": "🔥 সর্বাধিক জনপ্রিয়",
+    "tagEn": "🔥 Most Popular",
+    "color": "indigo",
+    "descBn": "নিয়মিত ডে ও সুইং ট্রেডারদের জন্য আদর্শ প্রি-মার্কেট প্রেডিকশন ও ডিরেকশনাল সেন্টিমেন্ট।",
+    "descEn": "Essential pre-market directional bias & fast WhatsApp delivery for active traders.",
+    "features": [
+      "৫-১০ মিনিট পূর্বে সরাসরি হোয়াটসঅ্যাপে নোটিফিকেশন",
+      "মেজর পেয়ার্স: EUR/USD, GBP/USD, USD/JPY ও Gold (XAU)",
+      "CPI, NFP, PPI ও FOMC প্রি-মার্কেট এআই প্রেডিকশন",
+      "সেন্ট্রাল এআই ডিরেকশনাল বাই/সেল সেন্টিমেন্ট সংকেত",
+      "আনলিমিটেড ট্রেডিং ডায়েরি ও সাইকোলজি নোটস",
+      "আনলিমিটেড ট্রেডিং প্লেবুক ও চার্ট আপলোড",
+      "১-ক্লিক সোশ্যাল মিডিয়া অটো-পোস্টিং (আসন্ন / Roadmap)"
+    ],
+    "limitations": {
+      "dailyNotesLimit": -1,
+      "playbookStrategiesLimit": -1,
+      "aiForecastsLimit": -1,
+      "socialMediaAutoPost": true
+    },
+    "isActive": true,
+    "isTestingMode": false,
+    "testingNotice": "",
+    "isPopular": true
+  },
+  {
+    "id": "vip_pro",
+    "nameBn": "ভিআইপি ইনস্টিটিউশনাল প্রো (VIP Pro)",
+    "nameEn": "VIP Institutional Pro (Quarterly)",
+    "priceUsd": 79,
+    "originalPriceUsd": 119,
+    "discountBadge": "👑 সেরা ভ্যালু অফার",
+    "offerEndsAt": "2026-11-14T09:32:39.323Z",
+    "periodBn": "৩ মাসের অ্যাক্সেস (79 USDT / 3 Months)",
+    "periodEn": "79 USDT / 3 Months (Save 35%)",
+    "tagBn": "👑 সেরা পছন্দ (VIP Value)",
+    "tagEn": "👑 Best Value (VIP Value)",
+    "color": "purple",
+    "descBn": "প্রো ও ফান্ডেড ট্রেডারদের জন্য ডাবল-অ্যালার্ট ও বিস্তারিত ডেভিয়েশন রেঞ্জ সহ কমপ্লিট স্যুট।",
+    "descEn": "Complete suite for prop & pro traders with double alert mechanism & deviation guidance.",
+    "features": [
+      "সকল ফরেক্স পেয়ার, গোল্ড ও ক্রিপ্টো ম্যাক্রো কাভারেজ",
+      "ডবল অ্যালার্ট সিস্টেম (১০ মি. আগে প্রাথমিক + ২ মি. আগে ফাইনাল রিভাইসড)",
+      "বিস্তারিত ডেভিয়েশন রেঞ্জ ও সেফ লট সাইজ গাইডলাইন",
+      "আনলিমিটেড ট্রেডিং প্লেবুক ও স্ট্র্যাটেজি জার্নাল অ্যাক্সেস",
+      "২৪/৭ প্রায়োরিটি ভিআইপি হোয়াটসঅ্যাপ সাপোর্ট",
+      "লাইভ টিভি (Bloomberg & CNBC) ও চার্ট ডেস্ক",
+      "১-ক্লিক মাল্টি-সোশ্যাল মিডিয়া অটো-পোস্ট ইঞ্জিন (শীঘ্রই আসছে)"
+    ],
+    "limitations": {
+      "dailyNotesLimit": -1,
+      "playbookStrategiesLimit": -1,
+      "aiForecastsLimit": -1,
+      "socialMediaAutoPost": true
+    },
+    "isActive": true,
+    "isTestingMode": false,
+    "testingNotice": ""
+  },
+  {
+    "id": "lifetime_alpha",
+    "nameBn": "লাইফটাইম আলফা ভিআইপি (Lifetime VIP)",
+    "nameEn": "Lifetime Alpha VIP (One-Time)",
+    "priceUsd": 199,
+    "originalPriceUsd": 399,
+    "discountBadge": "💎 ৫০% লিমিটেড লাইফটাইম ছাড়",
+    "offerEndsAt": "2026-11-30T09:32:39.323Z",
+    "periodBn": "এককালীন লাইফটাইম (199 USDT One-Time)",
+    "periodEn": "199 USDT Lifetime Access",
+    "tagBn": "💎 আজীবন লাইফটাইম",
+    "tagEn": "💎 Lifetime Access",
+    "color": "amber",
+    "descBn": "একবার ফি পরিশোধ করে আজীবন ফরেক্স এআই নিউজ, সিগন্যাল ও ভবিষ্যৎ সকল ফিচার উপভোগ করুন।",
+    "descEn": "Pay once and unlock all current and future Forex AI news, signals & algorithms forever.",
+    "features": [
+      "আজীবন আনলিমিটেড ফরেক্স এআই নিউজ ও প্রেডিকশন অ্যালার্ট",
+      "ভবিষ্যতের সকল এআই মডেল ও সোশ্যাল অটো-পোস্টিং ফ্রি লাইফটাইম অ্যাক্সেস",
+      "গোল্ড (XAU/USD) ও বিটকয়েন (BTC) প্রায়োরিটি ব্রেকডাউন",
+      "ইনস্টিটিউশনাল অর্ডারবুক ও সেন্ট্রাল ব্যাংক ডেভিয়েশন টেবিল",
+      "প্রাইভেট ডিরেক্ট হোয়াটসঅ্যাপ লাইন ও ওয়ান-অন-ওয়ান কনসালটেশন",
+      "কোনো মাসিক রিনিউয়াল বা অতিরিক্ত চার্জ নেই"
+    ],
+    "limitations": {
+      "dailyNotesLimit": -1,
+      "playbookStrategiesLimit": -1,
+      "aiForecastsLimit": -1,
+      "socialMediaAutoPost": true
+    },
+    "isActive": true,
+    "isTestingMode": false,
+    "testingNotice": ""
+  }
+]

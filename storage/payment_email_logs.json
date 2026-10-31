@@ -1,0 +1,60 @@
+[
+  {
+    "id": "em_1793439817074_np38",
+    "platform": "binance",
+    "amount": 29,
+    "currency": "USDT",
+    "txId": "TXB1793439817073",
+    "senderInfo": "Verified User",
+    "receivedAt": "2026-10-31T09:43:37.073Z",
+    "subject": "Binance Pay: You have received 29 USDT",
+    "isMatched": false
+  },
+  {
+    "id": "pubsub__test_01",
+    "platform": "binance",
+    "amount": 0,
+    "currency": "USDT",
+    "txId": "PUBSUB-est_01",
+    "senderInfo": "Google Cloud Pub/Sub Push (m.rahmanhabib.my@gmail.com)",
+    "receivedAt": "2026-10-31T09:40:00.000Z",
+    "subject": "⚡ Google Cloud Pub/Sub Real-Time Push Signal (History ID: 123456789)",
+    "isMatched": false
+  },
+  {
+    "id": "em_1793436442196_iwqf",
+    "platform": "binance",
+    "amount": 29,
+    "currency": "USDT",
+    "txId": "TXB_USER_HABIB_TEST_01",
+    "senderInfo": "Verified User",
+    "receivedAt": "2026-10-31T08:47:22.196Z",
+    "subject": "Binance Pay: You have received 29.00 USDT from 94810239",
+    "isMatched": true,
+    "matchedPaymentId": "pay_1793436421194_lxae"
+  },
+  {
+    "id": "em_1793434454741_cxi0",
+    "platform": "binance",
+    "amount": 29,
+    "currency": "USDT",
+    "txId": "TXB_AUTO_TEST_101",
+    "senderInfo": "Verified User",
+    "receivedAt": "2026-10-31T08:14:14.741Z",
+    "subject": "Binance Pay: You have received 29.00 USDT from 94810239",
+    "isMatched": true,
+    "matchedPaymentId": "pay_1793434443659_i120"
+  },
+  {
+    "id": "em_log_001",
+    "platform": "binance",
+    "amount": 29,
+    "currency": "USDT",
+    "txId": "TXB89102934812",
+    "senderInfo": "Standard Trader (Pay ID: 94810239)",
+    "receivedAt": "2026-10-23T12:30:20.000Z",
+    "subject": "Binance Pay: You have received 29.00 USDT from 94810239",
+    "isMatched": true,
+    "matchedPaymentId": "pay_sample_01"
+  }
+]

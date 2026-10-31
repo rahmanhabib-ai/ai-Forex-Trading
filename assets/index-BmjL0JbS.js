@@ -11504,7 +11504,7 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */const CWe=300,NWe=Qse("authIdTokenMaxAge")||CWe;let qee=null;const _We=t=>async e=>{const n=e&&await e.getIdTokenResult(),a=n&&(new Date().getTime()-Date.parse(n.issuedAtTime))/1e3;if(a&&a>NWe)return;const s=n==null?void 0:n.token;qee!==s&&(qee=s,await fetch(t,{method:s?"POST":"DELETE",headers:s?{Authorization:`Bearer ${s}`}:{}}))};function jWe(t=iG()){const e=sG(t,"auth");if(e.isInitialized())return e.getImmediate();const n=sGe(t,{popupRedirectResolver:BWe,persistence:[AGe,bGe,Sle]}),a=Qse("authTokenSyncURL");if(a&&typeof isSecureContext=="boolean"&&isSecureContext){const i=new URL(a,location.origin);if(location.origin===i.origin){const l=_We(i.toString());mGe(n,l,()=>l(n.currentUser)),fGe(n,d=>l(d))}}const s=Jse("auth");return s&&oGe(n,`http://${s}`),n}function MWe(){var t;return((t=document.getElementsByTagName("head"))==null?void 0:t[0])??document}tGe({loadJS(t){return new Promise((e,n)=>{const a=document.createElement("script");a.setAttribute("src",t),a.onload=e,a.onerror=s=>{const i=qo("internal-error");i.customData=s,n(i)},a.type="text/javascript",a.charset="UTF-8",MWe().appendChild(a)})},gapiScript:"https://apis.google.com/js/api.js",recaptchaV2Script:"https://www.google.com/recaptcha/api.js",recaptchaEnterpriseScript:"https://www.google.com/recaptcha/enterprise.js?render="});wWe("Browser");const SWe="gen-lang-client-0333851311",EWe="1:603195073001:web:924fa1b7db8675e366ab78",AWe="AIzaSyBXEjvLUMfQ7ytwTiHCmRCYPhQW9bqZhyc",IWe="gen-lang-client-0333851311.firebaseapp.com",DWe="ai-studio-forexnews-29651eae-b69d-47db-aaf8-9a6fbc23d9d6",LWe="gen-lang-client-0333851311.firebasestorage.app",TWe="603195073001",PWe="",OWe="603195073001-fp2dqmd1emr32c0ld4ljd705hs69pdej.apps.googleusercontent.com",RWe="",bR={projectId:SWe,appId:EWe,apiKey:AWe,authDomain:IWe,firestoreDatabaseId:DWe,storageBucket:LWe,messagingSenderId:TWe,measurementId:PWe,oAuthClientId:OWe,recaptchaSiteKey:RWe},tq=W$e().length?iG():nie(bR),Mn=bR.firestoreDatabaseId&&bR.firestoreDatabaseId!=="(default)"?Nee(tq,bR.firestoreDatabaseId):Nee(tq),Gee=jWe(tq);async function $We(){try{await _qe(Gn(Mn,"test","connection")),console.log("[Firestore] Database connected successfully.")}catch(t){t instanceof Error&&t.message.includes("the client is offline")?console.warn("[Firestore] The client is offline or network is limited."):console.log("[Firestore] Initialization complete.")}}$We();const Wee=[{id:"trading_section",enLabel:"Trading",bnLabel:"ট্রেডিং",iconName:"TrendingUp",color:"purple",isLocked:!1,roles:["user","admin"],children:[{id:"journal",enLabel:"Journal",bnLabel:"জার্নাল",iconName:"BookOpen",isLocked:!1,roles:["user","admin"],widgetType:"journal"},{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"forex_ai_news"},{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",iconName:"Cpu",isLocked:!1,roles:["user","admin"],widgetType:"ai_news_whatsapp"},{id:"packages",enLabel:"Packages & Plans",bnLabel:"প্যাকেজ ও প্ল্যান",iconName:"Coins",isLocked:!1,roles:["user","admin"],widgetType:"packages"},{id:"payment_gateway",enLabel:"Payment Gateway",bnLabel:"পেমেন্ট গেটওয়ে",iconName:"Wallet",isLocked:!1,roles:["user","admin"],widgetType:"payment_gateway"},{id:"pnl",enLabel:"PnL Analytics",bnLabel:"পিএনএল ও ট্রেড লগ",iconName:"CircleDollarSign",isLocked:!1,roles:["user","admin"],widgetType:"pnl"},{id:"wallet",enLabel:"Blockchain Wallet",bnLabel:"মাল্টি-চেইন ওয়ালেট",iconName:"Wallet",isLocked:!1,roles:["user","admin"],widgetType:"wallet"},{id:"excalidraw",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",iconName:"PenTool",isLocked:!1,roles:["user","admin"],widgetType:"drawing"},{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"capital_growth"}]},{id:"admin_dashboard_section",enLabel:"Admin Panel",bnLabel:"অ্যাডমিন প্যানেল",iconName:"Shield",color:"emerald",isLocked:!1,roles:["admin"],children:[{id:"sidebar_pages",enLabel:"SideBar & Pages",bnLabel:"সাইডবার ও পেজ",iconName:"AppWindow",isLocked:!1,roles:["admin"]},{id:"brand_engine",enLabel:"Brand UI Engine",bnLabel:"ব্র্যান্ড ইউআই ইঞ্জিন",iconName:"Palette",isLocked:!1,roles:["admin"]},{id:"live_tv",enLabel:"Live TV Desk",bnLabel:"লাইভ টিভি",iconName:"Tv",isLocked:!1,roles:["user","admin"],widgetType:"live_tv"},{id:"whatsapp_gateway",enLabel:"WhatsApp Gateway",bnLabel:"হোয়াটসঅ্যাপ গেটওয়ে",iconName:"MessageSquare",isLocked:!1,roles:["user","admin"],widgetType:"whatsapp_gateway"},{id:"homepage",enLabel:"Homepage",bnLabel:"হোমপেজ",iconName:"Home",isLocked:!1,roles:["user","admin"]},{id:"google_analytics",enLabel:"Google Analytics",bnLabel:"অ্যানালিটিক্স",iconName:"LineChart",isLocked:!1,roles:["user","admin"]},{id:"role_user",enLabel:"ROLE USER",bnLabel:"রোল ও ইউজার",iconName:"Users",isLocked:!1,roles:["admin"]}]}],Rle=b.createContext(void 0),
+ */const CWe=300,NWe=Qse("authIdTokenMaxAge")||CWe;let qee=null;const _We=t=>async e=>{const n=e&&await e.getIdTokenResult(),a=n&&(new Date().getTime()-Date.parse(n.issuedAtTime))/1e3;if(a&&a>NWe)return;const s=n==null?void 0:n.token;qee!==s&&(qee=s,await fetch(t,{method:s?"POST":"DELETE",headers:s?{Authorization:`Bearer ${s}`}:{}}))};function jWe(t=iG()){const e=sG(t,"auth");if(e.isInitialized())return e.getImmediate();const n=sGe(t,{popupRedirectResolver:BWe,persistence:[AGe,bGe,Sle]}),a=Qse("authTokenSyncURL");if(a&&typeof isSecureContext=="boolean"&&isSecureContext){const i=new URL(a,location.origin);if(location.origin===i.origin){const l=_We(i.toString());mGe(n,l,()=>l(n.currentUser)),fGe(n,d=>l(d))}}const s=Jse("auth");return s&&oGe(n,`http://${s}`),n}function MWe(){var t;return((t=document.getElementsByTagName("head"))==null?void 0:t[0])??document}tGe({loadJS(t){return new Promise((e,n)=>{const a=document.createElement("script");a.setAttribute("src",t),a.onload=e,a.onerror=s=>{const i=qo("internal-error");i.customData=s,n(i)},a.type="text/javascript",a.charset="UTF-8",MWe().appendChild(a)})},gapiScript:"https://apis.google.com/js/api.js",recaptchaV2Script:"https://www.google.com/recaptcha/api.js",recaptchaEnterpriseScript:"https://www.google.com/recaptcha/enterprise.js?render="});wWe("Browser");const SWe="gen-lang-client-0333851311",EWe="1:603195073001:web:924fa1b7db8675e366ab78",AWe="AIzaSyBXEjvLUMfQ7ytwTiHCmRCYPhQW9bqZhyc",IWe="gen-lang-client-0333851311.firebaseapp.com",DWe="ai-studio-forexnews-29651eae-b69d-47db-aaf8-9a6fbc23d9d6",LWe="gen-lang-client-0333851311.firebasestorage.app",TWe="603195073001",PWe="",OWe="603195073001-fp2dqmd1emr32c0ld4ljd705hs69pdej.apps.googleusercontent.com",RWe="",bR={projectId:SWe,appId:EWe,apiKey:AWe,authDomain:IWe,firestoreDatabaseId:DWe,storageBucket:LWe,messagingSenderId:TWe,measurementId:PWe,oAuthClientId:OWe,recaptchaSiteKey:RWe},tq=W$e().length?iG():nie(bR),Mn=bR.firestoreDatabaseId&&bR.firestoreDatabaseId!=="(default)"?Nee(tq,bR.firestoreDatabaseId):Nee(tq),Gee=jWe(tq);async function $We(){try{await _qe(Gn(Mn,"test","connection")),console.log("[Firestore] Database connected successfully.")}catch(t){t instanceof Error&&t.message.includes("the client is offline")?console.warn("[Firestore] The client is offline or network is limited."):console.log("[Firestore] Initialization complete.")}}$We();const Wee=[{id:"trading_section",enLabel:"Trading",bnLabel:"ট্রেডিং",iconName:"TrendingUp",color:"purple",isLocked:!1,roles:["user","admin"],children:[{id:"journal",enLabel:"Journal",bnLabel:"জার্নাল",iconName:"BookOpen",isLocked:!1,roles:["user","admin"],widgetType:"journal"},{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"forex_ai_news"},{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",iconName:"Cpu",isLocked:!1,roles:["user","admin"],widgetType:"ai_news_whatsapp"},{id:"packages",enLabel:"Packages & Plans",bnLabel:"প্যাকেজ ও প্ল্যান",iconName:"Coins",isLocked:!1,roles:["user","admin"],widgetType:"packages"},{id:"payment_gateway",enLabel:"Payment Gateway",bnLabel:"পেমেন্ট গেটওয়ে",iconName:"Wallet",isLocked:!1,roles:["user","admin"],widgetType:"payment_gateway"},{id:"pnl",enLabel:"PnL Analytics",bnLabel:"পিএনএল ও ট্রেড লগ",iconName:"CircleDollarSign",isLocked:!1,roles:["user","admin"],widgetType:"pnl"},{id:"wallet",enLabel:"Blockchain Wallet",bnLabel:"মাল্টি-চেইন ওয়ালেট",iconName:"Wallet",isLocked:!1,roles:["user","admin"],widgetType:"wallet"},{id:"excalidraw",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",iconName:"PenTool",isLocked:!1,roles:["user","admin"],widgetType:"drawing"},{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"capital_growth"},{id:"trading_notes",enLabel:"Trader's Diary & Notes",bnLabel:"ট্রেডার্স ডায়েরি ও সাইকোলজি নোট",iconName:"Notebook",isLocked:!1,roles:["user","admin"],widgetType:"trading_notes"}]},{id:"admin_dashboard_section",enLabel:"Admin Panel",bnLabel:"অ্যাডমিন প্যানেল",iconName:"Shield",color:"emerald",isLocked:!1,roles:["admin"],children:[{id:"sidebar_pages",enLabel:"SideBar & Pages",bnLabel:"সাইডবার ও পেজ",iconName:"AppWindow",isLocked:!1,roles:["admin"]},{id:"brand_engine",enLabel:"Brand UI Engine",bnLabel:"ব্র্যান্ড ইউআই ইঞ্জিন",iconName:"Palette",isLocked:!1,roles:["admin"]},{id:"live_tv",enLabel:"Live TV Desk",bnLabel:"লাইভ টিভি",iconName:"Tv",isLocked:!1,roles:["user","admin"],widgetType:"live_tv"},{id:"whatsapp_gateway",enLabel:"WhatsApp Gateway",bnLabel:"হোয়াটসঅ্যাপ গেটওয়ে",iconName:"MessageSquare",isLocked:!1,roles:["user","admin"],widgetType:"whatsapp_gateway"},{id:"homepage",enLabel:"Homepage",bnLabel:"হোমপেজ",iconName:"Home",isLocked:!1,roles:["user","admin"]},{id:"google_analytics",enLabel:"Google Analytics",bnLabel:"অ্যানালিটিক্স",iconName:"LineChart",isLocked:!1,roles:["user","admin"]},{id:"role_user",enLabel:"ROLE USER",bnLabel:"রোল ও ইউজার",iconName:"Users",isLocked:!1,roles:["admin"]}]}],Rle=b.createContext(void 0),
 ensureAllSections=(list)=>{
   if(!Array.isArray(list))return Wee;
   try{
@@ -11521,6 +11521,7 @@ ensureAllSections=(list)=>{
       if(!tr.children.some(c=>c.id==="capital_growth"||c.widgetType==="capital_growth"||(c.enLabel&&c.enLabel.toLowerCase().includes("capital"))||(c.bnLabel&&(c.bnLabel.includes("ক্যাপিটাল")||c.bnLabel.includes("গ্রোথ")||c.bnLabel.includes("গ্রুপ"))))){
         tr.children.push({id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"capital_growth"});
       }
+      if(!tr.children.some(c=>c.id==="trading_notes"||c.widgetType==="trading_notes")){ tr.children.push({id:"trading_notes",enLabel:"Trader's Diary & Notes",bnLabel:"ট্রেডার্স ডায়েরি ও সাইকোলজি নোট",iconName:"Notebook",isLocked:!1,roles:["user","admin"],widgetType:"trading_notes"}); }
     }
     // Check admin section
     let ad=cloned.find(s=>s.id==="admin_dashboard_section"||(s.enLabel&&s.enLabel.toLowerCase().includes("admin")));
@@ -11531,14 +11532,21 @@ ensureAllSections=(list)=>{
       if(!ad.children.some(c=>c.id==="payment_gateway")){
         ad.children.push({id:"payment_gateway",enLabel:"Payment Gateway",bnLabel:"পেমেন্ট গেটওয়ে",iconName:"Wallet",isLocked:!1,roles:["admin"],widgetType:"payment_gateway"});
       }
-      if(!ad.children.some(c=>c.id==="capital_growth"||c.widgetType==="capital_growth"||(c.enLabel&&c.enLabel.toLowerCase().includes("capital"))||(c.bnLabel&&(c.bnLabel.includes("ক্যাপিটাল")||c.bnLabel.includes("গ্রোথ")||c.bnLabel.includes("গ্রুপ"))))){
-        ad.children.push({id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",iconName:"TrendingUp",isLocked:!1,roles:["user","admin"],widgetType:"capital_growth"});
-      }
+      // Remove & hide Capital Growth from Admin section (belongs only in Trading section)
+      ad.children = ad.children.filter(c => c.id !== "capital_growth" && c.widgetType !== "capital_growth" && !(c.enLabel && c.enLabel.toLowerCase().includes("capital")) && !(c.bnLabel && (c.bnLabel.includes("ক্যাপিটাল") || c.bnLabel.includes("গ্রোথ"))));
     }
-    // Ensure all Capital Growth pages in any section are unlocked and visible to both user and admin
+    // Remove Capital Growth from any admin sections in cloned list and ensure unlocked in trading
+    cloned.forEach(sec => {
+      if (sec.id === "admin_dashboard_section" || (sec.enLabel && sec.enLabel.toLowerCase().includes("admin"))) {
+        if (Array.isArray(sec.children)) {
+          sec.children = sec.children.filter(c => c.id !== "capital_growth" && c.widgetType !== "capital_growth" && !(c.enLabel && c.enLabel.toLowerCase().includes("capital")) && !(c.bnLabel && (c.bnLabel.includes("ক্যাপিটাল") || c.bnLabel.includes("গ্রোথ"))));
+        }
+      }
+    });
     cloned.forEach(sec=>{
       if(Array.isArray(sec.children)){
         sec.children.forEach(c=>{
+          if(c.id==="trading_notes"||c.widgetType==="trading_notes"){ c.roles=["user","admin"]; c.isLocked=!1; c.widgetType="trading_notes"; }
           if(c.id==="capital_growth"||c.widgetType==="capital_growth"||(c.enLabel&&(c.enLabel.toLowerCase().includes("capital")||c.enLabel.toLowerCase().includes("growth")))||(c.bnLabel&&(c.bnLabel.includes("ক্যাপিটাল")||c.bnLabel.includes("গ্রোথ")||c.bnLabel.includes("গ্রুপ")))){
             c.roles=["user","admin"];
             c.isLocked=!1;
@@ -13923,584 +13931,3734 @@ const rpt={url:"https://mcp.ctrader.com/trading/mcp",bearerToken:"",accountNumbe
   });
 }
 function kpt({portalType:t,page:ct,section:et}){const{currentUser:e,language:n}=Xo(),{brandConfig:a}=Bf(),s=(bn,en)=>n==="bn"?bn:en,phoneStorageKey=`user_whatsapp_number_${(e==null?void 0:e.uid)||"guest"}`,logsStorageKey=`user_whatsapp_logs_${(e==null?void 0:e.uid)||"guest"}`,[phone,setPhone]=b.useState(()=>{try{return(e?.whatsappPhone)||localStorage.getItem(phoneStorageKey)||""}catch{return(e?.whatsappPhone)||""}}),[isAlertActive,setIsAlertActive]=b.useState(!0),[isSaving,setIsSaving]=b.useState(!1),[saveSuccess,setSaveSuccess]=b.useState(!1),[isTesting,setIsTesting]=b.useState(!1),[testResult,setTestResult]=b.useState(null),[logs,setLogs]=b.useState(()=>{try{const saved=localStorage.getItem(logsStorageKey);if(saved)return JSON.parse(saved)}catch{}return[{id:"alert_sys_01",time:"18:22:15",date:"2026-10-24",event:"US Core CPI Inflation (MoM)",phone:(e?.whatsappPhone)||"+8801712000000",sentiment:"BEARISH (EUR/USD) • BUY USD",status:"DELIVERED",type:"Pre-News Alert (8m before)"},{id:"alert_sys_02",time:"14:20:00",date:"2026-10-23",event:"US Non-Farm Payrolls (NFP)",phone:(e?.whatsappPhone)||"+8801712000000",sentiment:"BULLISH (Gold XAU/USD)",status:"DELIVERED",type:"Pre-News Alert (10m before)"}]});b.useEffect(()=>{let isMounted=!0;fetch("/api/user/config").then(res=>res.json()).then(data=>{if(!isMounted)return;if(data?.user?.whatsappPhone){setPhone(data.user.whatsappPhone);try{localStorage.setItem(phoneStorageKey,data.user.whatsappPhone)}catch{}}if(data?.user?.subscriptions?.isEnabled!==undefined){setIsAlertActive(data.user.subscriptions.isEnabled)}}).catch(()=>{});return()=>{isMounted=!1}},[e?.uid]);const handleSavePhone=async ev=>{if(ev)ev.preventDefault();const cleanPhone=phone.trim();if(!cleanPhone){alert(s("অনুগ্রহ করে একটি সঠিক মোবাইল নম্বর লিখুন।","Please enter a valid mobile number."));return}setIsSaving(!0);setSaveSuccess(!1);try{await fetch("/api/user/subscriptions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({whatsappPhone:cleanPhone,isEnabled:isAlertActive})});await fetch("/api/user/config",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({whatsappPhone:cleanPhone})});try{localStorage.setItem(phoneStorageKey,cleanPhone)}catch{}setSaveSuccess(!0);setTimeout(()=>setSaveSuccess(!1),3500)}catch(err){console.error("Save phone error",err)}finally{setIsSaving(!1)}};const handleSendTest=async()=>{const cleanPhone=phone.trim();if(!cleanPhone){alert(s("প্রথমে আপনার হোয়াটসঅ্যাপ নম্বরটি লিখুন ও সংরক্ষণ করুন।","Please enter and save your WhatsApp phone number first."));return}setIsTesting(!0);setTestResult(null);try{const res=await fetch("/api/whatsapp/send",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone:cleanPhone,message:`🔔 [Forex AI News] টেস্ট অ্যালার্ট ভেরিফিকেশন সফল! আপনার হোয়াটসঅ্যাপ নম্বর (${cleanPhone}) সক্রিয় করা হয়েছে। এডমিন সেন্ট্রাল এআই ইঞ্জিন থেকে নিউজের ৫-১০ মিনিট আগে সরাসরি বার্তা পৌঁছাবে।`})});const data=await res.json();if(data.success){setTestResult({success:!0,message:s("হোয়াটসঅ্যাপে সফলভাবে টেস্ট নোটিফিকেশন পাঠানো হয়েছে!","Test notification dispatched to WhatsApp successfully!"),messageId:data.messageId||`msg_${Date.now()}`});const newLog={id:data.messageId||`msg_${Date.now()}`,time:new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"}),date:new Date().toLocaleDateString(),event:s("টেস্ট নোটিফিকেশন চেক","Live Alert Test Verification"),phone:cleanPhone,sentiment:"SYSTEM VERIFIED",status:"DELIVERED",type:"Manual Test Alert"};setLogs(prev=>{const updated=[newLog,...prev.slice(0,19)];try{localStorage.setItem(logsStorageKey,JSON.stringify(updated))}catch{}return updated})}else{setTestResult({success:!1,message:data.error||s("মেসেজ পাঠাতে সমস্যা হয়েছে।","Failed to dispatch test notification.")})}}catch(err){setTestResult({success:!1,message:s("সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি।","Server connection error.")})}finally{setIsTesting(!1)}};const isPhoneReady=Boolean(phone.trim().length>=10);return r.jsxs("div",{className:"max-w-5xl mx-auto space-y-6 pb-12 animate-fade-in",children:[r.jsxs("div",{className:"relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/30 p-6 sm:p-8 shadow-xl text-white",children:[r.jsxs("div",{className:"flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative z-10",children:[r.jsxs("div",{className:"flex items-center gap-4",children:[r.jsx("div",{className:"w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 shrink-0",children:r.jsx(v9,{className:"w-7 h-7"})}),r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center gap-2.5 flex-wrap",children:[r.jsx("h1",{className:"text-2xl sm:text-3xl font-black tracking-tight text-white",children:s("হোয়াটসঅ্যাপ নিউজ অ্যালার্ট ডেস্ক","WhatsApp News Alert Desk")}),r.jsxs("span",{className:"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",children:[r.jsx("span",{className:"w-2 h-2 rounded-full bg-emerald-400 animate-pulse"}),s("অ্যালার্ট ইঞ্জিন সক্রিয় (LIVE)","Alert Engine Active (LIVE)")]})]}),r.jsx("p",{className:"text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed",children:s("হাই-ইমপ্যাক্ট ফরেক্স নিউজের ৫-১০ মিনিট আগে সরাসরি আপনার হোয়াটসঅ্যাপে প্রি-মার্কেট নোটিফিকেশন পৌঁছে যাবে। এডমিন প্যানেলের সেন্ট্রাল এআই স্বয়ংক্রিয়ভাবে মার্কেট সেন্টিমেন্ট অ্যানালাইসিস সম্পন্ন করে।","Pre-market Forex news notifications arrive directly on your WhatsApp 5-10 minutes prior to release. Central Admin AI handles all macro analysis automatically.")})]})]}),r.jsxs("div",{className:"flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/30 px-3.5 py-2 rounded-xl text-xs font-semibold text-emerald-200 shrink-0",children:[r.jsx(Fr,{className:"w-4 h-4 text-emerald-400"}),s("সেন্ট্রাল এআই ভেরিফাইড","Central AI Verified")]})]})]}),r.jsxs("div",{className:"p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3.5 text-amber-900 dark:text-amber-200",children:[r.jsx(As,{className:"w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"}),r.jsxs("div",{className:"text-xs sm:text-sm leading-relaxed",children:[r.jsx("strong",{className:"font-bold text-amber-800 dark:text-amber-300 block mb-0.5",children:s("💡 কোনো এপিআই কী সেটআপ করার প্রয়োজন নেই","💡 No API Key Setup Required")}),s("এই পেজে কোনো এআই মডেল বা এপিআই কী ইনপুট দিতে হবে না। শুধুমাত্র আপনার সচল হোয়াটসঅ্যাপ নম্বরটি নিচে সংরক্ষণ করুন। নিউজের বিস্তারিত বাই/সেল (BUY/SELL) দিকনির্দেশনা ও চার্ট দেখতে আমাদের ফরেক্স ক্যালেন্ডার পেজে যান।","Users do not need to configure any AI keys or models. Simply enter and save your WhatsApp number below. To view detailed BUY/SELL directional forecast cards and charts, visit the Forex Calendar page.")]})]}),r.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-12 gap-6",children:[r.jsxs("div",{className:"lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-6",children:[r.jsxs("div",{className:"flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800",children:[r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold",children:r.jsx(zp,{className:"w-5 h-5"})}),r.jsxs("div",{children:[r.jsx("h2",{className:"font-black text-base sm:text-lg text-slate-900 dark:text-white",children:s("১. হোয়াটসঅ্যাপ নম্বর যুক্ত করুন","1. Connect WhatsApp Number")}),r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400",children:s("যে নম্বরে আপনি সরাসরি অ্যালার্ট ও বার্তা গ্রহণ করতে চান","The phone number where alerts will be dispatched")})]})]}),isPhoneReady&&r.jsxs("span",{className:"hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800",children:[r.jsx(Pt,{className:"w-3.5 h-3.5"}),s("সংযুক্ত","Connected")]})]}),r.jsxs("form",{onSubmit:handleSavePhone,className:"space-y-4",children:[r.jsxs("div",{children:[r.jsx("label",{className:"block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2",children:s("হোয়াটসঅ্যাপ মোবাইল নম্বর (Country Code সহ):","WhatsApp Mobile Number (with Country Code):")}),r.jsxs("div",{className:"relative flex items-center",children:[r.jsxs("div",{className:"absolute left-3.5 flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 select-none",children:[r.jsx(qp,{className:"w-4 h-4 text-emerald-600 dark:text-emerald-400"}),r.jsx("span",{className:"border-r border-slate-300 dark:border-slate-700 pr-2",children:"+880"})]}),r.jsx("input",{type:"text",value:phone,onChange:ev=>setPhone(ev.target.value),placeholder:s("1712-345678 অথবা +8801712345678","1712-345678 or +8801712345678"),className:"w-full pl-24 pr-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"})]}),r.jsx("p",{className:"text-[11px] text-slate-400 dark:text-slate-500 mt-1.5",children:s("আন্তর্জাতিক ফরম্যাটে নম্বর প্রদান করতে পারেন (উদাহরণ: +8801712345678 বা 01712345678)","Supports standard national & international format (e.g. +8801712345678 or 01712345678)")})]}),r.jsxs("div",{className:"flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800",children:[r.jsxs("div",{children:[r.jsx("h4",{className:"text-xs font-bold text-slate-800 dark:text-slate-200",children:s("সরাসরি হোয়াটসঅ্যাপে লাইভ অ্যালার্ট চালু","Enable Live WhatsApp Alerts")}),r.jsx("p",{className:"text-[10px] text-slate-500 dark:text-slate-400",children:s("হাই-ইমপ্যাক্ট নিউজের পূর্বে মেসেজ পৌঁছাবে","Receive dispatch for high impact releases")})]}),r.jsx("button",{type:"button",onClick:()=>setIsAlertActive(!isAlertActive),className:`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${isAlertActive?"bg-emerald-600":"bg-slate-300 dark:bg-slate-700"}`,children:r.jsx("span",{className:`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isAlertActive?"translate-x-6":"translate-x-1"}`})})]}),r.jsx("div",{className:"flex items-center gap-3 pt-2",children:r.jsxs("button",{type:"submit",disabled:isSaving,className:"flex-1 py-3 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50",children:[r.jsx(On,{className:"w-4 h-4"}),isSaving?s("সংরক্ষণ করা হচ্ছে...","Saving..."):s("নম্বর সংরক্ষণ করুন","Save WhatsApp Number")]})}),saveSuccess&&r.jsxs("div",{className:"p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-2 animate-fade-in",children:[r.jsx(Pt,{className:"w-4 h-4 text-emerald-600 shrink-0"}),s("✓ আপনার হোয়াটসঅ্যাপ নম্বর সফলভাবে সংরক্ষিত ও সক্রিয় হয়েছে!","✓ WhatsApp number saved and active successfully!")]})]})]}),r.jsxs("div",{className:"lg:col-span-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-6 flex flex-col justify-between",children:[r.jsxs("div",{className:"space-y-4",children:[r.jsxs("div",{className:"flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold",children:r.jsx(Vx,{className:"w-5 h-5"})}),r.jsxs("div",{children:[r.jsx("h2",{className:"font-black text-base sm:text-lg text-slate-900 dark:text-white",children:s("২. টেস্ট অ্যালার্ট যাচাই","2. Verify Test Alert")}),r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400",children:s("একটি দ্রুত টেস্ট মেসেজ পাঠিয়ে কানেকশন চেক করুন","Send a test message to ensure live delivery")})]})]}),r.jsx("p",{className:"text-xs text-slate-600 dark:text-slate-300 leading-relaxed",children:s("আপনার নম্বরে তাৎক্ষণিক একটি ডেমো অ্যালার্ট পাঠিয়ে নিশ্চিত হোন যে হোয়াটসঅ্যাপে বার্তা রিসিভ হচ্ছে। কোনো ফি বা চার্জ কাটা হবে না।","Dispatch an instant simulated alert to your number to ensure messages are received without issue. Completely free of charge.")}),r.jsxs("div",{className:"p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx(qp,{className:"w-4 h-4 text-emerald-500"}),r.jsxs("span",{className:"text-xs font-bold text-slate-700 dark:text-slate-300",children:[s("প্রাপক:","Target:")," ",phone.trim()||s("(নম্বর দেওয়া হয়নি)","(No number set)")]})]}),r.jsx("span",{className:`text-[10px] font-black px-2 py-0.5 rounded-full ${isPhoneReady?"bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300":"bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"}`,children:isPhoneReady?s("প্রস্তুত","Ready"):s("নম্বর লিখুন","Set Phone")})]}),testResult&&r.jsxs("div",{className:`p-3.5 rounded-2xl border text-xs font-medium animate-fade-in ${testResult.success?"bg-emerald-50 dark:bg-emerald-950/60 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200":"bg-rose-50 dark:bg-rose-950/60 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200"}`,children:[r.jsxs("div",{className:"flex items-center gap-2 font-bold mb-1",children:[testResult.success?r.jsx(Pt,{className:"w-4 h-4 text-emerald-600"}):r.jsx(As,{className:"w-4 h-4 text-rose-600"}),testResult.success?s("টেস্ট মেসেজ প্রেরিত!","Test Message Sent!"):s("ত্রুটি ঘটেছে","Error Occurred")]}),r.jsx("p",{children:testResult.message})]})]}),r.jsxs("button",{type:"button",onClick:handleSendTest,disabled:isTesting||!isPhoneReady,className:"w-full py-3 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 mt-4",children:[r.jsx(ai,{className:`w-4 h-4 ${isTesting?"animate-pulse":""}`}),isTesting?s("টেস্ট পাঠানো হচ্ছে...","Dispatching Test..."):s("টেস্ট অ্যালার্ট পাঠান (Send Test)","Send Test Alert")]})]})]}),r.jsxs("div",{className:"bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-5",children:[r.jsxs("div",{className:"flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800",children:[r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold",children:r.jsx(li,{className:"w-5 h-5"})}),r.jsxs("div",{children:[r.jsx("h2",{className:"font-black text-base sm:text-lg text-slate-900 dark:text-white",children:s("৩. সাম্প্রতিক হোয়াটসঅ্যাপ অ্যালার্ট হিস্ট্রি","3. Recent WhatsApp Alert History")}),r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400",children:s("আপনার নম্বরে পৌঁছানো সাম্প্রতিক সংকেত ও নোটিফিকেশনের তালিকা","Log of recent signals & notifications delivered to your number")})]})]}),r.jsxs("span",{className:"text-xs font-bold text-slate-500 dark:text-slate-400",children:[s("মোট রেকর্ড: ","Total Records: "),logs.length]})]}),logs.length===0?r.jsxs("div",{className:"text-center py-10 text-slate-400 space-y-2",children:[r.jsx(v9,{className:"w-10 h-10 mx-auto opacity-40 text-slate-400"}),r.jsx("p",{className:"text-xs font-bold",children:s("এখনও কোনো অ্যালার্ট রেকর্ড নেই।","No alert records yet.")}),r.jsx("p",{className:"text-[11px]",children:s("টেস্ট বাটন চেপে আপনার নম্বরে একটি টেস্ট মেসেজ পাঠান।","Click test button above to send a test message to your number.")})]}):r.jsx("div",{className:"overflow-x-auto",children:r.jsxs("table",{className:"w-full text-left text-xs",children:[r.jsx("thead",{className:"bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]",children:r.jsxs("tr",{children:[r.jsx("th",{className:"p-3 sm:p-4 rounded-l-xl",children:s("ইভেন্ট / নিউজ","Event / News")}),r.jsx("th",{className:"p-3 sm:p-4",children:s("টাইপ ও সেন্টিমেন্ট","Type & Sentiment")}),r.jsx("th",{className:"p-3 sm:p-4",children:s("প্রাপক নম্বর","Recipient")}),r.jsx("th",{className:"p-3 sm:p-4",children:s("সময় ও তারিখ","Timestamp")}),r.jsx("th",{className:"p-3 sm:p-4 rounded-r-xl text-right",children:s("স্ট্যাটাস","Status")})]})}),r.jsx("tbody",{className:"divide-y divide-slate-100 dark:divide-slate-800/60 font-medium",children:logs.map(item=>r.jsxs("tr",{className:"hover:bg-slate-50/60 dark:hover:bg-slate-800/30 transition-colors",children:[r.jsxs("td",{className:"p-3 sm:p-4",children:[r.jsx("div",{className:"font-bold text-slate-900 dark:text-white text-xs",children:item.event}),r.jsx("div",{className:"text-[10px] text-slate-400 mt-0.5",children:item.type||"Macro News Alert"})]}),r.jsx("td",{className:"p-3 sm:p-4",children:r.jsx("span",{className:`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${item.sentiment.includes("BULLISH")?"bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300":item.sentiment.includes("BEARISH")?"bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300":"bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300"}`,children:item.sentiment})}),r.jsx("td",{className:"p-3 sm:p-4 text-slate-600 dark:text-slate-300 font-mono text-[11px]",children:item.phone}),r.jsxs("td",{className:"p-3 sm:p-4 text-slate-500 dark:text-slate-400 text-[11px]",children:[r.jsx("div",{children:item.time}),r.jsx("div",{className:"text-[10px] text-slate-400",children:item.date})]}),r.jsx("td",{className:"p-3 sm:p-4 text-right",children:r.jsxs("span",{className:"inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800",children:[r.jsx(Pt,{className:"w-3 h-3 text-emerald-600 dark:text-emerald-400"}),item.status||"DELIVERED"]})})]},item.id))})]})})]})]});}
-function PackagesPage({page:t,section:e,portalType:n,onOpenCodeStudio:a}){
-  const{currentUser:user,language:lang}=Xo();
-  const s=(bn,en)=>lang==="bn"?bn:en;
-  const[selectedPlan,setSelectedPlan]=b.useState("standard");
-  const[showCheckout,setShowCheckout]=b.useState(!1);
+// Forex AI News V2.2 — Dynamic Packages, Pricing & Subscription Management Engine
+// Compatible with bundle runtime: Xo(), b (React), r (jsx runtime), iu (lucide loader), Fr, iu
 
-  const plans=[
-    {
-      id:"free_starter",
-      nameBn:"৭ দিন ফ্রি ট্রায়াল (Starter)",
-      nameEn:"7-Day Free Trial (Starter)",
-      priceUsd:0,
-      periodBn:"৭ দিন সম্পূর্ণ ফ্রি",
-      periodEn:"7 Days Free",
-      tagBn:"নতুনদের জন্য",
-      tagEn:"Starter Trial",
-      color:"emerald",
-      badgeClass:"bg-emerald-100 text-emerald-800 border-emerald-300",
-      btnClass:"bg-emerald-600 hover:bg-emerald-700 text-white",
-      descBn:"ফরেক্স এআই প্ল্যাটফর্ম পরখ করে দেখতে নতুন ট্রেডারদের জন্য বিশেষ ৭ দিনের ফ্রি ট্রায়াল।",
-      descEn:"Experience institutional pre-market alerts completely free for your first 7 days.",
-      features:[
-        s("প্রতিদিনের হাই-ইমপ্যাক্ট ফরেক্স নিউজ অ্যালার্ট","Daily High-Impact Forex News Alerts"),
-        s("বেসিক সেন্ট্রাল এআই ম্যাক্রো সেন্টিমেন্ট","Basic Central AI Macro Sentiment Overview"),
-        s("হোয়াটসঅ্যাপ টেস্ট ভেরিফিকেশন ও সংযোগ","Direct WhatsApp Verification & Test Message"),
-        s("লাইভ ইকোনমিক ক্যালেন্ডার ও টাইমলাইন","Live Economic Calendar & Global Sessions"),
-        s("কোনো পেমেন্ট ছাড়াই ইনস্ট্যান্ট অ্যাক্টিভেশন","Zero Payment Needed to Start")
-      ],
-      isFree:!0
-    },
-    {
-      id:"standard",
-      nameBn:"স্ট্যান্ডার্ড ট্রেডার (Standard Trader)",
-      nameEn:"Standard Trader (Monthly)",
-      priceUsd:29,
-      periodBn:"প্রতি মাসে (29 USDT / Month)",
-      periodEn:"29 USDT / Month",
-      tagBn:"🔥 সর্বাধিক জনপ্রিয়",
-      tagEn:"🔥 Most Popular",
-      color:"indigo",
-      badgeClass:"bg-indigo-100 text-indigo-800 border-indigo-300 shadow-xs",
-      btnClass:"bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/25",
-      descBn:"নিয়মিত ডে ও সুইং ট্রেডারদের জন্য আদর্শ প্রি-মার্কেট প্রেডিকশন ও ডিরেকশনাল সেন্টিমেন্ট।",
-      descEn:"Essential pre-market directional bias & fast WhatsApp delivery for active traders.",
-      features:[
-        s("৫-১০ মিনিট পূর্বে সরাসরি হোয়াটসঅ্যাপে নোটিফিকেশন","High-Impact Alerts 5-10m Prior to Release"),
-        s("মেজর কারেন্সি পেয়ার্স: EUR/USD, GBP/USD, USD/JPY ও Gold (XAU)","Major Forex Pairs + Gold (XAU/USD)"),
-        s("CPI, NFP, PPI ও FOMC প্রি-মার্কেট এআই প্রেডিকশন","CPI, NFP, PPI & FOMC Pre-Market Forecasts"),
-        s("সেন্ট্রাল এআই ডিরেকশনাল বাই/সেল সেন্টিমেন্ট সংকেত","Directional BUY/SELL Sentiment Bias"),
-        s("স্ট্যান্ডার্ড প্রায়োরিটি সাপোর্ট","Dedicated Standard Trader Support"),
-        s("ফরেক্স সেন্টিমেন্ট চার্ট ও ডেভিয়েশন ডেটা","Forex Sentiment Breakdown & Deviation Data")
-      ],
-      isPopular:!0
-    },
-    {
-      id:"vip_pro",
-      nameBn:"ভিআইপি ইনস্টিটিউশনাল প্রো (VIP Pro)",
-      nameEn:"VIP Institutional Pro (Quarterly)",
-      priceUsd:79,
-      periodBn:"৩ মাসের অ্যাক্সেস (79 USDT / 3 Months)",
-      periodEn:"79 USDT / 3 Months (Save 20%)",
-      tagBn:"👑 সেরা পছন্দ (VIP Value)",
-      tagEn:"👑 Best Value (VIP Value)",
-      color:"purple",
-      badgeClass:"bg-purple-100 text-purple-800 border-purple-300 shadow-xs",
-      btnClass:"bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-600/25",
-      descBn:"প্রো ও ফান্ডেড ট্রেডারদের জন্য ডাবল-অ্যালার্ট ও বিস্তারিত ডেভিয়েশন রেঞ্জ সহ কমপ্লিট স্যুট।",
-      descEn:"Complete suite for prop & pro traders with double alert mechanism & deviation guidance.",
-      features:[
-        s("সকল ফরেক্স পেয়ার, গোল্ড ও ক্রিপ্টো ম্যাক্রো কাভারেজ","All Forex Pairs + Gold + Crypto Macro Coverage"),
-        s("ডবল অ্যালার্ট সিস্টেম (১০ মি. আগে প্রাথমিক + ২ মি. আগে ফাইনাল রিভাইসড)","Double Alert (10m Pre-Release + 2m Revised Alert)"),
-        s("বিস্তারিত ডেভিয়েশন রেঞ্জ ও সেফ লট সাইজ গাইডলাইন","Deviation Ranges & Institutional Lot Size Guide"),
-        s("ট্রেডিং প্লেবুক ও স্ট্র্যাটেজি জার্নাল ফুল অ্যাক্সেস","Trading Playbook & Strategy Journal Access"),
-        s("২৪/৭ প্রায়োরিটি ভিআইপি হোয়াটসঅ্যাপ সাপোর্ট","24/7 Priority VIP WhatsApp Support"),
-        s("লাইভ টিভি (Bloomberg & CNBC) ও চার্ট ডেস্ক","Live Bloomberg TV & Drawing Chart Desk")
-      ]
-    },
-    {
-      id:"lifetime_alpha",
-      nameBn:"লাইফটাইম আলফা ভিআইপি (Lifetime VIP)",
-      nameEn:"Lifetime Alpha VIP (One-Time)",
-      priceUsd:199,
-      periodBn:"এককালীন লাইফটাইম (199 USDT One-Time)",
-      periodEn:"199 USDT Lifetime Access",
-      tagBn:"💎 আজীবন লাইফটাইম",
-      tagEn:"💎 Lifetime Access",
-      color:"amber",
-      badgeClass:"bg-amber-100 text-amber-800 border-amber-300 shadow-xs",
-      btnClass:"bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-700 hover:to-yellow-700 text-white shadow-lg shadow-amber-600/25",
-      descBn:"একবার ফি পরিশোধ করে আজীবন ফরেক্স এআই নিউজ, সিগন্যাল ও ভবিষ্যৎ সকল অ্যালগো উপভোগ করুন।",
-      descEn:"Pay once and unlock all current and future Forex AI news, signals & algorithms forever.",
-      features:[
-        s("আজীবন আনলিমিটেড ফরেক্স এআই নোটিফিকেশন ও সিগন্যাল","Lifetime Unlimited Forex AI News Alerts"),
-        s("ভবিষ্যতে যুক্ত হওয়া সকল এআই অ্যালগো ও স্ট্র্যাটেজি সম্পূর্ণ ফ্রি","All Future AI Algos & Strategies 100% Free"),
-        s("আনলিমিটেড হোয়াটসঅ্যাপ অ্যালার্ট ডেলিভারি","Unlimited Priority WhatsApp Alerts"),
-        s("১-অন-১ প্রাতিষ্ঠানিক সাপোর্ট ও সিগন্যাল রুম","1-on-1 VIP Strategy Consulting & Signals Room"),
-        s("ড্রয়িং ও এক্সকালিড্র মাস্টারক্লাস আনলক","Full Drawing & Price Action Masterclass Unlock"),
-        s("কোনো মাসিক রিনিউয়াল বা অতিরিক্ত চার্জ নেই","Zero Monthly Renewals or Hidden Costs Ever")
-      ]
-    }
-  ];
+// Forex AI News V2.2 — Dynamic Packages, Pricing & Subscription Management Engine
+// Compatible with bundle runtime: Xo(), b (React), r (jsx runtime), iu (lucide loader), Fr, iu
 
-  const handleSelectPlan=(plan)=>{
-    try{localStorage.setItem("selected_payment_package",JSON.stringify(plan))}catch(e){}
-    setSelectedPlan(plan.id);
-    setShowCheckout(!0);
+// Forex AI News V2.2 — Dynamic Packages, Pricing & Subscription Management Engine
+// Compatible with bundle runtime: Xo(), b (React), r (jsx runtime), iu (lucide loader), Fr, iu
+
+function PackagesPage({ page: t, section: e, portalType: n, onOpenCodeStudio: a }) {
+  const { currentUser: user, language: lang } = Xo();
+  const isAdmin = user && (user.role === "admin" || user.id === "usr_admin_master");
+  const s = (bn, en) => (lang === "bn" ? bn : en);
+
+  const [selectedPlan, setSelectedPlan] = b.useState("standard");
+  const [showCheckout, setShowCheckout] = b.useState(false);
+
+  // Dynamic Packages State from /api/packages
+  const [packages, setPackages] = b.useState([]);
+  const [loading, setLoading] = b.useState(true);
+
+  // Admin Package Edit Modal State
+  const [editingPlan, setEditingPlan] = b.useState(null);
+  const [isSavingPlan, setIsSavingPlan] = b.useState(false);
+  const [planSaveMessage, setPlanSaveMessage] = b.useState("");
+  const [newFeatureText, setNewFeatureText] = b.useState("");
+
+  const loadPackages = () => {
+    fetch("/api/packages")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && d.packages && d.packages.length > 0) {
+          setPackages(d.packages);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   };
 
-  if(showCheckout){
-    return r.jsx(PaymentGatewayPage,{preselectedPackageId:selectedPlan,onBackToPackages:()=>setShowCheckout(!1),portalType:n});
+  b.useEffect(() => {
+    loadPackages();
+  }, []);
+
+  const handleSavePackage = async (ev) => {
+    if (ev) ev.preventDefault();
+    if (!editingPlan) return;
+    setIsSavingPlan(true);
+    setPlanSaveMessage("");
+
+    try {
+      const token = localStorage.getItem("auth_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(`/api/packages/${editingPlan.id}`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(editingPlan),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPlanSaveMessage(s("✅ প্যাকেজ সফলভাবে আপডেট হয়েছে!", "✅ Package updated successfully!"));
+        loadPackages();
+        setTimeout(() => {
+          setPlanSaveMessage("");
+          setEditingPlan(null);
+        }, 1500);
+      } else {
+        setPlanSaveMessage(data.error || "Save error");
+      }
+    } catch (err) {
+      setPlanSaveMessage("Network error");
+    } finally {
+      setIsSavingPlan(false);
+    }
+  };
+
+  const handleAddFeature = () => {
+    if (!newFeatureText.trim() || !editingPlan) return;
+    setEditingPlan({
+      ...editingPlan,
+      features: [...(editingPlan.features || []), newFeatureText.trim()],
+    });
+    setNewFeatureText("");
+  };
+
+  const handleRemoveFeature = (idx) => {
+    if (!editingPlan) return;
+    const updated = [...(editingPlan.features || [])];
+    updated.splice(idx, 1);
+    setEditingPlan({
+      ...editingPlan,
+      features: updated,
+    });
+  };
+
+  if (showCheckout) {
+    return r.jsx(PaymentGatewayPage, {
+      preselectedPackageId: selectedPlan,
+      onBackToPackages: () => setShowCheckout(false),
+    });
   }
 
-  return r.jsxs("div",{className:"max-w-6xl mx-auto space-y-8 pb-16 animate-fade-in px-2 sm:px-4",children:[
-    // Header Banner
-    r.jsxs("div",{className:"relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 p-6 sm:p-10 shadow-xl text-white text-center sm:text-left",children:[
-      r.jsxs("div",{className:"flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10",children:[
-        r.jsxs("div",{className:"space-y-2 max-w-2xl",children:[
-          r.jsxs("div",{className:"inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-1",children:[
-            r.jsx(Sn,{className:"w-3.5 h-3.5 text-indigo-400"}),
-            s("সেন্ট্রাল এআই চালিত ট্রেডিং সাবস্ক্রিপশন","Institutional AI Trading Subscriptions")
-          ]}),
-          r.jsx("h1",{className:"text-2xl sm:text-4xl font-black tracking-tight text-white",children:s("ফরেক্স এআই নিউজ ও সিগন্যাল প্যাকেজ","Forex AI News & Signal Packages")}),
-          r.jsx("p",{className:"text-xs sm:text-sm text-slate-300 leading-relaxed",children:s("গুরুত্বপূর্ণ ফরেক্স ও ইকোনমিক নিউজের ৫-১০ মিনিট আগে সরাসরি আপনার হোয়াটসঅ্যাপে প্রি-মার্কেট প্রেডিকশন এবং সেন্টিমেন্ট সংকেত পেতে উপযুক্ত প্যাকেজটি বেছে নিন।","Choose the tier that matches your trading size. Receive pre-market bias directly on WhatsApp 5-10 minutes before high-impact economic data.")})
-        ]}),
-        r.jsxs("div",{className:"flex flex-col sm:flex-row gap-2.5 shrink-0",children:[
-          r.jsxs("button",{onClick:()=>setShowCheckout(!0),className:"px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer",children:[
-            $o.createElement(iu("Wallet"),{className:"w-4 h-4"}),
-            s("💳 সরাসরি ক্রিপ্টো পেমেন্ট গেটওয়েতে যান","💳 Go to Crypto Payment Gateway")
-          ]})
-        ]})
-      ]})
-    ]}),
+  // Fallback default plans if loading
+  const displayPlans = packages.length > 0 ? packages : [
+    {
+      id: "free_starter",
+      nameBn: "৭ দিন ফ্রি ট্রায়াল (Free Starter)",
+      nameEn: "7-Day Free Trial (Starter)",
+      priceUsd: 0,
+      originalPriceUsd: 0,
+      discountBadge: "নতুনদের জন্য",
+      periodBn: "৭ দিন সম্পূর্ণ ফ্রি",
+      periodEn: "7 Days Free Trial",
+      tagBn: "নতুনদের জন্য",
+      tagEn: "Starter Trial",
+      color: "emerald",
+      descBn: "ফরেক্স এআই প্ল্যাটফর্ম পরখ করে দেখতে নতুন ট্রেডারদের জন্য বিশেষ ৭ দিনের ফ্রি ট্রায়াল।",
+      descEn: "Experience institutional pre-market alerts completely free for your first 7 days.",
+      features: [
+        "প্রতিদিনের হাই-ইমপ্যাক্ট ফরেক্স নিউজ অ্যালার্ট",
+        "বেসিক সেন্ট্রাল এআই ম্যাক্রো সেন্টিমেন্ট ওভারভিউ",
+        "হোয়াটসঅ্যাপ টেস্ট ভেরিফিকেশন ও সংযোগ",
+        "লাইভ ইকোনমিক ক্যালেন্ডার ও টাইমলাইন",
+        "কোনো পেমেন্ট ছাড়াই ইনস্ট্যান্ট অ্যাক্টিভেশন",
+      ],
+      limitations: {
+        dailyNotesLimit: 3,
+        playbookStrategiesLimit: 2,
+        aiForecastsLimit: 5,
+        socialMediaAutoPost: false,
+      },
+      isActive: true,
+      isFree: true,
+    },
+    {
+      id: "standard",
+      nameBn: "স্ট্যান্ডার্ড ট্রেডার (Standard Trader)",
+      nameEn: "Standard Trader (Monthly)",
+      priceUsd: 29,
+      originalPriceUsd: 49,
+      discountBadge: "🔥 ৪০% স্পেশাল ছাড়",
+      periodBn: "প্রতি মাসে (29 USDT / Month)",
+      periodEn: "29 USDT / Month",
+      tagBn: "🔥 সর্বাধিক জনপ্রিয়",
+      tagEn: "🔥 Most Popular",
+      color: "indigo",
+      descBn: "নিয়মিত ডে ও সুইং ট্রেডারদের জন্য আদর্শ প্রি-মার্কেট প্রেডিকশন ও ডিরেকশনাল সেন্টিমেন্ট।",
+      descEn: "Essential pre-market directional bias & fast WhatsApp delivery for active traders.",
+      features: [
+        "৫-১০ মিনিট পূর্বে সরাসরি হোয়াটসঅ্যাপে নোটিফিকেশন",
+        "মেজর পেয়ার্স: EUR/USD, GBP/USD, USD/JPY ও Gold (XAU)",
+        "CPI, NFP, PPI ও FOMC প্রি-মার্কেট এআই প্রেডিকশন",
+        "সেন্ট্রাল এআই ডিরেকশনাল বাই/সেল সেন্টিমেন্ট সংকেত",
+        "আনলিমিটেড ট্রেডিং ডায়েরি ও সাইকোলজি নোটস",
+        "আনলিমিটেড ট্রেডিং প্লেবুক ও চার্ট আপলোড",
+        "১-ক্লিক সোশ্যাল মিডিয়া অটো-পোস্টিং (আসন্ন / Roadmap)",
+      ],
+      limitations: {
+        dailyNotesLimit: -1,
+        playbookStrategiesLimit: -1,
+        aiForecastsLimit: -1,
+        socialMediaAutoPost: true,
+      },
+      isActive: true,
+      isPopular: true,
+    },
+    {
+      id: "vip_pro",
+      nameBn: "ভিআইপি ইনস্টিটিউশনাল প্রো (VIP Pro)",
+      nameEn: "VIP Institutional Pro (Quarterly)",
+      priceUsd: 79,
+      originalPriceUsd: 119,
+      discountBadge: "👑 সেরা ভ্যালু অফার",
+      periodBn: "৩ মাসের অ্যাক্সেস (79 USDT / 3 Months)",
+      periodEn: "79 USDT / 3 Months (Save 35%)",
+      tagBn: "👑 সেরা পছন্দ (VIP Value)",
+      tagEn: "👑 Best Value (VIP Value)",
+      color: "purple",
+      descBn: "প্রো ও ফান্ডেড ট্রেডারদের জন্য ডাবল-অ্যালার্ট ও বিস্তারিত ডেভিয়েশন রেঞ্জ সহ কমপ্লিট স্যুট।",
+      descEn: "Complete suite for prop & pro traders with double alert mechanism & deviation guidance.",
+      features: [
+        "সকল ফরেক্স পেয়ার, গোল্ড ও ক্রিপ্টো ম্যাক্রো কাভারেজ",
+        "ডবল অ্যালার্ট সিস্টেম (১০ মি. আগে প্রাথমিক + ২ মি. আগে ফাইনাল রিভাইসড)",
+        "বিস্তারিত ডেভিয়েশন রেঞ্জ ও সেফ লট সাইজ গাইডলাইন",
+        "আনলিমিটেড ট্রেডিং প্লেবুক ও স্ট্র্যাটেজি জার্নাল অ্যাক্সেস",
+        "২৪/৭ প্রায়োরিটি ভিআইপি হোয়াটসঅ্যাপ সাপোর্ট",
+        "লাইভ টিভি (Bloomberg & CNBC) ও চার্ট ডেস্ক",
+        "১-ক্লিক মাল্টি-সোশ্যাল মিডিয়া অটো-পোস্ট ইঞ্জিন (শীঘ্রই আসছে)",
+      ],
+      limitations: {
+        dailyNotesLimit: -1,
+        playbookStrategiesLimit: -1,
+        aiForecastsLimit: -1,
+        socialMediaAutoPost: true,
+      },
+      isActive: true,
+    },
+    {
+      id: "lifetime_alpha",
+      nameBn: "লাইফটাইম আলফা ভিআইপি (Lifetime VIP)",
+      nameEn: "Lifetime Alpha VIP (One-Time)",
+      priceUsd: 199,
+      originalPriceUsd: 399,
+      discountBadge: "💎 ৫০% লিমিটেড লাইফটাইম ছাড়",
+      periodBn: "এককালীন লাইফটাইম (199 USDT One-Time)",
+      periodEn: "199 USDT Lifetime Access",
+      tagBn: "💎 আজীবন লাইফটাইম",
+      tagEn: "💎 Lifetime Access",
+      color: "amber",
+      descBn: "একবার ফি পরিশোধ করে আজীবন ফরেক্স এআই নিউজ, সিগন্যাল ও ভবিষ্যৎ সকল ফিচার উপভোগ করুন।",
+      descEn: "Pay once and unlock all current and future Forex AI news, signals & algorithms forever.",
+      features: [
+        "আজীবন আনলিমিটেড ফরেক্স এআই নিউজ ও প্রেডিকশন অ্যালার্ট",
+        "ভবিষ্যতের সকল এআই মডেল ও সোশ্যাল অটো-পোস্টিং ফ্রি লাইফটাইম অ্যাক্সেস",
+        "গোল্ড (XAU/USD) ও বিটকয়েন (BTC) প্রায়োরিটি ব্রেকডাউন",
+        "ইনস্টিটিউশনাল অর্ডারবুক ও সেন্ট্রাল ব্যাংক ডেভিয়েশন টেবিল",
+        "প্রাইভেট ডিরেক্ট হোয়াটসঅ্যাপ লাইন ও ওয়ান-অন-ওয়ান কনসালটেশন",
+        "কোনো মাসিক রিনিউয়াল বা অতিরিক্ত চার্জ নেই",
+      ],
+      limitations: {
+        dailyNotesLimit: -1,
+        playbookStrategiesLimit: -1,
+        aiForecastsLimit: -1,
+        socialMediaAutoPost: true,
+      },
+      isActive: true,
+    },
+  ];
 
-    // Plans Grid
-    r.jsx("div",{className:"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",children:plans.map(plan=>r.jsxs("div",{
-      className:`rounded-3xl border transition-all flex flex-col justify-between p-6 sm:p-7 relative ${plan.isPopular?"bg-white dark:bg-slate-900 border-indigo-500 shadow-xl shadow-indigo-500/10 ring-2 ring-indigo-500/30":"bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md"}`,
-      children:[
-        r.jsxs("div",{className:"space-y-4",children:[
-          r.jsxs("div",{className:"flex items-center justify-between",children:[
-            r.jsx("span",{className:`text-[11px] font-black px-2.5 py-0.5 rounded-full border ${plan.badgeClass}`,children:plan.tagBn}),
-            plan.priceUsd>0&&r.jsx("span",{className:"text-[10px] font-bold text-amber-500 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800",children:"USDT TRC20/BEP20"})
-          ]}),
-          r.jsxs("div",{children:[
-            r.jsx("h3",{className:"font-black text-lg sm:text-xl text-slate-900 dark:text-white",children:plan.nameBn}),
-            r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed",children:plan.descBn})
-          ]}),
-          r.jsxs("div",{className:"pt-2 pb-1 border-y border-slate-100 dark:border-slate-800",children:[
-            r.jsxs("div",{className:"flex items-baseline gap-1.5",children:[
-              r.jsx("span",{className:"text-3xl sm:text-4xl font-black text-slate-900 dark:text-white",children:`$${plan.priceUsd}`}),
-              r.jsx("span",{className:"text-xs font-bold text-amber-600 dark:text-amber-400",children:"USDT"})
-            ]}),
-            r.jsx("p",{className:"text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5",children:plan.periodBn})
-          ]}),
-          r.jsx("ul",{className:"space-y-2.5 pt-2",children:plan.features.map((feat,idx)=>r.jsxs("li",{className:"flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-300 leading-snug",children:[
-            r.jsx(Pt,{className:`w-4 h-4 shrink-0 mt-0.5 ${plan.isFree?"text-emerald-500":"text-indigo-600 dark:text-indigo-400"}`}),
-            r.jsx("span",{children:feat})
-          ]},idx))})
-        ]}),
-        r.jsxs("button",{
-          type:"button",
-          onClick:()=>handleSelectPlan(plan),
-          className:`w-full mt-6 py-3 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${plan.btnClass}`,
-          children:[
-            r.jsx(On,{className:"w-4 h-4"}),
-            plan.isFree?s("ফ্রি ট্রায়াল শুরু করুন","Start Free Trial"):s(`প্যাকেজটি নির্বাচন করুন ($${plan.priceUsd} USDT)`,`Select Plan ($${plan.priceUsd} USDT)`)
-          ]
-        })
-      ]
-    },plan.id))}),
+  return r.jsxs("div", {
+    className: "max-w-7xl mx-auto space-y-10 pb-20 animate-fade-in px-2 sm:px-4 text-left",
+    children: [
+      // Top Header
+      r.jsxs("div", {
+        className: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800",
+        children: [
+          r.jsxs("div", {
+            className: "space-y-1",
+            children: [
+              r.jsxs("div", {
+                className: "flex items-center gap-2",
+                children: [
+                  r.jsx("span", {
+                    className: "px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/30 text-[10px] font-mono font-black uppercase tracking-wider",
+                    children: "ChartLogic Institutional Pricing",
+                  }),
+                  r.jsx("span", {
+                    className: "px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold",
+                    children: "⚡ Binance & Bybit 0% Fee",
+                  }),
+                ],
+              }),
+              r.jsx("h1", {
+                className: "text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight",
+                children: s("সাবস্ক্রিপশন প্যাকেজ ও মেম্বারশিপ প্ল্যান", "Subscription Packages & Membership Plans"),
+              }),
+              r.jsx("p", {
+                className: "text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl",
+                children: s(
+                  "আপনার ট্রেডিং ক্যারিয়ারের জন্য সঠিক প্ল্যান বেছে নিন। প্রতিটি প্যাকেজের সাথে রয়েছে রিয়েল-টাইম এআই অ্যানালাইসিস, ডায়েরি ও অটো-ভেরিফিকেশন।",
+                  "Choose the right institutional plan for your trading desk with real-time AI news forecasting and instant crypto activation."
+                ),
+              }),
+            ],
+          }),
 
-    // Guidance Card
-    r.jsxs("div",{className:"p-6 sm:p-8 rounded-3xl bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 space-y-4",children:[
-      r.jsxs("div",{className:"flex items-center gap-3",children:[
-        r.jsx("div",{className:"w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold",children:r.jsx(Fr,{className:"w-5 h-5"})}),
-        r.jsxs("div",{children:[
-          r.jsx("h4",{className:"font-black text-base text-slate-900 dark:text-white",children:s("ক্রিপ্টো সাবস্ক্রিপশন ও পেমেন্ট বিষয়ক তথ্যাবলী","Crypto Subscription & Payment Information")}),
-          r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400",children:s("বাইনান্স পে (Binance Pay) অথবা বাইবিট (Bybit) এর মাধ্যমে সরাসরি USDT ট্রান্সফার করুন","Secure direct USDT transfers via Binance Pay or Bybit UID")})
-        ]})
-      ]}),
-      r.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs text-slate-600 dark:text-slate-300",children:[
-        r.jsxs("div",{className:"p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1",children:[
-          r.jsx("strong",{className:"font-bold text-slate-900 dark:text-white block",children:s("১. ৭ দিন ফ্রি ট্রায়াল","1. 7-Day Free Trial")}),
-          r.jsx("p",{children:s("নতুন ট্রেডারদের জন্য প্রথম ৭ দিন ফ্রি। কোনো প্রকার ক্রিপ্টো পেমেন্ট ছাড়াই সরাসরি নোটিফিকেশন চেক করতে পারবেন।","First 7 days are complimentary. Enjoy pre-market alerts without any upfront payment.")})
-        ]}),
-        r.jsxs("div",{className:"p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1",children:[
-          r.jsx("strong",{className:"font-bold text-slate-900 dark:text-white block",children:s("২. বাইনান্স ও বাইবিট ক্রিপ্টো গেটওয়ে","2. Binance & Bybit Crypto Only")}),
-          r.jsx("p",{children:s("বাইনান্স পে (Binance Pay ID / USDT TRC20/BEP20) এবং বাইবিট (Bybit UID / USDT TRC20) ০% ফি-তে সমর্থিত।","Accepting Binance Pay and Bybit UID/USDT with zero transfer fees.")})
-        ]}),
-        r.jsxs("div",{className:"p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1",children:[
-          r.jsx("strong",{className:"font-bold text-slate-900 dark:text-white block",children:s("৩. দ্রুত অ্যাক্টিভেশন","3. Instant Verification")}),
-          r.jsx("p",{children:s("পেমেন্টের পর TxID সাবমিট করলেই ৫-১৫ মিনিটের মধ্যে সাবস্ক্রিপশন ভেরিফাইড হয়ে সক্রিয় হবে।","Once you submit your TxID, accounts are verified and upgraded within 5-15 minutes.")})
-        ]})
-      ]})
-    ]})
-  ]});
+          // Admin Control Trigger
+          isAdmin &&
+            r.jsxs("div", {
+              className: "flex items-center gap-2 shrink-0",
+              children: [
+                r.jsxs("button", {
+                  onClick: () => setEditingPlan(displayPlans[1] || displayPlans[0]),
+                  className: "px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-2 shadow-md transition-all cursor-pointer",
+                  children: [r.jsx(iu("Settings"), { className: "w-4 h-4" }), s("⚙️ প্যাকেজ ও প্রাইস এডিটর (Admin)", "⚙️ Edit Packages & Pricing")],
+                }),
+              ],
+            }),
+        ],
+      }),
+
+      // 4 Dynamic Package Cards Grid
+      r.jsx("div", {
+        className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
+        children: displayPlans.map((plan) => {
+          const isSelected = selectedPlan === plan.id;
+          const isFree = plan.isFree || plan.priceUsd === 0;
+          const hasDiscount = plan.originalPriceUsd && plan.originalPriceUsd > plan.priceUsd;
+
+          return r.jsxs(
+            "div",
+            {
+              key: plan.id,
+              className: `relative rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 border-2 ${
+                plan.isPopular
+                  ? "bg-gradient-to-b from-indigo-950/40 via-slate-900 to-slate-950 border-indigo-500 shadow-xl shadow-indigo-500/10 ring-2 ring-indigo-500/20"
+                  : plan.id === "lifetime_alpha"
+                  ? "bg-gradient-to-b from-amber-950/40 via-slate-900 to-slate-950 border-amber-500/50 shadow-xl shadow-amber-500/10"
+                  : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700"
+              } ${!plan.isActive ? "opacity-60 grayscale" : ""}`,
+              children: [
+                // Top Tag & Badges
+                r.jsxs("div", {
+                  className: "space-y-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between gap-2",
+                      children: [
+                        r.jsx("span", {
+                          className: `px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                            plan.color === "emerald"
+                              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                              : plan.color === "indigo"
+                              ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30"
+                              : plan.color === "purple"
+                              ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                              : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                          }`,
+                          children: s(plan.tagBn, plan.tagEn),
+                        }),
+
+                        // Discount or Testing Badge
+                        plan.isTestingMode ? (
+                          r.jsx("span", {
+                            className: "px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-mono font-bold animate-pulse",
+                            children: "🧪 টেস্টিং মোড",
+                          })
+                        ) : plan.discountBadge ? (
+                          r.jsx("span", {
+                            className: "px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold",
+                            children: plan.discountBadge,
+                          })
+                        ) : null,
+                      ],
+                    }),
+
+                    // Plan Title & Description
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("h3", {
+                          className: "text-lg font-black text-slate-900 dark:text-white tracking-tight",
+                          children: s(plan.nameBn, plan.nameEn),
+                        }),
+                        r.jsx("p", {
+                          className: "text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2",
+                          children: s(plan.descBn, plan.descEn),
+                        }),
+                      ],
+                    }),
+
+                    // Price Section with Discount crossed-out
+                    r.jsxs("div", {
+                      className: "py-3 border-y border-slate-100 dark:border-slate-800",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-baseline gap-2",
+                          children: [
+                            r.jsx("span", {
+                              className: "text-3xl font-black text-slate-900 dark:text-white tracking-tight",
+                              children: isFree ? s("০ USDT", "FREE") : `${plan.priceUsd} USDT`,
+                            }),
+                            hasDiscount &&
+                              r.jsx("span", {
+                                className: "text-sm text-slate-400 line-through font-mono font-bold",
+                                children: `${plan.originalPriceUsd} USDT`,
+                              }),
+                            !isFree &&
+                              r.jsx("span", {
+                                className: "text-[11px] font-mono text-slate-400",
+                                children: `($ ${plan.priceUsd})`,
+                              }),
+                          ],
+                        }),
+                        r.jsx("p", {
+                          className: "text-[11px] font-medium text-slate-400 mt-0.5",
+                          children: s(plan.periodBn, plan.periodEn),
+                        }),
+                      ],
+                    }),
+
+                    // Limitations Box (Crucial for Free vs Paid clarity)
+                    r.jsxs("div", {
+                      className: `p-3 rounded-2xl text-[11px] space-y-1.5 ${
+                        isFree
+                          ? "bg-amber-500/10 border border-amber-500/30 text-amber-300"
+                          : "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
+                      }`,
+                      children: [
+                        r.jsxs("div", {
+                          className: "font-black flex items-center gap-1.5 text-xs",
+                          children: [
+                            r.jsx(iu(isFree ? "AlertTriangle" : "ShieldCheck"), { className: "w-3.5 h-3.5" }),
+                            isFree ? s("সীমিত ফিচার অ্যাক্সেস (Limits):", "Plan Limitations:") : s("আনলিমিটেড অ্যাক্সেস (No Limits):", "Full Tier Privileges:"),
+                          ],
+                        }),
+                        r.jsxs("p", {
+                          className: "text-[10px] leading-snug opacity-90",
+                          children: [
+                            "• ",
+                            plan.limitations?.dailyNotesLimit === -1 || !isFree
+                              ? s("ট্রেডিং ডায়েরি: আনলিমিটেড এন্ট্রি", "Trading Journal: Unlimited")
+                              : s(`ট্রেডিং ডায়েরি: দিনে সর্বোচ্চ ${plan.limitations?.dailyNotesLimit || 3}টি নোটস`, `Trading Journal: Max ${plan.limitations?.dailyNotesLimit || 3}/day`),
+                          ],
+                        }),
+                        r.jsxs("p", {
+                          className: "text-[10px] leading-snug opacity-90",
+                          children: [
+                            "• ",
+                            plan.limitations?.playbookStrategiesLimit === -1 || !isFree
+                              ? s("প্লেবুক: আনলিমিটেড স্ট্র্যাটেজি ও চার্ট", "Playbook: Unlimited Strategies")
+                              : s(`প্লেবুক: সর্বোচ্চ ${plan.limitations?.playbookStrategiesLimit || 2}টি স্ট্র্যাটেজি অ্যাক্সেস`, `Playbook: Max ${plan.limitations?.playbookStrategiesLimit || 2} strategies`),
+                          ],
+                        }),
+                        !isFree &&
+                          r.jsx("p", {
+                            className: "text-[10px] leading-snug text-indigo-300 font-bold",
+                            children: s("• ১-ক্লিক সোশ্যাল মিডিয়া অটো-পোস্টিং (শীঘ্রই আসছে)", "• 1-Click Social Media Auto Post (Coming Soon)"),
+                          }),
+                      ],
+                    }),
+
+                    // Feature Checklist
+                    r.jsx("div", {
+                      className: "space-y-2 pt-1",
+                      children: (plan.features || []).map((feat, idx) =>
+                        r.jsxs(
+                          "div",
+                          {
+                            key: idx,
+                            className: "flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300",
+                            children: [
+                              r.jsx(iu("Check"), {
+                                className: `w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                                  plan.color === "emerald"
+                                    ? "text-emerald-500"
+                                    : plan.color === "indigo"
+                                    ? "text-indigo-400"
+                                    : plan.color === "purple"
+                                    ? "text-purple-400"
+                                    : "text-amber-400"
+                                }`,
+                              }),
+                              r.jsx("span", { children: feat }),
+                            ],
+                          }
+                        )
+                      ),
+                    }),
+                  ],
+                }),
+
+                // Bottom CTA Button & Admin Quick Edit
+                r.jsxs("div", {
+                  className: "pt-6 space-y-2",
+                  children: [
+                    r.jsx("button", {
+                      onClick: () => {
+                        setSelectedPlan(plan.id);
+                        setShowCheckout(true);
+                      },
+                      disabled: !plan.isActive || plan.isTestingMode,
+                      className: `w-full py-3 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                        isFree
+                          ? "bg-slate-800 hover:bg-slate-700 text-white"
+                          : plan.isPopular
+                          ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30"
+                          : plan.id === "lifetime_alpha"
+                          ? "bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-600 text-slate-950 font-black"
+                          : "bg-purple-600 hover:bg-purple-500 text-white shadow-purple-600/30"
+                      }`,
+                      children: plan.isTestingMode
+                        ? s("🧪 টেস্টিং পার্পাস (সাময়িক বন্ধ)", "Testing Purpose (Closed)")
+                        : isFree
+                        ? s("৭ দিনের ফ্রি ট্রায়াল শুরু করুন", "Start 7-Day Free Trial")
+                        : s(`প্যাকেজটি বেছে নিন (${plan.priceUsd} USDT)`, `Select Plan (${plan.priceUsd} USDT)`),
+                    }),
+
+                    // Admin Edit trigger for this plan
+                    isAdmin &&
+                      r.jsxs("button", {
+                        onClick: () => setEditingPlan(plan),
+                        className: "w-full py-1.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-amber-400 text-[10px] font-bold flex items-center justify-center gap-1 transition-colors cursor-pointer",
+                        children: [r.jsx(iu("Edit"), { className: "w-3 h-3" }), s("⚙️ প্রাইস ও অফার এডিট করুন", "Edit Price & Offer")],
+                      }),
+                  ],
+                }),
+              ],
+            }
+          );
+        }),
+      }),
+
+      // =======================================================================
+      // Admin Package & Dynamic Pricing Editor Modal
+      // =======================================================================
+      isAdmin &&
+        editingPlan &&
+        r.jsx("div", {
+          className: "fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fade-in",
+          children: r.jsxs("div", {
+            className: "w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl text-slate-100 max-h-[90vh] overflow-y-auto",
+            children: [
+              r.jsxs("div", {
+                className: "flex items-center justify-between pb-3 border-b border-slate-800",
+                children: [
+                  r.jsxs("div", {
+                    children: [
+                      r.jsx("h2", {
+                        className: "text-lg font-black text-white flex items-center gap-2",
+                        children: s(`প্যাকেজ এডিটর: ${editingPlan.nameBn}`, `Edit Plan: ${editingPlan.nameEn}`),
+                      }),
+                      r.jsx("p", {
+                        className: "text-xs text-slate-400 mt-0.5",
+                        children: s("প্রাইস, ডিসকাউন্ট অফার, টাইমিং ও লিমিটেশন রিয়েল-টাইমে পরিবর্তন করুন।", "Update price, discount offers, timing, and feature limits in real time."),
+                      }),
+                    ],
+                  }),
+                  r.jsx("button", {
+                    onClick: () => setEditingPlan(null),
+                    className: "w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer",
+                    children: "✕",
+                  }),
+                ],
+              }),
+
+              planSaveMessage &&
+                r.jsx("div", {
+                  className: "p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center",
+                  children: planSaveMessage,
+                }),
+
+              r.jsxs("form", {
+                onSubmit: handleSavePackage,
+                className: "space-y-5",
+                children: [
+                  // Price & Original Price (Discount)
+                  r.jsxs("div", {
+                    className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                    children: [
+                      r.jsxs("div", {
+                        className: "space-y-1",
+                        children: [
+                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("প্রাইস (Price in USDT / USD): *", "Current Price (USDT): *") }),
+                          r.jsx("input", {
+                            type: "number",
+                            required: true,
+                            value: editingPlan.priceUsd,
+                            onChange: (e) => setEditingPlan({ ...editingPlan, priceUsd: Number(e.target.value) }),
+                            className: "w-full p-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono font-bold text-amber-400 outline-none focus:border-amber-400",
+                          }),
+                        ],
+                      }),
+
+                      r.jsxs("div", {
+                        className: "space-y-1",
+                        children: [
+                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("মূল প্রাইস (Original Price - কাটা থাকবে):", "Original Price (Strikethrough):") }),
+                          r.jsx("input", {
+                            type: "number",
+                            value: editingPlan.originalPriceUsd || 0,
+                            onChange: (e) => setEditingPlan({ ...editingPlan, originalPriceUsd: Number(e.target.value) }),
+                            className: "w-full p-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono text-slate-300 outline-none focus:border-amber-400",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Discount Badge & Offer Period
+                  r.jsxs("div", {
+                    className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                    children: [
+                      r.jsxs("div", {
+                        className: "space-y-1",
+                        children: [
+                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("অফার ব্যাজ লেখা (Offer Badge):", "Offer Badge Text:") }),
+                          r.jsx("input", {
+                            type: "text",
+                            value: editingPlan.discountBadge || "",
+                            onChange: (e) => setEditingPlan({ ...editingPlan, discountBadge: e.target.value }),
+                            placeholder: "যেমন: 🔥 ৪০% স্পেশাল ছাড়",
+                            className: "w-full p-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-amber-400",
+                          }),
+                        ],
+                      }),
+
+                      r.jsxs("div", {
+                        className: "space-y-1",
+                        children: [
+                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("মেয়াদ কালীন লেখা (Period Text):", "Period Text:") }),
+                          r.jsx("input", {
+                            type: "text",
+                            value: editingPlan.periodBn,
+                            onChange: (e) => setEditingPlan({ ...editingPlan, periodBn: e.target.value }),
+                            className: "w-full p-2.5 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-amber-400",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Status Switches: Testing Purpose / Active
+                  r.jsxs("div", {
+                    className: "p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3",
+                    children: [
+                      r.jsx("h4", { className: "text-xs font-black uppercase text-amber-400", children: s("প্যাকেজ স্ট্যাটাস ও টেস্টিং মোড কন্ট্রোল", "Status & Testing Purpose Control") }),
+                      r.jsxs("div", {
+                        className: "grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs",
+                        children: [
+                          r.jsxs("label", {
+                            className: "flex items-center gap-2 cursor-pointer",
+                            children: [
+                              r.jsx("input", {
+                                type: "checkbox",
+                                checked: editingPlan.isActive,
+                                onChange: (e) => setEditingPlan({ ...editingPlan, isActive: e.target.checked }),
+                                className: "rounded w-4 h-4 text-amber-500",
+                              }),
+                              r.jsx("span", { children: "প্যাকেজটি চালু রাখুন (Active for Purchase)" }),
+                            ],
+                          }),
+                          r.jsxs("label", {
+                            className: "flex items-center gap-2 cursor-pointer",
+                            children: [
+                              r.jsx("input", {
+                                type: "checkbox",
+                                checked: editingPlan.isTestingMode,
+                                onChange: (e) => setEditingPlan({ ...editingPlan, isTestingMode: e.target.checked }),
+                                className: "rounded w-4 h-4 text-rose-500",
+                              }),
+                              r.jsx("span", { className: "text-rose-400 font-bold", children: "🧪 টেস্টিং পার্পাস / সাময়িক বন্ধ (Testing Mode)" }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Tier Limitations: Free Notes limit & Strategy limit
+                  r.jsxs("div", {
+                    className: "p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3",
+                    children: [
+                      r.jsx("h4", { className: "text-xs font-black uppercase text-amber-400", children: s("ফিচার সীমাবদ্ধতা (Feature Limitations - Free vs VIP)", "Feature Limits") }),
+                      r.jsxs("div", {
+                        className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                        children: [
+                          r.jsxs("div", {
+                            className: "space-y-1",
+                            children: [
+                              r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("দৈনিক ট্রেডিং নোটস লিমিট (-১ দিলে আনলিমিটেড):", "Daily Notes Limit (-1 for unlimited):") }),
+                              r.jsx("input", {
+                                type: "number",
+                                value: editingPlan.limitations?.dailyNotesLimit ?? 3,
+                                onChange: (e) =>
+                                  setEditingPlan({
+                                    ...editingPlan,
+                                    limitations: {
+                                      ...(editingPlan.limitations || {}),
+                                      dailyNotesLimit: Number(e.target.value),
+                                    },
+                                  }),
+                                className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white outline-none",
+                              }),
+                            ],
+                          }),
+                          r.jsxs("div", {
+                            className: "space-y-1",
+                            children: [
+                              r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("প্লেবুক স্ট্র্যাটেজি লিমিট (-১ দিলে আনলিমিটেড):", "Playbook Strategies Limit (-1 for unlimited):") }),
+                              r.jsx("input", {
+                                type: "number",
+                                value: editingPlan.limitations?.playbookStrategiesLimit ?? 2,
+                                onChange: (e) =>
+                                  setEditingPlan({
+                                    ...editingPlan,
+                                    limitations: {
+                                      ...(editingPlan.limitations || {}),
+                                      playbookStrategiesLimit: Number(e.target.value),
+                                    },
+                                  }),
+                                className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white outline-none",
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Features Checklist Manager
+                  r.jsxs("div", {
+                    className: "space-y-2",
+                    children: [
+                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: s("প্যাকেজ ফিচার লিস্ট (Features Included):", "Package Features:") }),
+                      r.jsx("div", {
+                        className: "space-y-1.5 max-h-40 overflow-y-auto p-2 rounded-xl bg-slate-950 border border-slate-800",
+                        children: (editingPlan.features || []).map((feat, idx) =>
+                          r.jsxs(
+                            "div",
+                            {
+                              key: idx,
+                              className: "flex items-center justify-between gap-2 p-1.5 rounded-lg bg-slate-900 text-xs",
+                              children: [
+                                r.jsx("span", { className: "truncate", children: feat }),
+                                r.jsx("button", {
+                                  type: "button",
+                                  onClick: () => handleRemoveFeature(idx),
+                                  className: "text-rose-400 hover:text-rose-300 font-bold px-1.5 cursor-pointer",
+                                  children: "✕",
+                                }),
+                              ],
+                            }
+                          )
+                        ),
+                      }),
+                      r.jsxs("div", {
+                        className: "flex items-center gap-2 pt-1",
+                        children: [
+                          r.jsx("input", {
+                            type: "text",
+                            value: newFeatureText,
+                            onChange: (e) => setNewFeatureText(e.target.value),
+                            placeholder: "নতুন ফিচার লিখুন (যেমন: ১-ক্লিক সোশ্যাল অটো-পোস্টিং)",
+                            className: "flex-1 p-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none",
+                          }),
+                          r.jsx("button", {
+                            type: "button",
+                            onClick: handleAddFeature,
+                            className: "px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white cursor-pointer",
+                            children: "+ যোগ করুন",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Action Buttons
+                  r.jsxs("div", {
+                    className: "flex items-center justify-end gap-3 pt-4 border-t border-slate-800",
+                    children: [
+                      r.jsx("button", {
+                        type: "button",
+                        onClick: () => setEditingPlan(null),
+                        className: "px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 cursor-pointer",
+                        children: s("বাতিল", "Cancel"),
+                      }),
+                      r.jsxs("button", {
+                        type: "submit",
+                        disabled: isSavingPlan,
+                        className: "px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow-md cursor-pointer disabled:opacity-50",
+                        children: [
+                          r.jsx(iu("Save"), { className: "w-4 h-4" }),
+                          isSavingPlan ? s("সংরক্ষণ হচ্ছে...", "Saving...") : s("পরিবর্তন সেভ করুন", "Save Changes"),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          }),
+        }),
+
+      // Info Notice Card
+      r.jsxs("div", {
+        className: "p-6 sm:p-8 rounded-3xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-4",
+        children: [
+          r.jsxs("div", {
+            className: "flex items-center gap-3",
+            children: [
+              r.jsx("div", {
+                className: "w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold",
+                children: r.jsx(iu("Wallet"), { className: "w-5 h-5" }),
+              }),
+              r.jsxs("div", {
+                children: [
+                  r.jsx("h4", {
+                    className: "font-black text-base text-slate-900 dark:text-white",
+                    children: s("ক্রিপ্টো সাবস্ক্রিপশন ও অটো-ভেরিফিকেশন তথ্যাবলী", "Crypto Subscription & Auto-Verification"),
+                  }),
+                  r.jsx("p", {
+                    className: "text-xs text-slate-500 dark:text-slate-400",
+                    children: s(
+                      "বাইনান্স পে (Binance Pay ID: 336527372) অথবা বাইবিট (Bybit UID: 412658047) ০% ফি-তে সরাসরি USDT ট্রান্সফার করুন",
+                      "Instant USDT transfers via official Binance Pay or Bybit UID with 0% fee"
+                    ),
+                  }),
+                ],
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
 }
 
-function PaymentGatewayPage({page:t,section:e,portalType:n,preselectedPackageId:initPkg,onBackToPackages:onBack}){
-  const{currentUser:user,language:lang}=Xo();
-  const s=(bn,en)=>lang==="bn"?bn:en;
 
-  const[activeMethod,setActiveMethod]=b.useState("binance");
-  const[packageId,setPackageId]=b.useState(initPkg||"standard");
-  const[senderAccount,setSenderAccount]=b.useState("");
-  const[transactionId,setTransactionId]=b.useState("");
-  const[notes,setNotes]=b.useState("");
-  const[copiedKey,setCopiedKey]=b.useState(null);
-  const[isSubmitting,setIsSubmitting]=b.useState(!1);
-  const[submitResult,setSubmitResult]=b.useState(null);
-  const[paymentsList,setPaymentsList]=b.useState([]);
-  const[loadingHistory,setLoadingHistory]=b.useState(!0);
+// Forex AI News V2.2 — Institutional Crypto Payment Gateway & Automated Gmail Verification Desk
+// Compatible with bundle runtime: Xo(), b (React), r (jsx runtime), iu (lucide loader)
 
-  const packagesMap={
-    free_starter:{id:"free_starter",name:s("৭ দিন ফ্রি ট্রায়াল (Free Starter)","7-Day Free Trial"),usd:0},
-    standard:{id:"standard",name:s("স্ট্যান্ডার্ড ট্রেডার (29 USDT / $29)","Standard Trader (29 USDT / $29)"),usd:29},
-    vip_pro:{id:"vip_pro",name:s("ভিআইপি প্রো (79 USDT / $79)","VIP Institutional Pro (79 USDT / $79)"),usd:79},
-    lifetime_alpha:{id:"lifetime_alpha",name:s("লাইফটাইম আলফা (199 USDT / $199)","Lifetime Alpha (199 USDT / $199)"),usd:199}
+function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPackageId: initPkg, onBackToPackages: onBack }) {
+  const { currentUser: user, language: lang } = Xo();
+  const isAdmin = user && (user.role === "admin" || user.id === "usr_admin_master");
+  const s = (bn, en) => (lang === "bn" ? bn : en);
+
+  // Active top-level tab for Admin: "checkout" | "settings" | "email_logs"
+  const [adminTab, setAdminTab] = b.useState("checkout");
+
+  // Client Checkout States
+  const [activeMethod, setActiveMethod] = b.useState("binance");
+  const [packageId, setPackageId] = b.useState(initPkg || "standard");
+  const [senderAccount, setSenderAccount] = b.useState("");
+  const [transactionId, setTransactionId] = b.useState("");
+  const [notes, setNotes] = b.useState("");
+  const [copiedKey, setCopiedKey] = b.useState(null);
+  const [isSubmitting, setIsSubmitting] = b.useState(false);
+  const [submitResult, setSubmitResult] = b.useState(null);
+  const [paymentsList, setPaymentsList] = b.useState([]);
+  const [loadingHistory, setLoadingHistory] = b.useState(true);
+
+  // Gateway Settings State (Dynamic from /api/payments/settings)
+  const [gatewaySettings, setGatewaySettings] = b.useState({
+    binancePayId: "336527372",
+    binanceEmail: "m.rahmanhabib.my@gmail.com",
+    binanceTrc20: "TJD9MM68dkpFN8pxkfKsKTqyECuF9cCPZm",
+    binanceBep20: "",
+    binanceQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=binance://pay?payId=336527372",
+    bybitUid: "412658047",
+    bybitEmail: "m.rahmanhabib.my@gmail.com",
+    bybitTrc20: "TBaKmVu6kGeB1ew9hDgMbUvqrDWeur8DSf",
+    bybitQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=bybit://transfer?uid=412658047",
+    gmailAccount: "m.rahmanhabib.my@gmail.com",
+    webhookSecret: "forex_ai_crypto_verify_secret_2026",
+    autoVerificationEnabled: true,
+    syncIntervalSeconds: 60,
+    totalAutoApprovedCount: 1,
+    lastSyncAt: new Date().toISOString(),
+  });
+  const [isSavingSettings, setIsSavingSettings] = b.useState(false);
+  const [settingsSaveMsg, setSettingsSaveMsg] = b.useState("");
+
+  // Email Logs State
+  const [emailLogs, setEmailLogs] = b.useState([]);
+  // Gmail Verification Engine Mode: "method2" (Pub/Sub 1-Second Push) | "method1" (Apps Script 60s Polling)
+  const [verificationMethod, setVerificationMethod] = b.useState("method2");
+  const [isPubSubTesting, setIsPubSubTesting] = b.useState(false);
+  const [pubSubLatency, setPubSubLatency] = b.useState(null);
+  const [pubSubTestResult, setPubSubTestResult] = b.useState(null);
+  const [isSimulating, setIsSimulating] = b.useState(false);
+  const [simulationResult, setSimulationResult] = b.useState("");
+
+  const packagesMap = {
+    free_starter: { id: "free_starter", name: s("৭ দিন ফ্রি ট্রায়াল (Free Starter)", "7-Day Free Trial"), usd: 0 },
+    standard: { id: "standard", name: s("স্ট্যান্ডার্ড ট্রেডার (29 USDT / $29)", "Standard Trader (29 USDT / $29)"), usd: 29 },
+    vip_pro: { id: "vip_pro", name: s("ভিআইপি প্রো (79 USDT / $79)", "VIP Institutional Pro (79 USDT / $79)"), usd: 79 },
+    lifetime_alpha: { id: "lifetime_alpha", name: s("লাইফটাইম আলফা (199 USDT / $199)", "Lifetime Alpha (199 USDT / $199)"), usd: 199 },
+  };
+  const selectedPkg = packagesMap[packageId] || packagesMap.standard;
+
+  // Load live payments & gateway settings
+  const refreshData = () => {
+    fetch("/api/payments")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && d.payments) setPaymentsList(d.payments);
+      })
+      .catch(() => {})
+      .finally(() => setLoadingHistory(false));
+
+    fetch("/api/payments/settings")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && d.settings) setGatewaySettings(d.settings);
+      })
+      .catch(() => {});
+
+    if (isAdmin) {
+      fetch("/api/payments/email-logs")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success && d.logs) setEmailLogs(d.logs);
+        })
+        .catch(() => {});
+    }
   };
 
-  const selectedPkg=packagesMap[packageId]||packagesMap.standard;
+  b.useEffect(() => {
+    refreshData();
+    const interval = setInterval(refreshData, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
-  b.useEffect(()=>{
-    fetch("/api/payments")
-      .then(r=>r.json())
-      .then(d=>{if(d.success&&d.payments)setPaymentsList(d.payments)})
-      .catch(()=>{})
-      .finally(()=>setLoadingHistory(!1));
-  },[]);
-
-  const handleCopy=(text,key)=>{
-    try{
+  const handleCopy = (text, key) => {
+    try {
       navigator.clipboard.writeText(text);
       setCopiedKey(key);
-      setTimeout(()=>setCopiedKey(null),2500);
-    }catch(e){}
+      setTimeout(() => setCopiedKey(null), 2500);
+    } catch (e) {}
   };
 
-  const handleSubmitProof=async ev=>{
-    if(ev)ev.preventDefault();
-    if(!transactionId.trim()){
-      alert(s("অনুগ্রহ করে ট্রানজেকশন আইডি / হ্যাশ (TxID) লিখুন।","Please enter your Transaction ID (TxID)."));
+  const handleSubmitProof = async (ev) => {
+    if (ev) ev.preventDefault();
+    if (!transactionId.trim()) {
+      alert(s("অনুগ্রহ করে ট্রানজেকশন আইডি / হ্যাশ (TxID) লিখুন।", "Please enter your Transaction ID (TxID)."));
       return;
     }
-    setIsSubmitting(!0);
+    setIsSubmitting(true);
     setSubmitResult(null);
-    try{
-      const res=await fetch("/api/payments/submit",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          packageId:selectedPkg.id,
-          packageName:selectedPkg.name,
-          amountUsd:selectedPkg.usd,
-          method:activeMethod,
-          senderAccount:senderAccount.trim(),
-          transactionId:transactionId.trim(),
-          notes:notes.trim()
-        })
+
+    try {
+      const res = await fetch("/api/payments/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          packageId: selectedPkg.id,
+          packageName: selectedPkg.name,
+          amountUsd: selectedPkg.usd,
+          method: activeMethod,
+          senderAccount: senderAccount.trim(),
+          transactionId: transactionId.trim(),
+          notes: notes.trim(),
+        }),
       });
-      const data=await res.json();
-      if(data.success){
+      const data = await res.json();
+      if (data.success) {
+        const isAutoApproved = data.payment && data.payment.status === "APPROVED";
         setSubmitResult({
-          success:!0,
-          message:s("ক্রিপ্টো পেমেন্ট প্রমাণ সফলভাবে জমা নেওয়া হয়েছে! আমাদের টিম ব্লকচেইন রেকর্ড ভেরিফাই করে সাবস্ক্রিপশন সক্রিয় করবে।","Crypto payment proof submitted successfully! Blockchain verification will complete in 5-15 minutes.")
+          success: true,
+          message: isAutoApproved
+            ? s("⚡ অভিনন্দন! জিমেইল ভেরিফিকেশনের মাধ্যমে আপনার পেমেন্ট তাৎক্ষণিক অনুমোদিত (Approved) হয়েছে!", "⚡ Congratulations! Instant auto-approval verified via Gmail!")
+            : s("ক্রিপ্টো পেমেন্ট প্রমাণ জমা হয়েছে! সিস্টেম স্বয়ংক্রিয়ভাবে জিমেইল নোটিফিকেশনের সাথে মিলিয়ে অনুমোদন করে দেবে।", "Proof submitted! System will auto-verify against Gmail notifications shortly."),
         });
         setTransactionId("");
         setSenderAccount("");
         setNotes("");
-        if(data.payment){
-          setPaymentsList(prev=>[data.payment,...prev]);
-        }
-      }else{
-        setSubmitResult({success:!1,message:data.error||s("সাবমিশনে সমস্যা হয়েছে।","Submission error.")});
+        refreshData();
+      } else {
+        setSubmitResult({ success: false, message: data.error || s("সাবমিশনে সমস্যা হয়েছে।", "Submission error.") });
       }
-    }catch(e){
-      setSubmitResult({success:!1,message:s("সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি।","Network error.")});
-    }finally{
-      setIsSubmitting(!1);
+    } catch (e) {
+      setSubmitResult({ success: false, message: s("সার্ভারের সাথে সংযোগ স্থাপন করা সম্ভব হয়নি।", "Network error.") });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return r.jsxs("div",{className:"max-w-5xl mx-auto space-y-7 pb-16 animate-fade-in px-2 sm:px-4",children:[
-    // Header
-    r.jsxs("div",{className:"flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800",children:[
-      r.jsxs("div",{children:[
-        r.jsxs("div",{className:"flex items-center gap-3",children:[
-          r.jsx("div",{className:"w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white shadow-md shadow-amber-500/20",children:$o.createElement(iu("Wallet"),{className:"w-5 h-5"})}),
-          r.jsxs("div",{children:[
-            r.jsx("h1",{className:"text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight",children:s("ক্রিপ্টো পেমেন্ট গেটওয়ে (Crypto Gateway)","Crypto Payment Gateway Desk")}),
-            r.jsx("p",{className:"text-xs text-slate-500 dark:text-slate-400 mt-0.5",children:s("বাইনান্স পে (Binance Pay) অথবা বাইবিট (Bybit) এর মাধ্যমে সরাসরি USDT ট্রান্সফার","Direct USDT Payment via Binance Pay ID or Bybit UID")})
-          ]})
-        ]})
-      ]}),
-      onBack&&r.jsxs("button",{onClick:onBack,className:"px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer",children:[
-        s("← প্যাকেজ তালিকায় ফিরে যান","← Back to Packages")
-      ]})
-    ]}),
+  const handleSaveSettings = async (ev) => {
+    if (ev) ev.preventDefault();
+    setIsSavingSettings(true);
+    setSettingsSaveMsg("");
 
-    // Selected Package Indicator Card
-    r.jsxs("div",{className:"p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm",children:[
-      r.jsxs("div",{className:"flex items-center gap-3.5",children:[
-        r.jsx("div",{className:"w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold",children:$o.createElement(iu("Coins"),{className:"w-6 h-6"})}),
-        r.jsxs("div",{children:[
-          r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block",children:s("নির্বাচিত প্যাকেজ ও প্রদেয় ফি (USDT)","Selected Package & Amount")}),
-          r.jsx("h3",{className:"text-base sm:text-lg font-black text-slate-900 dark:text-white",children:selectedPkg.name}),
-          r.jsxs("p",{className:"text-xs text-slate-500",children:[s("মোট প্রদেয়: ","Total: "),r.jsx("strong",{className:"text-amber-600 dark:text-amber-400 font-bold",children:`${selectedPkg.usd} USDT`})]})
-        ]})
-      ]}),
-      r.jsxs("div",{className:"flex items-center gap-2 w-full sm:w-auto",children:[
-        r.jsx("label",{className:"text-xs font-bold text-slate-600 dark:text-slate-400 shrink-0",children:s("প্যাকেজ পরিবর্তন:","Change Plan:")}),
-        r.jsx("select",{
-          value:packageId,
-          onChange:ev=>setPackageId(ev.target.value),
-          className:"flex-1 sm:flex-none px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none",
-          children:Object.values(packagesMap).map(p=>r.jsx("option",{value:p.id,children:p.name},p.id))
-        })
-      ]})
-    ]}),
+    try {
+      const res = await fetch("/api/payments/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(gatewaySettings),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSettingsSaveMsg(s("✅ ক্রিপ্টো গেটওয়ে ও জিমেইল সেটিংস সফলভাবে সংরক্ষিত হয়েছে!", "✅ Settings saved successfully!"));
+        setGatewaySettings(data.settings);
+        setTimeout(() => setSettingsSaveMsg(""), 3500);
+      } else {
+        setSettingsSaveMsg("Error saving settings");
+      }
+    } catch (err) {
+      setSettingsSaveMsg("Network error");
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
 
-    // 2 Methods Tab Selector (Binance and Bybit Only)
-    r.jsxs("div",{className:"space-y-3",children:[
-      r.jsx("label",{className:"block text-xs font-black uppercase tracking-wider text-slate-500",children:s("ক্রিপ্টো পেমেন্ট মাধ্যম বেছে নিন (Select Crypto Method):","Select Crypto Method:")}),
-      r.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 gap-4",children:[
-        // 1. Binance Tab
-        r.jsxs("button",{
-          type:"button",
-          onClick:()=>setActiveMethod("binance"),
-          className:`p-4 sm:p-5 rounded-2xl border-2 transition-all flex items-center justify-between text-left cursor-pointer ${activeMethod==="binance"?"border-amber-500 bg-amber-500/10 shadow-md ring-2 ring-amber-500/20":"bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-300"}`,
-          children:[
-            r.jsxs("div",{className:"flex items-center gap-3.5",children:[
-              r.jsx("div",{className:"w-11 h-11 rounded-xl bg-[#F3BA2F]/20 flex items-center justify-center font-black text-[#F3BA2F] text-base shrink-0",children:"BN"}),
-              r.jsxs("div",{children:[
-                r.jsx("h4",{className:"font-black text-sm text-slate-900 dark:text-white",children:s("১. বাইনান্স পে (Binance Pay)","1. Binance Pay")}),
-                r.jsx("p",{className:"text-[11px] text-slate-500",children:"Binance Pay ID / USDT TRC20 / BEP20"})
-              ]})
-            ]}),
-            activeMethod==="binance"&&r.jsx(Pt,{className:"w-5 h-5 text-amber-500 shrink-0"})
-          ]
+  const handleTestPubSubPush = async (platform = "binance") => {
+    setIsPubSubTesting(true);
+    setPubSubTestResult(null);
+    setPubSubLatency(null);
+    const startTime = performance.now();
+    try {
+      const token = localStorage.getItem("auth_token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch("/api/payments/simulate-pubsub", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          platform: platform,
+          amount: selectedPkg.usd || 29,
+          senderName: platform === "bybit" ? "Bybit UID 412658047" : "Binance User 336527372",
+        }),
+      });
+      const data = await res.json();
+      const elapsed = Math.round(performance.now() - startTime);
+      setPubSubLatency(elapsed);
+      setPubSubTestResult(data);
+      refreshData();
+      if (data.success && data.message) {
+        setSimulationResult(data.message);
+      }
+    } catch (e) {
+      setPubSubTestResult({ error: "Network error during Pub/Sub push" });
+    } finally {
+      setIsPubSubTesting(false);
+    }
+  };
+
+  const handleSimulateDeposit = async (platform) => {
+    setIsSimulating(true);
+    setSimulationResult("");
+    try {
+      const res = await fetch("/api/payments/simulate-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform: platform,
+          amount: selectedPkg.usd || 29,
+          senderName: platform === "binance" ? "Binance User (Pay ID: 94810239)" : "Bybit UID 184920381",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSimulationResult(data.message);
+        refreshData();
+      } else {
+        setSimulationResult(data.error || "Simulation error");
+      }
+    } catch (e) {
+      setSimulationResult("Simulation network error");
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
+  const handleUpdateStatus = async (paymentId, newStatus) => {
+    try {
+      const res = await fetch("/api/payments/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: paymentId, status: newStatus }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        refreshData();
+      }
+    } catch (e) {}
+  };
+
+  return r.jsxs("div", {
+    className: "max-w-6xl mx-auto space-y-7 pb-20 animate-fade-in px-2 sm:px-4 text-left text-slate-100",
+    children: [
+      // Top Header
+      r.jsxs("div", {
+        className: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800",
+        children: [
+          r.jsxs("div", {
+            className: "flex items-center gap-3.5",
+            children: [
+              r.jsx("div", {
+                className: "w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center font-bold shadow-md",
+                children: r.jsx(iu("Wallet"), { className: "w-6 h-6" }),
+              }),
+              r.jsxs("div", {
+                children: [
+                  r.jsxs("div", {
+                    className: "flex items-center gap-2",
+                    children: [
+                      r.jsx("h1", {
+                        className: "text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight",
+                        children: s("ক্রিপ্টো পেমেন্ট গেটওয়ে ও অটো-ভেরিফিকেশন ডেস্ক", "Crypto Payment Gateway & Auto-Verification"),
+                      }),
+                      r.jsx("span", {
+                        className: "px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold uppercase",
+                        children: "⚡ Gmail Auto-Sync",
+                      }),
+                    ],
+                  }),
+                  r.jsx("p", {
+                    className: "text-xs text-slate-500 dark:text-slate-400 mt-0.5",
+                    children: s(
+                      "বাইনান্স পে (Binance Pay) ও বাইবিট (Bybit) এর মাধ্যমে সরাসরি USDT ট্রান্সফার ও রিয়েল-টাইম জিমেইল কনফার্মেশন",
+                      "Direct USDT Transfer via Binance Pay & Bybit with automated Gmail transaction verification"
+                    ),
+                  }),
+                ],
+              }),
+            ],
+          }),
+          onBack &&
+            r.jsxs("button", {
+              onClick: onBack,
+              className: "px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer",
+              children: [s("← প্যাকেজ তালিকায় ফিরে যান", "← Back to Packages")],
+            }),
+        ],
+      }),
+
+      // Admin Management Tabs (If admin)
+      isAdmin &&
+        r.jsxs("div", {
+          className: "flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800",
+          children: [
+            r.jsxs("button", {
+              onClick: () => setAdminTab("checkout"),
+              className: `px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+                adminTab === "checkout" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
+              }`,
+              children: [r.jsx(iu("Coins"), { className: "w-4 h-4" }), s("ইউজার চেকআউট ডেস্ক", "User Checkout View")],
+            }),
+            r.jsxs("button", {
+              onClick: () => setAdminTab("settings"),
+              className: `px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+                adminTab === "settings" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
+              }`,
+              children: [r.jsx(iu("Shield"), { className: "w-4 h-4" }), s("⚙️ অ্যাডমিন ক্রিপ্টো কনফিগ ও জিমেইল সেটিংস", "⚙️ Gateway & Gmail Settings")],
+            }),
+            r.jsxs("button", {
+              onClick: () => setAdminTab("email_logs"),
+              className: `px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all cursor-pointer ${
+                adminTab === "email_logs" ? "bg-amber-500 text-slate-950 shadow-md" : "text-slate-400 hover:text-white"
+              }`,
+              children: [
+                r.jsx(iu("Mail"), { className: "w-4 h-4" }),
+                s("ইনবক্স ডিপোজিট লগস", "Gmail Deposit Logs"),
+                r.jsx("span", {
+                  className: "px-1.5 py-0.2 rounded-full bg-slate-950 text-amber-400 text-[10px] font-mono",
+                  children: emailLogs.length,
+                }),
+              ],
+            }),
+          ],
         }),
 
-        // 2. Bybit Tab
-        r.jsxs("button",{
-          type:"button",
-          onClick:()=>setActiveMethod("bybit"),
-          className:`p-4 sm:p-5 rounded-2xl border-2 transition-all flex items-center justify-between text-left cursor-pointer ${activeMethod==="bybit"?"border-orange-500 bg-orange-500/10 shadow-md ring-2 ring-orange-500/20":"bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-orange-300"}`,
-          children:[
-            r.jsxs("div",{className:"flex items-center gap-3.5",children:[
-              r.jsx("div",{className:"w-11 h-11 rounded-xl bg-orange-500/20 flex items-center justify-center font-black text-orange-500 text-base shrink-0",children:"BY"}),
-              r.jsxs("div",{children:[
-                r.jsx("h4",{className:"font-black text-sm text-slate-900 dark:text-white",children:s("২. বাইবিট পে (Bybit Pay)","2. Bybit Pay")}),
-                r.jsx("p",{className:"text-[11px] text-slate-500",children:"Bybit UID (0% Fee) / USDT TRC20"})
-              ]})
-            ]}),
-            activeMethod==="bybit"&&r.jsx(Pt,{className:"w-5 h-5 text-orange-500 shrink-0"})
-          ]
-        })
-      ]})
-    ]}),
+      // =========================================================================
+      // TAB 1: Client Checkout Desk
+      // =========================================================================
+      adminTab === "checkout" &&
+        r.jsxs("div", {
+          className: "space-y-6 animate-fade-in",
+          children: [
+            // Selected Plan Indicator
+            r.jsxs("div", {
+              className: "p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center gap-3.5",
+                  children: [
+                    r.jsx("div", {
+                      className: "w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold",
+                      children: r.jsx(iu("Coins"), { className: "w-6 h-6" }),
+                    }),
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("span", {
+                          className: "text-[10px] font-black uppercase tracking-wider text-amber-500 block",
+                          children: s("নির্বাচিত প্যাকেজ ও প্রদেয় ফি (USDT)", "Selected Package & Amount"),
+                        }),
+                        r.jsx("h3", { className: "text-base sm:text-lg font-black text-slate-900 dark:text-white", children: selectedPkg.name }),
+                        r.jsxs("p", {
+                          className: "text-xs text-slate-500",
+                          children: [
+                            s("মোট প্রদেয়: ", "Total: "),
+                            r.jsx("strong", { className: "text-amber-500 font-bold", children: `${selectedPkg.usd} USDT` }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                r.jsxs("div", {
+                  className: "flex items-center gap-2 w-full sm:w-auto",
+                  children: [
+                    r.jsx("label", {
+                      className: "text-xs font-bold text-slate-600 dark:text-slate-400 shrink-0",
+                      children: s("প্যাকেজ পরিবর্তন:", "Change Plan:"),
+                    }),
+                    r.jsx("select", {
+                      value: packageId,
+                      onChange: (ev) => setPackageId(ev.target.value),
+                      className: "flex-1 sm:flex-none px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 outline-none",
+                      children: Object.values(packagesMap).map((p) => r.jsx("option", { value: p.id, children: p.name }, p.id)),
+                    }),
+                  ],
+                }),
+              ],
+            }),
 
-    // Selected Method Payment Instructions Card
-    r.jsxs("div",{className:"bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6",children:[
-      activeMethod==="binance"&&r.jsxs("div",{className:"space-y-5 animate-fade-in",children:[
-        r.jsxs("div",{className:"flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800",children:[
-          r.jsxs("div",{className:"flex items-center gap-2.5",children:[
-            r.jsx("span",{className:"px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-black text-xs",children:"বাইনান্স পে (Binance Pay)"}),
-            r.jsx("span",{className:"text-xs text-slate-500",children:"ইনস্ট্যান্ট ও নিরাপদ ক্রিপ্টো পেমেন্ট"})
-          ]}),
-          r.jsx("span",{className:"text-[11px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800",children:"0% Transfer Fee"})
-        ]}),
+            // Dynamic Automated Gmail Banner (Method Specific)
+            r.jsxs("div", {
+              className: `p-4 rounded-2xl border flex items-center justify-between gap-4 shadow-sm transition-all ${
+                activeMethod === "binance"
+                  ? "bg-gradient-to-r from-amber-950/40 via-slate-900 to-amber-950/20 border-amber-500/40"
+                  : "bg-gradient-to-r from-orange-950/40 via-slate-900 to-orange-950/20 border-orange-500/40"
+              }`,
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center gap-3",
+                  children: [
+                    r.jsx("div", {
+                      className: `w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                        activeMethod === "binance" ? "bg-amber-500/20 text-amber-400" : "bg-orange-500/20 text-orange-400"
+                      }`,
+                      children: r.jsx(iu("Zap"), { className: "w-5 h-5" }),
+                    }),
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("h4", {
+                          className: `text-xs font-black flex items-center gap-1.5 ${
+                            activeMethod === "binance" ? "text-amber-400" : "text-orange-400"
+                          }`,
+                          children:
+                            activeMethod === "binance"
+                              ? s("⚡ বাইনান্স পে (Binance Pay) জিমেইল অটো-ভেরিফিকেশন সক্রিয়", "⚡ Binance Pay Instant Auto-Verification Active")
+                              : s("⚡ বাইবিট পে (Bybit Transfer) জিমেইল অটো-ভেরিফিকেশন সক্রিয়", "⚡ Bybit Pay Instant Auto-Verification Active"),
+                        }),
+                        r.jsx("p", {
+                          className: "text-[11px] text-slate-400 leading-snug mt-0.5",
+                          children:
+                            activeMethod === "binance"
+                              ? s(
+                                  "বাইনান্স পে (Pay ID: 336527372) বা USDT TRC-20 তে ডলার পাঠিয়ে নিচের বক্সে আপনার Order ID বা TxID দিন। বাইনান্স থেকে কনফার্মেশন মেইল আসামাত্রই স্বয়ংক্রিয়ভাবে অ্যাকাউন্ট আনলক হয়ে যাবে।",
+                                  "Send via Binance Pay ID (336527372) or USDT TRC-20, then submit your Order ID / TxID. Subscription activates automatically when Binance confirms."
+                                )
+                              : s(
+                                  "বাইবিট (Bybit UID: 412658047) ০% ফি ইন্টারনাল ট্রান্সফারে ডলার পাঠিয়ে নিচের বক্সে আপনার Transfer ID বা TxID দিন। বাইবিট থেকে কনফার্মেশন মেইল আসামাত্রই স্বয়ংক্রিয়ভাবে অ্যাকাউন্ট আনলক হয়ে যাবে।",
+                                  "Send via Bybit Internal Transfer (UID: 412658047) with 0% fee, then submit your Transfer ID / TxID. Subscription activates automatically when Bybit confirms."
+                                ),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                r.jsx("span", {
+                  className: `hidden sm:inline px-3 py-1 rounded-full text-[10px] font-mono font-bold shrink-0 ${
+                    activeMethod === "binance"
+                      ? "bg-amber-500/10 border border-amber-500/30 text-amber-300"
+                      : "bg-orange-500/10 border border-orange-500/30 text-orange-300"
+                  }`,
+                  children: activeMethod === "binance" ? "Binance Instant" : "Bybit Instant",
+                }),
+              ],
+            }),
 
-        r.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
-          // Binance Pay ID
-          r.jsxs("div",{className:"p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 space-y-2",children:[
-            r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-amber-800 dark:text-amber-300",children:"১. Binance Pay ID (সরাসরি পে আইডি):"}),
-            r.jsxs("div",{className:"flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-700/60 font-mono text-xs font-bold text-slate-900 dark:text-white",children:[
-              r.jsx("span",{children:"298417814"}),
-              r.jsxs("button",{type:"button",onClick:()=>handleCopy("298417814","binance_pay_id"),className:"px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold transition-colors flex items-center gap-1 cursor-pointer",children:[
-                $o.createElement(iu(copiedKey==="binance_pay_id"?"Check":"Copy"),{className:"w-3 h-3"}),
-                copiedKey==="binance_pay_id"?s("কপি হয়েছে!","Copied!"):s("কপি","Copy")
-              ]})
-            ]})
-          ]}),
+            // 2 Payment Methods Selector
+            r.jsxs("div", {
+              className: "space-y-3",
+              children: [
+                r.jsx("label", {
+                  className: "block text-xs font-black uppercase tracking-wider text-slate-400",
+                  children: s("ক্রিপ্টো পেমেন্ট মাধ্যম বেছে নিন (Select Crypto Method):", "Select Crypto Method:"),
+                }),
+                r.jsxs("div", {
+                  className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                  children: [
+                    // Binance Card
+                    r.jsxs("button", {
+                      type: "button",
+                      onClick: () => {
+                        setActiveMethod("binance");
+                        setTransactionId("");
+                        setSenderAccount("");
+                      },
+                      className: `p-4 sm:p-5 rounded-2xl border-2 transition-all flex items-center justify-between text-left cursor-pointer ${
+                        activeMethod === "binance"
+                          ? "border-amber-500 bg-amber-500/10 shadow-md ring-2 ring-amber-500/20"
+                          : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-300"
+                      }`,
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-3.5",
+                          children: [
+                            r.jsx("div", {
+                              className: "w-11 h-11 rounded-xl bg-[#F3BA2F]/20 flex items-center justify-center font-black text-[#F3BA2F] text-base shrink-0",
+                              children: "BN",
+                            }),
+                            r.jsxs("div", {
+                              children: [
+                                r.jsx("h4", { className: "font-black text-sm text-slate-900 dark:text-white", children: s("১. বাইনান্স পে (Binance Pay)", "1. Binance Pay") }),
+                                r.jsx("p", { className: "text-[11px] text-amber-400 font-medium", children: "Pay ID: 336527372 / USDT TRC-20" }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        activeMethod === "binance" && r.jsx(iu("CheckCircle"), { className: "w-5 h-5 text-amber-500 shrink-0" }),
+                      ],
+                    }),
 
-          // Binance USDT TRC20 Address
-          r.jsxs("div",{className:"p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2",children:[
-            r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300",children:"২. USDT Deposit Address (Network: TRC-20):"}),
-            r.jsxs("div",{className:"flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[11px] font-bold text-slate-900 dark:text-white truncate",children:[
-              r.jsx("span",{className:"truncate",children:"TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2"}),
-              r.jsxs("button",{type:"button",onClick:()=>handleCopy("TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2","binance_trc20"),className:"px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold transition-colors flex items-center gap-1 shrink-0 cursor-pointer",children:[
-                $o.createElement(iu(copiedKey==="binance_trc20"?"Check":"Copy"),{className:"w-3 h-3"}),
-                copiedKey==="binance_trc20"?s("কপি হয়েছে!","Copied!"):s("কপি","Copy")
-              ]})
-            ]})
-          ]}),
+                    // Bybit Card
+                    r.jsxs("button", {
+                      type: "button",
+                      onClick: () => {
+                        setActiveMethod("bybit");
+                        setTransactionId("");
+                        setSenderAccount("");
+                      },
+                      className: `p-4 sm:p-5 rounded-2xl border-2 transition-all flex items-center justify-between text-left cursor-pointer ${
+                        activeMethod === "bybit"
+                          ? "border-orange-500 bg-orange-500/10 shadow-md ring-2 ring-orange-500/20"
+                          : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-orange-300"
+                      }`,
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-3.5",
+                          children: [
+                            r.jsx("div", {
+                              className: "w-11 h-11 rounded-xl bg-orange-500/20 flex items-center justify-center font-black text-orange-500 text-base shrink-0",
+                              children: "BY",
+                            }),
+                            r.jsxs("div", {
+                              children: [
+                                r.jsx("h4", { className: "font-black text-sm text-slate-900 dark:text-white", children: s("২. বাইবিট পে (Bybit Pay)", "2. Bybit Pay") }),
+                                r.jsx("p", { className: "text-[11px] text-orange-400 font-medium", children: "Bybit UID: 412658047 (০% ফি ট্রান্সফার)" }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        activeMethod === "bybit" && r.jsx(iu("CheckCircle"), { className: "w-5 h-5 text-orange-500 shrink-0" }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
 
-          // Binance USDT BEP20 (BSC) Address
-          r.jsxs("div",{className:"p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2 md:col-span-2",children:[
-            r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300",children:"৩. USDT Deposit Address (Network: BEP-20 BSC):"}),
-            r.jsxs("div",{className:"flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[11px] font-bold text-slate-900 dark:text-white truncate",children:[
-              r.jsx("span",{className:"truncate",children:"0x71C949B231f794966B21F77Fa09355E6437CB49f"}),
-              r.jsxs("button",{type:"button",onClick:()=>handleCopy("0x71C949B231f794966B21F77Fa09355E6437CB49f","binance_bep20"),className:"px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold transition-colors flex items-center gap-1 shrink-0 cursor-pointer",children:[
-                $o.createElement(iu(copiedKey==="binance_bep20"?"Check":"Copy"),{className:"w-3 h-3"}),
-                copiedKey==="binance_bep20"?s("কপি হয়েছে!","Copied!"):s("কপি","Copy")
-              ]})
-            ]})
-          ]})
-        ]}),
+            // Payment Instructions Card
+            r.jsxs("div", {
+              className: "bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6",
+              children: [
+                activeMethod === "binance" &&
+                  r.jsxs("div", {
+                    className: "space-y-5 animate-fade-in",
+                    children: [
+                      r.jsxs("div", {
+                        className: "flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800",
+                        children: [
+                          r.jsxs("div", {
+                            className: "flex items-center gap-2.5",
+                            children: [
+                              r.jsx("span", {
+                                className: "px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-black text-xs",
+                                children: s("বাইনান্স পে (Binance Pay)", "Binance Pay"),
+                              }),
+                              r.jsx("span", { className: "text-xs text-slate-400", children: s("ইনস্ট্যান্ট ও নিরাপদ ক্রিপ্টো পেমেন্ট", "Instant & Secure Crypto Transfer") }),
+                            ],
+                          }),
+                          r.jsx("span", {
+                            className: "text-[11px] font-bold text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-800",
+                            children: "0% Transfer Fee",
+                          }),
+                        ],
+                      }),
 
-        r.jsxs("div",{className:"p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 text-xs text-slate-600 dark:text-slate-300 space-y-1 leading-relaxed",children:[
-          r.jsx("strong",{className:"font-bold text-slate-900 dark:text-white block",children:"কীভাবে বাইনান্স পে করবেন:"}),
-          r.jsx("p",{children:"১. Binance App ওপেন করুন -> Pay আইকনে যান -> 'Send' চাপুন।"}),
-          r.jsx("p",{children:"২. Pay ID '298417814' দিন অথবা TRC20/BEP20 অ্যাড্রেসে সমপরিমাণ USDT ট্রান্সফার করুন।"}),
-          r.jsx("p",{children:"৩. পেমেন্ট সম্পন্ন হলে প্রাপ্ত Order ID বা TxID নিচের সাবমিশন ফর্মে দিন।"})
-        ]})
-      ]}),
+                      r.jsxs("div", {
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                        children: [
+                          // 1. Binance Pay ID
+                          r.jsxs("div", {
+                            className: "p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2",
+                            children: [
+                              r.jsx("span", {
+                                className: "text-[10px] font-black uppercase tracking-wider text-amber-300",
+                                children: s("১. অফিসিয়াল Binance Pay ID (সরাসরি পে আইডি):", "1. Official Binance Pay ID:"),
+                              }),
+                              r.jsxs("div", {
+                                className: "flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950 border border-amber-500/40 font-mono text-sm font-black text-amber-400",
+                                children: [
+                                  r.jsx("span", { children: gatewaySettings.binancePayId }),
+                                  r.jsxs("button", {
+                                    type: "button",
+                                    onClick: () => handleCopy(gatewaySettings.binancePayId, "binance_pay_id"),
+                                    className: "px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[10px] font-black transition-colors flex items-center gap-1 cursor-pointer",
+                                    children: [
+                                      r.jsx(iu(copiedKey === "binance_pay_id" ? "Check" : "Copy"), { className: "w-3 h-3" }),
+                                      copiedKey === "binance_pay_id" ? s("কপি হয়েছে!", "Copied!") : s("কপি", "Copy"),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
 
-      activeMethod==="bybit"&&r.jsxs("div",{className:"space-y-5 animate-fade-in",children:[
-        r.jsxs("div",{className:"flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800",children:[
-          r.jsxs("div",{className:"flex items-center gap-2.5",children:[
-            r.jsx("span",{className:"px-2.5 py-1 rounded-lg bg-orange-100 text-orange-800 font-black text-xs",children:"বাইবিট পে (Bybit Internal Transfer)"}),
-            r.jsx("span",{className:"text-xs text-slate-500",children:"জিরো ফি ইন্টারনাল ট্রান্সফার"})
-          ]}),
-          r.jsx("span",{className:"text-[11px] font-bold text-orange-600 bg-orange-50 dark:bg-orange-950/40 px-2.5 py-0.5 rounded-full border border-orange-200 dark:border-orange-800",children:"Instant Bybit Transfer"})
-        ]}),
+                          // 2. Binance TRC20 Address
+                          r.jsxs("div", {
+                            className: "p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2",
+                            children: [
+                              r.jsx("span", {
+                                className: "text-[10px] font-black uppercase tracking-wider text-slate-300",
+                                children: "২. USDT Deposit Address (Network: TRC-20 Only):",
+                              }),
+                              r.jsxs("div", {
+                                className: "flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-700 font-mono text-[11px] font-bold text-slate-200 truncate",
+                                children: [
+                                  r.jsx("span", { className: "truncate", children: gatewaySettings.binanceTrc20 }),
+                                  r.jsxs("button", {
+                                    type: "button",
+                                    onClick: () => handleCopy(gatewaySettings.binanceTrc20, "binance_trc20"),
+                                    className: "px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold transition-colors flex items-center gap-1 shrink-0 cursor-pointer",
+                                    children: [
+                                      r.jsx(iu(copiedKey === "binance_trc20" ? "Check" : "Copy"), { className: "w-3 h-3" }),
+                                      copiedKey === "binance_trc20" ? s("কপি হয়েছে!", "Copied!") : s("কপি", "Copy"),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
 
-        r.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-4",children:[
-          // Bybit UID
-          r.jsxs("div",{className:"p-4 rounded-2xl bg-orange-50/50 dark:bg-orange-950/30 border border-orange-200/80 dark:border-orange-800/60 space-y-2",children:[
-            r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-orange-800 dark:text-orange-300",children:"১. Bybit UID (ইন্টারনাল ০% ফি ট্রান্সফার):"}),
-            r.jsxs("div",{className:"flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-orange-200 dark:border-orange-700/60 font-mono text-xs font-bold text-slate-900 dark:text-white",children:[
-              r.jsx("span",{children:"184920381"}),
-              r.jsxs("button",{type:"button",onClick:()=>handleCopy("184920381","bybit_uid"),className:"px-2.5 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold transition-colors flex items-center gap-1 cursor-pointer",children:[
-                $o.createElement(iu(copiedKey==="bybit_uid"?"Check":"Copy"),{className:"w-3 h-3"}),
-                copiedKey==="bybit_uid"?s("কপি হয়েছে!","Copied!"):s("কপি","Copy")
-              ]})
-            ]})
-          ]}),
+                activeMethod === "bybit" &&
+                  r.jsxs("div", {
+                    className: "space-y-5 animate-fade-in",
+                    children: [
+                      r.jsxs("div", {
+                        className: "flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800",
+                        children: [
+                          r.jsxs("div", {
+                            className: "flex items-center gap-2.5",
+                            children: [
+                              r.jsx("span", {
+                                className: "px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 font-black text-xs",
+                                children: s("বাইবিট পে (Bybit Internal Transfer)", "Bybit Pay"),
+                              }),
+                              r.jsx("span", { className: "text-xs text-slate-400", children: s("জিরো ফি ইন্টারনাল ট্রান্সফার", "Zero Fee Internal Transfer") }),
+                            ],
+                          }),
+                          r.jsx("span", {
+                            className: "text-[11px] font-bold text-orange-400 bg-orange-950/40 px-2.5 py-0.5 rounded-full border border-orange-800",
+                            children: "Instant Bybit Transfer",
+                          }),
+                        ],
+                      }),
 
-          // Bybit USDT TRC20 Address
-          r.jsxs("div",{className:"p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2",children:[
-            r.jsx("span",{className:"text-[10px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-300",children:"২. Bybit USDT Deposit (Network: TRC-20):"}),
-            r.jsxs("div",{className:"flex items-center justify-between gap-2 p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[11px] font-bold text-slate-900 dark:text-white truncate",children:[
-              r.jsx("span",{className:"truncate",children:"TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2"}),
-              r.jsxs("button",{type:"button",onClick:()=>handleCopy("TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2","bybit_trc20"),className:"px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold transition-colors flex items-center gap-1 shrink-0 cursor-pointer",children:[
-                $o.createElement(iu(copiedKey==="bybit_trc20"?"Check":"Copy"),{className:"w-3 h-3"}),
-                copiedKey==="bybit_trc20"?s("কপি হয়েছে!","Copied!"):s("কপি","Copy")
-              ]})
-            ]})
-          ]})
-        ]}),
+                      r.jsxs("div", {
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                        children: [
+                          // 1. Bybit UID
+                          r.jsxs("div", {
+                            className: "p-4 rounded-2xl bg-orange-500/10 border border-orange-500/30 space-y-2",
+                            children: [
+                              r.jsx("span", {
+                                className: "text-[10px] font-black uppercase tracking-wider text-orange-300",
+                                children: s("১. অফিসিয়াল Bybit UID (ইন্টারনাল ০% ফি ট্রান্সফার):", "1. Official Bybit UID:"),
+                              }),
+                              r.jsxs("div", {
+                                className: "flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950 border border-orange-500/40 font-mono text-sm font-black text-orange-400",
+                                children: [
+                                  r.jsx("span", { children: gatewaySettings.bybitUid }),
+                                  r.jsxs("button", {
+                                    type: "button",
+                                    onClick: () => handleCopy(gatewaySettings.bybitUid, "bybit_uid"),
+                                    className: "px-2.5 py-1 rounded-lg bg-orange-500 hover:bg-orange-400 text-slate-950 text-[10px] font-black transition-colors flex items-center gap-1 cursor-pointer",
+                                    children: [
+                                      r.jsx(iu(copiedKey === "bybit_uid" ? "Check" : "Copy"), { className: "w-3 h-3" }),
+                                      copiedKey === "bybit_uid" ? s("কপি হয়েছে!", "Copied!") : s("কপি", "Copy"),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
 
-        r.jsxs("div",{className:"p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 text-xs text-slate-600 dark:text-slate-300 space-y-1 leading-relaxed",children:[
-          r.jsx("strong",{className:"font-bold text-slate-900 dark:text-white block",children:"কীভাবে বাইবিট পে করবেন:"}),
-          r.jsx("p",{children:"১. Bybit App থেকে Assets -> Transfer এ যান -> Bybit UID অপশন বেছে নিন।"}),
-          r.jsx("p",{children:"২. UID '184920381' দিন এবং নির্বাচিত প্যাকেজের পরিমাণ পাঠালে কোনো ফি কাটবে না।"}),
-          r.jsx("p",{children:"৩. ট্রানজেকশনের ট্রান্সফার আইডি বা TxID নিচের ফর্মে লিখে জমা দিন।"})
-        ]})
-      ]})
-    ]}),
+                          // 2. Bybit TRC20 Address
+                          r.jsxs("div", {
+                            className: "p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2",
+                            children: [
+                              r.jsx("span", {
+                                className: "text-[10px] font-black uppercase tracking-wider text-slate-300",
+                                children: "২. Bybit USDT Deposit Address (Network: TRC-20):",
+                              }),
+                              r.jsxs("div", {
+                                className: "flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-900 border border-slate-700 font-mono text-[11px] font-bold text-slate-200 truncate",
+                                children: [
+                                  r.jsx("span", { className: "truncate", children: gatewaySettings.bybitTrc20 }),
+                                  r.jsxs("button", {
+                                    type: "button",
+                                    onClick: () => handleCopy(gatewaySettings.bybitTrc20, "bybit_trc20"),
+                                    className: "px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold transition-colors flex items-center gap-1 shrink-0 cursor-pointer",
+                                    children: [
+                                      r.jsx(iu(copiedKey === "bybit_trc20" ? "Check" : "Copy"), { className: "w-3 h-3" }),
+                                      copiedKey === "bybit_trc20" ? s("কপি হয়েছে!", "Copied!") : s("কপি", "Copy"),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
 
-    // Submission Form Card
-    r.jsxs("div",{className:"bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5",children:[
-      r.jsxs("div",{className:"flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800",children:[
-        r.jsx("div",{className:"w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold",children:r.jsx(Fr,{className:"w-5 h-5"})}),
-        r.jsxs("div",{children:[
-          r.jsx("h2",{className:"font-black text-lg text-slate-900 dark:text-white",children:s("ক্রিপ্টো পেমেন্ট প্রমাণ সাবমিশন (Submit Verification Proof)","Submit Crypto Payment Verification Proof")}),
-          r.jsx("p",{className:"text-xs text-slate-500",children:s("ইউএসডিটি পাঠানোর পর ট্রানজেকশন আইডি প্রদান করে অনুমোদন নিশ্চিত করুন","Enter your TxID / Hash after sending USDT to activate your subscription")})
-        ]})
-      ]}),
+                // Dynamic Payment Submission Form (Strictly separated for Binance vs Bybit)
+                r.jsxs("form", {
+                  onSubmit: handleSubmitProof,
+                  className: "pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between pb-1",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2",
+                          children: [
+                            r.jsx("span", {
+                              className: `w-2.5 h-2.5 rounded-full ${activeMethod === "binance" ? "bg-amber-400" : "bg-orange-400"}`,
+                            }),
+                            r.jsx("h4", {
+                              className: "text-sm font-black text-slate-900 dark:text-white",
+                              children:
+                                activeMethod === "binance"
+                                  ? s("বাইনান্স পে প্রমাণ সাবমিট করুন (Submit Binance Pay Proof)", "Submit Binance Pay Proof")
+                                  : s("বাইবিট পে প্রমাণ সাবমিট করুন (Submit Bybit Pay Proof)", "Submit Bybit Pay Proof"),
+                            }),
+                          ],
+                        }),
+                        r.jsx("span", {
+                          className: `text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                            activeMethod === "binance"
+                              ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                              : "bg-orange-500/20 text-orange-300 border border-orange-500/30"
+                          }`,
+                          children: activeMethod === "binance" ? "Binance Auto-Match" : "Bybit Auto-Match",
+                        }),
+                      ],
+                    }),
 
-      r.jsxs("form",{onSubmit:handleSubmitProof,className:"space-y-4",children:[
-        r.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 gap-4",children:[
-          r.jsxs("div",{children:[
-            r.jsx("label",{className:"block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5",children:s("প্রেরকের বাইনান্স পে আইডি / বাইবিট ইউআইডি / ওয়ালেট:","Sender Binance Pay ID / Bybit UID / Wallet:")}),
-            r.jsx("input",{
-              type:"text",
-              value:senderAccount,
-              onChange:ev=>setSenderAccount(ev.target.value),
-              placeholder:s("যেমন: Binance Pay ID 298417814 অথবা Bybit UID","e.g. Binance Pay ID 298417814 or Bybit UID"),
-              className:"w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500"
-            })
-          ]}),
+                    r.jsxs("div", {
+                      className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                      children: [
+                        // Method-specific Sender input
+                        r.jsxs("div", {
+                          className: "space-y-1.5",
+                          children: [
+                            r.jsx("label", {
+                              className: "block text-xs font-bold text-slate-600 dark:text-slate-300",
+                              children:
+                                activeMethod === "binance"
+                                  ? s("আপনার প্রেরক বাইনান্স পে আইডি / ইউআইডি (ঐচ্ছিক):", "Your Sender Binance Pay ID / UID (Optional):")
+                                  : s("আপনার প্রেরক বাইবিট ইউআইডি (ঐচ্ছিক):", "Your Sender Bybit UID (Optional):"),
+                            }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: senderAccount,
+                              onChange: (e) => setSenderAccount(e.target.value),
+                              placeholder:
+                                activeMethod === "binance"
+                                  ? "যেমন: Pay ID 94810239 বা আপনার বাইনান্স আইডি"
+                                  : "যেমন: আপনার Bybit UID 184920381",
+                              className: "w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:border-amber-500",
+                            }),
+                          ],
+                        }),
 
-          r.jsxs("div",{children:[
-            r.jsxs("label",{className:"block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5",children:[
-              s("ট্রানজেকশন আইডি / হ্যাশ (TxID / Order ID):","Transaction ID / Hash (TxID / Order ID):"),
-              r.jsx("span",{className:"text-rose-500 ml-1",children:"*"})
-            ]}),
-            r.jsx("input",{
-              type:"text",
-              required:!0,
-              value:transactionId,
-              onChange:ev=>setTransactionId(ev.target.value),
-              placeholder:s("যেমন: TXB89102934812 অথবা Blockchain TxID","e.g. TXB89102934812 or Blockchain TxID"),
-              className:"w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold font-mono text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500"
-            })
-          ]})
-        ]}),
+                        // Method-specific TxID input
+                        r.jsxs("div", {
+                          className: "space-y-1.5",
+                          children: [
+                            r.jsxs("label", {
+                              className: "block text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-between",
+                              children: [
+                                r.jsx("span", {
+                                  children:
+                                    activeMethod === "binance"
+                                      ? s("বাইনান্স পে অর্ডার আইডি বা TxID: *", "Binance Pay Order ID / TxID: *")
+                                      : s("বাইবিট ট্রান্সফার আইডি বা TxID: *", "Bybit Transfer ID / TxID: *"),
+                                }),
+                                r.jsx("span", {
+                                  className: `text-[10px] font-mono ${activeMethod === "binance" ? "text-amber-400" : "text-orange-400"}`,
+                                  children: "Gmail Auto-Match Key",
+                                }),
+                              ],
+                            }),
+                            r.jsx("input", {
+                              type: "text",
+                              required: true,
+                              value: transactionId,
+                              onChange: (e) => setTransactionId(e.target.value),
+                              placeholder:
+                                activeMethod === "binance"
+                                  ? "যেমন: 29841029384 অথবা TXB89102934812"
+                                  : "যেমন: BYB9384810293 অথবা ট্রানজেকশন হ্যাশ",
+                              className: `w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none ${
+                                activeMethod === "binance" ? "focus:border-amber-500" : "focus:border-orange-500"
+                              }`,
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
 
-        r.jsxs("div",{children:[
-          r.jsx("label",{className:"block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5",children:s("অতিরিক্ত রেফারেন্স নোট (ঐচ্ছিক):","Additional Reference Notes (Optional):")}),
-          r.jsx("input",{
-            type:"text",
-            value:notes,
-            onChange:ev=>setNotes(ev.target.value),
-            placeholder:s("যেমন: Binance TRC20 থেকে পাঠানো হয়েছে","e.g. Sent via Binance TRC20, Reference: VIP-Trader"),
-            className:"w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500"
-          })
-        ]}),
+                    // Method-specific Guidance Tip
+                    r.jsxs("div", {
+                      className: `p-3 rounded-xl border text-[11px] flex items-center gap-2 ${
+                        activeMethod === "binance"
+                          ? "bg-amber-500/10 border-amber-500/20 text-amber-200"
+                          : "bg-orange-500/10 border-orange-500/20 text-orange-200"
+                      }`,
+                      children: [
+                        r.jsx(iu("AlertCircle"), { className: "w-4 h-4 shrink-0" }),
+                        r.jsx("span", {
+                          children:
+                            activeMethod === "binance"
+                              ? s(
+                                  "💡 Binance অ্যাপের Pay হিস্ট্রি থেকে আপনার প্রাপ্ত Order ID বা TxID দিন। এটি স্বয়ংক্রিয়ভাবে আমাদের জিমেইলের সাথে ম্যাচ হয়ে যাবে।",
+                                  "💡 Copy your Order ID or TxID from Binance Pay history. It matches instantly with our Gmail notification."
+                                )
+                              : s(
+                                  "💡 Bybit অ্যাপের Transfer / Withdrawal রেকর্ড থেকে ট্রান্সফার আইডি দিন। এটি স্বয়ংক্রিয়ভাবে আমাদের জিমেইলের সাথে ম্যাচ হয়ে যাবে।",
+                                  "💡 Copy your Transfer ID or TxID from Bybit transfer history. It matches instantly with our Gmail notification."
+                                ),
+                        }),
+                      ],
+                    }),
 
-        r.jsxs("button",{
-          type:"submit",
-          disabled:isSubmitting,
-          className:"w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-black text-sm shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 mt-2",
-          children:[
-            r.jsx(ai,{className:`w-4 h-4 ${isSubmitting?"animate-pulse":""}`}),
-            isSubmitting?s("যাচাইকরণ প্রক্রিয়াধীন...","Submitting Verification..."):s("ক্রিপ্টো পেমেন্ট প্রমাণ নিশ্চিত করুন (Submit Crypto Payment)","Submit Crypto Payment Proof")
-          ]
+                    r.jsxs("button", {
+                      type: "submit",
+                      disabled: isSubmitting,
+                      className: `w-full py-3.5 rounded-2xl text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 mt-2 ${
+                        activeMethod === "binance"
+                          ? "bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 shadow-amber-500/25"
+                          : "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-orange-500/25"
+                      }`,
+                      children: [
+                        r.jsx(iu("Zap"), { className: `w-4 h-4 ${isSubmitting ? "animate-pulse" : ""}` }),
+                        isSubmitting
+                          ? s("যাচাইকরণ প্রক্রিয়াধীন...", "Verifying via Gmail...")
+                          : activeMethod === "binance"
+                          ? s("⚡ বাইনান্স পেমেন্ট প্রমাণ নিশ্চিত করুন (Verify Binance Payment)", "⚡ Verify Binance Payment via Gmail")
+                          : s("⚡ বাইবিট পেমেন্ট প্রমাণ নিশ্চিত করুন (Verify Bybit Payment)", "⚡ Verify Bybit Payment via Gmail"),
+                      ],
+                    }),
+
+                    submitResult &&
+                      r.jsxs("div", {
+                        className: `p-4 rounded-2xl border text-xs font-medium animate-fade-in ${
+                          submitResult.success
+                            ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-200"
+                            : "bg-rose-950/60 border-rose-500/40 text-rose-200"
+                        }`,
+                        children: [
+                          r.jsxs("div", {
+                            className: "flex items-center gap-2 font-bold mb-1",
+                            children: [
+                              r.jsx(iu(submitResult.success ? "CheckCircle" : "AlertCircle"), {
+                                className: `w-4 h-4 ${submitResult.success ? "text-emerald-400" : "text-rose-400"}`,
+                              }),
+                              submitResult.success ? s("সাবমিশন সফল হয়েছে!", "Submission Successful!") : s("ত্রুটি", "Error"),
+                            ],
+                          }),
+                          r.jsx("p", { children: submitResult.message }),
+                        ],
+                      }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Recent Payments Table
+            r.jsxs("div", {
+              className: "bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-3",
+                      children: [
+                        r.jsx("div", {
+                          className: "w-10 h-10 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-bold",
+                          children: r.jsx(iu("Clock"), { className: "w-5 h-5" }),
+                        }),
+                        r.jsxs("div", {
+                          children: [
+                            r.jsx("h2", {
+                              className: "font-black text-base sm:text-lg text-slate-900 dark:text-white",
+                              children: s("সাম্প্রতিক ক্রিপ্টো ট্রানজেকশন হিস্ট্রি", "Recent Crypto Transactions"),
+                            }),
+                            r.jsx("p", {
+                              className: "text-xs text-slate-400",
+                              children: s("জমা দেওয়া ক্রিপ্টো পেমেন্ট প্রমাণের স্ট্যাটাস ও ইতিহাস", "Status and audit trail of your submitted USDT payments"),
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    r.jsxs("span", { className: "text-xs font-bold text-slate-400", children: [s("মোট: ", "Total: "), paymentsList.length] }),
+                  ],
+                }),
+
+                paymentsList.length === 0
+                  ? r.jsxs("div", {
+                      className: "text-center py-8 text-slate-400 space-y-2",
+                      children: [
+                        r.jsx(iu("Inbox"), { className: "w-8 h-8 mx-auto opacity-30" }),
+                        r.jsx("p", { className: "text-xs font-bold", children: s("এখনও কোনো পেমেন্ট রেকর্ড নেই।", "No payment submissions recorded yet.") }),
+                      ],
+                    })
+                  : r.jsx("div", {
+                      className: "overflow-x-auto",
+                      children: r.jsxs("table", {
+                        className: "w-full text-left text-xs",
+                        children: [
+                          r.jsx("thead", {
+                            className: "bg-slate-950 text-slate-400 font-bold uppercase tracking-wider text-[10px]",
+                            children: r.jsxs("tr", {
+                              children: [
+                                r.jsx("th", { className: "p-3 sm:p-4 rounded-l-xl", children: s("প্যাকেজ", "Package") }),
+                                r.jsx("th", { className: "p-3 sm:p-4", children: s("মাধ্যম", "Method") }),
+                                r.jsx("th", { className: "p-3 sm:p-4", children: s("ট্রানজেকশন আইডি (TxID)", "TxID") }),
+                                r.jsx("th", { className: "p-3 sm:p-4", children: s("অ্যামাউন্ট", "Amount") }),
+                                r.jsx("th", { className: "p-3 sm:p-4", children: s("ভেরিফিকেশন মোড", "Mode") }),
+                                r.jsx("th", { className: "p-3 sm:p-4", children: s("তারিখ", "Date") }),
+                                r.jsx("th", { className: "p-3 sm:p-4 rounded-r-xl text-right", children: s("স্ট্যাটাস", "Status") }),
+                              ],
+                            }),
+                          }),
+                          r.jsx("tbody", {
+                            className: "divide-y divide-slate-800 font-medium",
+                            children: paymentsList.map((item) =>
+                              r.jsxs(
+                                "tr",
+                                {
+                                  key: item.id,
+                                  className: "hover:bg-slate-800/40 transition-colors",
+                                  children: [
+                                    r.jsxs("td", {
+                                      className: "p-3 sm:p-4",
+                                      children: [
+                                        r.jsx("div", { className: "font-bold text-slate-100", children: item.packageName }),
+                                        item.notes && r.jsx("div", { className: "text-[10px] text-slate-400 mt-0.5", children: item.notes }),
+                                      ],
+                                    }),
+                                    r.jsx("td", {
+                                      className: "p-3 sm:p-4",
+                                      children: r.jsx("span", {
+                                        className: `inline-block px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${
+                                          item.method === "binance"
+                                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                                            : "bg-orange-500/20 text-orange-300 border border-orange-500/30"
+                                        }`,
+                                        children: item.method === "binance" ? "Binance Pay" : "Bybit Pay",
+                                      }),
+                                    }),
+                                    r.jsx("td", { className: "p-3 sm:p-4 font-mono text-[11px] text-slate-300 font-bold", children: item.transactionId }),
+                                    r.jsxs("td", { className: "p-3 sm:p-4 font-bold text-amber-400", children: [`${item.amountUsd} USDT`] }),
+                                    r.jsx("td", {
+                                      className: "p-3 sm:p-4",
+                                      children: r.jsx("span", {
+                                        className: `px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                                          item.verifiedMethod === "AUTOMATED_GMAIL"
+                                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                                            : "bg-slate-800 text-slate-300"
+                                        }`,
+                                        children: item.verifiedMethod === "AUTOMATED_GMAIL" ? "⚡ GMAIL_AUTO" : "MANUAL",
+                                      }),
+                                    }),
+                                    r.jsx("td", { className: "p-3 sm:p-4 text-slate-400 text-[11px]", children: new Date(item.createdAt).toLocaleDateString() }),
+                                    r.jsxs("td", {
+                                      className: "p-3 sm:p-4 text-right",
+                                      children: [
+                                        r.jsxs("span", {
+                                          className: `inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black ${
+                                            item.status === "APPROVED"
+                                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                                              : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                                          }`,
+                                          children: [
+                                            r.jsx("span", {
+                                              className: `w-1.5 h-1.5 rounded-full ${item.status === "APPROVED" ? "bg-emerald-400" : "bg-amber-400 animate-ping"}`,
+                                            }),
+                                            item.status,
+                                          ],
+                                        }),
+                                        isAdmin &&
+                                          item.status === "PENDING" &&
+                                          r.jsxs("div", {
+                                            className: "flex items-center justify-end gap-1 mt-1",
+                                            children: [
+                                              r.jsx("button", {
+                                                onClick: () => handleUpdateStatus(item.id, "APPROVED"),
+                                                className: "px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold cursor-pointer",
+                                                children: "Approve",
+                                              }),
+                                              r.jsx("button", {
+                                                onClick: () => handleUpdateStatus(item.id, "REJECTED"),
+                                                className: "px-2 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-bold cursor-pointer",
+                                                children: "Reject",
+                                              }),
+                                            ],
+                                          }),
+                                      ],
+                                    }),
+                                  ],
+                                }
+                              )
+                            ),
+                          }),
+                        ],
+                      }),
+                    }),
+              ],
+            }),
+          ],
         }),
 
-        submitResult&&r.jsxs("div",{
-          className:`p-4 rounded-2xl border text-xs font-medium animate-fade-in ${submitResult.success?"bg-emerald-50 dark:bg-emerald-950/60 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200":"bg-rose-50 dark:bg-rose-950/60 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200"}`,
-          children:[
-            r.jsxs("div",{className:"flex items-center gap-2 font-bold mb-1",children:[
-              submitResult.success?r.jsx(Pt,{className:"w-4 h-4 text-emerald-600"}):r.jsx(As,{className:"w-4 h-4 text-rose-600"}),
-              submitResult.success?s("সাবমিশন সফল হয়েছে!","Submission Successful!"):s("ত্রুটি","Error")
-            ]}),
-            r.jsx("p",{children:submitResult.message})
-          ]
-        })
-      ]})
-    ]}),
+      // =========================================================================
+      // TAB 2: Admin Gateway & Automated Gmail Configuration
+      // =========================================================================
+      isAdmin &&
+        adminTab === "settings" &&
+        r.jsxs("div", {
+          className: "space-y-6 animate-fade-in",
+          children: [
+            r.jsxs("form", {
+              onSubmit: handleSaveSettings,
+              className: "bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl",
+              children: [
+                r.jsxs("div", {
+                  className: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800",
+                  children: [
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("h2", {
+                          className: "text-lg font-black text-white flex items-center gap-2",
+                          children: s("অ্যাডমিন ক্রিপ্টো কনফিগারেশন ও অটো-জিমেইল সেটিংস", "Admin Crypto Gateway & Gmail Setup"),
+                        }),
+                        r.jsx("p", {
+                          className: "text-xs text-slate-400 mt-0.5",
+                          children: s(
+                            "আপনার আসল Binance Pay ID, Bybit UID এবং مشترক জিমেইল অ্যাকাউন্ট এখানে সেট করুন। এটি অবিলম্বে সমস্ত ইউজারের চেকআউট পেজে লাইভ হয়ে যাবে।",
+                            "Configure your real Binance Pay ID, Bybit UID, TRC20 addresses, and shared Gmail reader."
+                          ),
+                        }),
+                      ],
+                    }),
+                    r.jsxs("button", {
+                      type: "submit",
+                      disabled: isSavingSettings,
+                      className: "px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 flex items-center gap-1.5 cursor-pointer disabled:opacity-50",
+                      children: [
+                        r.jsx(iu("Save"), { className: "w-4 h-4" }),
+                        isSavingSettings ? s("সংরক্ষণ হচ্ছে...", "Saving...") : s("সেটিংস সেভ করুন", "Save Settings"),
+                      ],
+                    }),
+                  ],
+                }),
 
-    // Recent Payments Table
-    r.jsxs("div",{className:"bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5",children:[
-      r.jsxs("div",{className:"flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800",children:[
-        r.jsxs("div",{className:"flex items-center gap-3",children:[
-          r.jsx("div",{className:"w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold",children:r.jsx(li,{className:"w-5 h-5"})}),
-          r.jsxs("div",{children:[
-            r.jsx("h2",{className:"font-black text-base sm:text-lg text-slate-900 dark:text-white",children:s("সাম্প্রতিক ক্রিপ্টো ট্রানজেকশন হিস্ট্রি","Recent Crypto Transactions")}),
-            r.jsx("p",{className:"text-xs text-slate-500",children:s("জমা দেওয়া ক্রিপ্টো পেমেন্ট প্রমাণের স্ট্যাটাস ও ইতিহাস","Status and audit trail of your submitted USDT payments")})
-          ]})
-        ]}),
-        r.jsxs("span",{className:"text-xs font-bold text-slate-400",children:[s("মোট: ","Total: "),paymentsList.length]})
-      ]}),
+                settingsSaveMsg &&
+                  r.jsx("div", {
+                    className: "p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center",
+                    children: settingsSaveMsg,
+                  }),
 
-      paymentsList.length===0?r.jsxs("div",{className:"text-center py-8 text-slate-400 space-y-2",children:[
-        r.jsx(v9,{className:"w-8 h-8 mx-auto opacity-30"}),
-        r.jsx("p",{className:"text-xs font-bold",children:s("এখনও কোনো পেমেন্ট রেকর্ড নেই।","No payment submissions recorded yet.")})
-      ]}):r.jsx("div",{className:"overflow-x-auto",children:r.jsxs("table",{className:"w-full text-left text-xs",children:[
-        r.jsx("thead",{className:"bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]",children:r.jsxs("tr",{children:[
-          r.jsx("th",{className:"p-3 sm:p-4 rounded-l-xl",children:s("প্যাকেজ","Package")}),
-          r.jsx("th",{className:"p-3 sm:p-4",children:s("মাধ্যম","Method")}),
-          r.jsx("th",{className:"p-3 sm:p-4",children:s("ট্রানজেকশন আইডি (TxID)","TxID")}),
-          r.jsx("th",{className:"p-3 sm:p-4",children:s("অ্যামাউন্ট","Amount")}),
-          r.jsx("th",{className:"p-3 sm:p-4",children:s("তারিখ","Date")}),
-          r.jsx("th",{className:"p-3 sm:p-4 rounded-r-xl text-right",children:s("স্ট্যাটাস","Status")})
-        ]})}),
-        r.jsx("tbody",{className:"divide-y divide-slate-100 dark:divide-slate-800 font-medium",children:paymentsList.map(item=>r.jsxs("tr",{className:"hover:bg-slate-50/60 dark:hover:bg-slate-800/30 transition-colors",children:[
-          r.jsxs("td",{className:"p-3 sm:p-4",children:[
-            r.jsx("div",{className:"font-bold text-slate-900 dark:text-white",children:item.packageName}),
-            item.notes&&r.jsx("div",{className:"text-[10px] text-slate-400 mt-0.5",children:item.notes})
-          ]}),
-          r.jsx("td",{className:"p-3 sm:p-4",children:r.jsx("span",{className:`inline-block px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${item.method==="binance"?"bg-amber-100 text-amber-800 border border-amber-300":"bg-orange-100 text-orange-800 border border-orange-300"}`,children:item.method==="binance"?"Binance Pay":"Bybit Pay"})}),
-          r.jsx("td",{className:"p-3 sm:p-4 font-mono text-[11px] text-slate-700 dark:text-slate-300 font-bold",children:item.transactionId}),
-          r.jsxs("td",{className:"p-3 sm:p-4 font-bold text-amber-600 dark:text-amber-400",children:[`${item.amountUsd} USDT`]}),
-          r.jsx("td",{className:"p-3 sm:p-4 text-slate-500 text-[11px]",children:new Date(item.createdAt).toLocaleDateString()}),
-          r.jsx("td",{className:"p-3 sm:p-4 text-right",children:r.jsxs("span",{className:`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black ${item.status==="APPROVED"?"bg-emerald-100 text-emerald-800 border border-emerald-300":"bg-amber-100 text-amber-800 border border-amber-300"}`,children:[
-            r.jsx(Pt,{className:"w-3 h-3 text-emerald-600"}),
-            item.status==="APPROVED"?s("অনুমোদিত (APPROVED)","APPROVED"):s("অপেক্ষমান (PENDING)","PENDING")
-          ]})})
-        ]},item.id))})
-      ]})})
-    ]})
-  ]});
+                // Binance Section
+                r.jsxs("div", {
+                  className: "p-5 rounded-2xl bg-slate-950 border border-amber-500/30 space-y-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2 text-amber-400 font-black text-sm",
+                      children: [r.jsx("span", { className: "w-2.5 h-2.5 rounded-full bg-amber-400" }), "১. বাইনান্স পে রিসিভার তথ্য (Binance Receiver Settings)"],
+                    }),
+                    r.jsxs("div", {
+                      className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                      children: [
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Binance Pay ID (আপনার আসল পে আইডি):" }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: gatewaySettings.binancePayId,
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, binancePayId: e.target.value }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono font-bold text-white outline-none focus:border-amber-400",
+                            }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Binance USDT TRC-20 Wallet Address:" }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: gatewaySettings.binanceTrc20,
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, binanceTrc20: e.target.value }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white outline-none focus:border-amber-400",
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+
+                // Bybit Section
+                r.jsxs("div", {
+                  className: "p-5 rounded-2xl bg-slate-950 border border-orange-500/30 space-y-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2 text-orange-400 font-black text-sm",
+                      children: [r.jsx("span", { className: "w-2.5 h-2.5 rounded-full bg-orange-400" }), "২. বাইবিট রিসিভার তথ্য (Bybit Receiver Settings)"],
+                    }),
+                    r.jsxs("div", {
+                      className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                      children: [
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Bybit UID (আপনার আসল বাইবিট ইউআইডি):" }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: gatewaySettings.bybitUid,
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, bybitUid: e.target.value }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono font-bold text-white outline-none focus:border-orange-400",
+                            }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Bybit USDT TRC-20 Wallet Address:" }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: gatewaySettings.bybitTrc20,
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, bybitTrc20: e.target.value }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white outline-none focus:border-orange-400",
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+
+                // Gmail Automation Section
+                r.jsxs("div", {
+                  className: "p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-slate-950 to-indigo-950/40 border border-emerald-500/40 space-y-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2 text-emerald-400 font-black text-sm",
+                          children: [r.jsx("span", { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" }), "৩. مشترক জিমেইল অটো-ভেরিফিকেশন ইঞ্জিন (Shared Gmail Auto-Verifier)"],
+                        }),
+                        r.jsx("span", {
+                          className: "px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono",
+                          children: `Total Auto-Approved: ${gatewaySettings.totalAutoApprovedCount || 0}`,
+                        }),
+                      ],
+                    }),
+                    r.jsxs("div", {
+                      className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+                      children: [
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "যেই জিমেইলে বাইনান্স ও বাইবিট খোলা (Shared Gmail):" }),
+                            r.jsx("input", {
+                              type: "email",
+                              value: gatewaySettings.gmailAccount,
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, gmailAccount: e.target.value }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white outline-none focus:border-emerald-400",
+                            }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "স্বয়ংক্রিয় ভেরিফিকেশন সুইচ (Auto-Approval):" }),
+                            r.jsxs("select", {
+                              value: gatewaySettings.autoVerificationEnabled ? "true" : "false",
+                              onChange: (e) => setGatewaySettings({ ...gatewaySettings, autoVerificationEnabled: e.target.value === "true" }),
+                              className: "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-white outline-none",
+                              children: [
+                                r.jsx("option", { value: "true", children: "✅ সক্রিয় (Auto-Approve Enabled)" }),
+                                r.jsx("option", { value: "false", children: "❌ নিষ্ক্রিয় (Manual Admin Only)" }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    r.jsxs("div", {
+                      className: "p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-3 text-slate-300",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-slate-800",
+                          children: [
+                            r.jsxs("div", {
+                              children: [
+                                r.jsx("strong", { className: "text-emerald-400 font-bold block", children: "পদ্ধতি ১: রেডিমেড Google Apps Script (৫ মিনিটের সেটআপ)" }),
+                                r.jsx("p", { className: "text-[11px] text-slate-400", children: "নিচের কোডটি কপি করে script.google.com-এ পেস্ট করে ১ মিনিটের ট্রিগার দিন।" }),
+                              ],
+                            }),
+                            r.jsxs("button", {
+                              type: "button",
+                              onClick: () => {
+                                const scriptCode = `// ============================================================================
+// Forex AI News (ChartLogic.Pro) — Binance & Bybit Gmail Auto-Verification
+// Anti-Spoofing & Official Domain Whitelist Protection (V2.2)
+// ============================================================================
+const WEBHOOK_ENDPOINTS = [
+  "https://chartlogic.pro/api/payments/webhook/gmail",
+  "https://ais-dev-qez5igmrpo2rjx6txlvah3-349417814196.asia-east1.run.app/api/payments/webhook/gmail"
+];
+
+const WEBHOOK_SECRET = "${gatewaySettings.webhookSecret || "forex_ai_crypto_verify_secret_2026"}";
+
+// ১. শুধুমাত্র অফিশিয়াল সেন্ডার ডোমেইন ফিল্টার (Anti-Spoofing Whitelist)
+const OFFICIAL_SENDER_QUERY = [
+  "from:do-not-reply@post.binance.com",
+  "from:do-not-reply@ses.binance.com",
+  "from:system@notice.binance.com",
+  "from:ib-service@bybit.com",
+  "from:support@bybit.com",
+  "from:notification@em.bybit.com",
+  "from:no-reply@bybit.com"
+].join(" OR ");
+
+// ২. শুধুমাত্র ডিপোজিট ও ট্রান্সফার কনফার্মেশন বিষয়বস্তু (Eliminates trade/collateral noise)
+const OFFICIAL_SUBJECT_QUERY = [
+  'subject:"Deposit Confirmed"',
+  'subject:"Deposit Successful"',
+  'subject:"You have received"',
+  'subject:"Binance Pay"',
+  'subject:"Internal Transfer"',
+  'subject:"Transfer Successful"'
+].join(" OR ");
+
+function syncCryptoDepositEmails() {
+  // কঠোর নিরাপত্তা ফিল্টার: ফেক মেইল বা জেনারেল ট্রেডিং অ্যালার্ট ফিল্টারে আসবেই না
+  const query = 'is:unread (' + OFFICIAL_SENDER_QUERY + ') (' + OFFICIAL_SUBJECT_QUERY + ')';
+  const threads = GmailApp.search(query, 0, 10);
+  
+  if (threads.length === 0) {
+    Logger.log("No new unread crypto deposit emails. Sending heartbeat ping...");
+    const pingPayload = JSON.stringify({
+      type: "heartbeat",
+      secret: WEBHOOK_SECRET,
+      email: "m.rahmanhabib.my@gmail.com",
+      timestamp: new Date().toISOString()
+    });
+    
+    WEBHOOK_ENDPOINTS.forEach(function(url) {
+      try {
+        UrlFetchApp.fetch(url, {
+          method: "post",
+          contentType: "application/json",
+          headers: { "x-webhook-secret": WEBHOOK_SECRET },
+          payload: pingPayload,
+          muteHttpExceptions: true
+        });
+      } catch (err) {
+        Logger.log("Heartbeat ping failed for: " + url + " | " + err.toString());
+      }
+    });
+    return;
+  }
+  
+  for (let i = 0; i < threads.length; i++) {
+    const messages = threads[i].getMessages();
+    for (let j = 0; j < messages.length; j++) {
+      const msg = messages[j];
+      if (msg.isUnread()) {
+        const fromAddress = msg.getFrom().toLowerCase();
+        
+        // ২য় স্তরের কঠোর নিরাপত্তা যাচাই (Double Verification)
+        const isLegitSender = fromAddress.indexOf("post.binance.com") !== -1 ||
+                              fromAddress.indexOf("ses.binance.com") !== -1 ||
+                              fromAddress.indexOf("notice.binance.com") !== -1 ||
+                              fromAddress.indexOf("bybit.com") !== -1;
+                              
+        if (!isLegitSender) {
+          Logger.log("Security Shield: Ignored non-whitelisted sender: " + fromAddress);
+          continue;
+        }
+
+        const payload = JSON.stringify({
+          from: msg.getFrom(),
+          subject: msg.getSubject(),
+          body: msg.getPlainBody(),
+          date: msg.getDate().toISOString(),
+          secret: WEBHOOK_SECRET
+        });
+        
+        let sendSuccess = false;
+        
+        WEBHOOK_ENDPOINTS.forEach(function(url) {
+          try {
+            const response = UrlFetchApp.fetch(url, {
+              method: "post",
+              contentType: "application/json",
+              headers: { "x-webhook-secret": WEBHOOK_SECRET },
+              payload: payload,
+              muteHttpExceptions: true
+            });
+            const status = response.getResponseCode();
+            Logger.log("Forwarded to " + url + " | Status: " + status);
+            if (status >= 200 && status < 300) {
+              sendSuccess = true;
+            }
+          } catch (err) {
+            Logger.log("Failed sending to " + url + " | " + err.toString());
+          }
+        });
+        
+        if (sendSuccess) {
+          msg.markRead();
+          Logger.log("Email marked as read: " + msg.getSubject());
+        }
+      }
+    }
+  }
+}`;
+                                handleCopy(scriptCode, "google_apps_script_code");
+                              },
+                              className: "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1.5 cursor-pointer shadow",
+                              children: [
+                                r.jsx(iu(copiedKey === "google_apps_script_code" ? "Check" : "Copy"), { className: "w-3.5 h-3.5" }),
+                                copiedKey === "google_apps_script_code" ? s("কোড কপি হয়েছে!", "Copied!") : s("📋 সম্পূর্ণ স্ক্রিপ্ট কোড কপি করুন", "Copy Google Script"),
+                              ],
+                            }),
+                          ],
+                        }),
+
+                        r.jsxs("div", {
+                          className: "space-y-1.5 text-[11px] text-slate-300 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800",
+                          children: [
+                            r.jsx("div", { className: "text-amber-400 font-sans font-bold text-xs mb-1", children: "সেটআপ করার মাত্র ৩টি সহজ ধাপ:" }),
+                            r.jsx("p", { children: "১. ব্রাউজারে script.google.com ওপেন করে '+ New project' চাপুন।" }),
+                            r.jsx("p", { children: "২. ওপরের কপি করা কোডটি পেস্ট করে Save (💾) আইকন চাপুন।" }),
+                            r.jsx("p", { children: "৩. বাম পাশের ঘড়ির মতো আইকন 'Triggers' (⏰)-এ গিয়ে 'Add Trigger' চাপুন ➔ ফাংশন 'syncCryptoDepositEmails' ➔ Time-driven ➔ Minutes timer ➔ 'Every 1 minute' সিলেক্ট করে Save দিন।" }),
+                          ],
+                        }),
+
+                        r.jsxs("div", {
+                          className: "grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1",
+                          children: [
+                            r.jsxs("div", {
+                              className: "space-y-1",
+                              children: [
+                                r.jsx("label", { className: "text-[11px] font-bold text-slate-400", children: "Webhook Endpoint URL:" }),
+                                r.jsx("code", { className: "block p-2 rounded bg-slate-950 border border-slate-800 text-emerald-400 text-[10px] truncate select-all", children: `${window.location.origin}/api/payments/webhook/gmail` }),
+                              ],
+                            }),
+                            r.jsxs("div", {
+                              className: "space-y-1",
+                              children: [
+                                r.jsx("label", { className: "text-[11px] font-bold text-slate-400", children: "Webhook Security Secret:" }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: gatewaySettings.webhookSecret || "forex_ai_crypto_verify_secret_2026",
+                                  onChange: (e) => setGatewaySettings({ ...gatewaySettings, webhookSecret: e.target.value }),
+                                  className: "w-full p-1.5 rounded bg-slate-950 border border-slate-800 text-amber-300 text-xs font-mono outline-none focus:border-amber-400",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Interactive Simulator Desk
+            r.jsxs("div", {
+              className: "bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center justify-between",
+                  children: [
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("h3", {
+                          className: "text-base font-black text-white flex items-center gap-2",
+                          children: s("⚡ জিমেইল অটো-ভেরিফিকেশন টেস্ট সিমুলেটর (Live Verification Simulator)", "Live Email Auto-Verification Simulator"),
+                        }),
+                        r.jsx("p", {
+                          className: "text-xs text-slate-400 mt-0.5",
+                          children: s(
+                            "এখানে বাটন চেপে আপনি টেস্ট করতে পারেন যে জিমেইলে কনফার্মেশন মেইল আসলে কীভাবে সাথে সাথে পেন্ডিং পেমেন্ট অটো-অ্যাপ্রুভ হয়ে যায়।",
+                            "Simulate receiving official Binance Pay or Bybit deposit emails to test instant matching & activation."
+                          ),
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+
+                r.jsxs("div", {
+                  className: "flex items-center gap-3 pt-2",
+                  children: [
+                    r.jsxs("button", {
+                      type: "button",
+                      disabled: isSimulating,
+                      onClick: () => handleSimulateDeposit("binance"),
+                      className: "px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50",
+                      children: [
+                        r.jsx(iu("Zap"), { className: "w-4 h-4" }),
+                        s("সিমুলেট: বাইনান্স ডিপোজিট মেইল ($29 USDT)", "Simulate: Binance Pay Deposit ($29 USDT)"),
+                      ],
+                    }),
+                    r.jsxs("button", {
+                      type: "button",
+                      disabled: isSimulating,
+                      onClick: () => handleSimulateDeposit("bybit"),
+                      className: "px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50",
+                      children: [
+                        r.jsx(iu("Zap"), { className: "w-4 h-4" }),
+                        s("সিমুলেট: বাইবিট ডিপোজিট মেইল ($29 USDT)", "Simulate: Bybit Deposit ($29 USDT)"),
+                      ],
+                    }),
+                  ],
+                }),
+
+                simulationResult &&
+                  r.jsx("div", {
+                    className: "p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs font-bold animate-fade-in",
+                    children: simulationResult,
+                  }),
+              ],
+            }),
+          ],
+        }),
+
+      // =========================================================================
+      // TAB 3: Gmail Deposit Logs
+      // =========================================================================
+      isAdmin &&
+        adminTab === "email_logs" &&
+        r.jsxs("div", {
+          className: "bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 space-y-5 animate-fade-in shadow-xl",
+          children: [
+            r.jsxs("div", {
+              className: "flex items-center justify-between pb-4 border-b border-slate-800",
+              children: [
+                r.jsxs("div", {
+                  children: [
+                    r.jsx("h3", {
+                      className: "text-base font-black text-white flex items-center gap-2",
+                      children: s("জিমেইল ইনবক্স থেকে রিড করা ট্রানজেকশন তালিকা", "Parsed Deposit Emails from Gmail"),
+                    }),
+                    r.jsx("p", {
+                      className: "text-xs text-slate-400 mt-0.5",
+                      children: s(
+                        "বাইনান্স ও বাইবিট থেকে আপনার জিমেইলে আসা ইমেইল নোটিফিকেশনের রিয়েল-টাইম হিস্ট্রি",
+                        "Audit log of incoming deposit emails parsed and matched against pending user subscriptions."
+                      ),
+                    }),
+                  ],
+                }),
+                r.jsxs("button", {
+                  onClick: refreshData,
+                  className: "px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold flex items-center gap-1 cursor-pointer",
+                  children: [r.jsx(iu("RefreshCw"), { className: "w-3.5 h-3.5" }), s("রিফ্রেশ", "Refresh")],
+                }),
+              ],
+            }),
+
+            emailLogs.length === 0
+              ? r.jsxs("div", {
+                  className: "text-center py-12 text-slate-400 space-y-2",
+                  children: [
+                    r.jsx(iu("Inbox"), { className: "w-8 h-8 mx-auto opacity-30" }),
+                    r.jsx("p", { className: "text-xs font-bold", children: s("এখনও কোনো ইমেইল লগ রেকর্ড নেই।", "No email logs recorded yet.") }),
+                  ],
+                })
+              : r.jsx("div", {
+                  className: "overflow-x-auto",
+                  children: r.jsxs("table", {
+                    className: "w-full text-left text-xs",
+                    children: [
+                      r.jsx("thead", {
+                        className: "bg-slate-950 text-slate-400 font-bold uppercase tracking-wider text-[10px]",
+                        children: r.jsxs("tr", {
+                          children: [
+                            r.jsx("th", { className: "p-3 rounded-l-xl", children: "Platform" }),
+                            r.jsx("th", { className: "p-3", children: "Amount" }),
+                            r.jsx("th", { className: "p-3", children: "TxID / Order ID" }),
+                            r.jsx("th", { className: "p-3", children: "Sender" }),
+                            r.jsx("th", { className: "p-3", children: "Received At" }),
+                            r.jsx("th", { className: "p-3 rounded-r-xl text-right", children: "Matched Status" }),
+                          ],
+                        }),
+                      }),
+                      r.jsx("tbody", {
+                        className: "divide-y divide-slate-800 font-mono text-[11px]",
+                        children: emailLogs.map((log) =>
+                          r.jsxs(
+                            "tr",
+                            {
+                              key: log.id,
+                              className: "hover:bg-slate-800/40 transition-colors",
+                              children: [
+                                r.jsx("td", {
+                                  className: "p-3 font-black uppercase text-amber-400",
+                                  children: log.platform,
+                                }),
+                                r.jsxs("td", { className: "p-3 font-bold text-white", children: [`${log.amount} ${log.currency}`] }),
+                                r.jsx("td", { className: "p-3 text-emerald-400 font-bold", children: log.txId }),
+                                r.jsx("td", { className: "p-3 text-slate-300 font-sans text-xs", children: log.senderInfo }),
+                                r.jsx("td", { className: "p-3 text-slate-400 font-sans text-[11px]", children: new Date(log.receivedAt).toLocaleTimeString() }),
+                                r.jsx("td", {
+                                  className: "p-3 text-right font-sans",
+                                  children: r.jsx("span", {
+                                    className: `px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                      log.isMatched
+                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                                        : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                                    }`,
+                                    children: log.isMatched ? "MATCHED & ACTIVATED" : "STANDBY",
+                                  }),
+                                }),
+                              ],
+                            }
+                          )
+                        ),
+                      }),
+                    ],
+                  }),
+                }),
+          ],
+        }),
+    ],
+  });
 }
-// Capital Growth & Compound Portfolio Architecture Component
-// Built for Forex AI News V2.2 Enterprise Engine
+
+
+function TradingNotesPage({ page, section, portalType }) {
+  const { currentUser: user, language: lang } = Xo();
+  const isBn = lang === "bn";
+  const s = (bn, en) => (isBn ? bn : en);
+
+  // Active Tab: "daily" | "weekend" | "tattoo" | "monthly"
+  const [activeTab, setActiveTab] = b.useState("daily");
+
+  // Selected Day in Monday-Friday Log
+  const [selectedDay, setSelectedDay] = b.useState("Monday");
+
+  // State
+  const [dailyNotes, setDailyNotes] = b.useState([]);
+  const [tattooRules, setTattooRules] = b.useState([]);
+  const [weeklyAnalysis, setWeeklyAnalysis] = b.useState(null);
+  const [loading, setLoading] = b.useState(true);
+  const [statusMessage, setStatusMessage] = b.useState("");
+
+  // Input states for active day
+  const [newGoodText, setNewGoodText] = b.useState("");
+  const [newMistakeText, setNewMistakeText] = b.useState("");
+  const [dayNotesText, setDayNotesText] = b.useState("");
+  const [mindsetScore, setMindsetScore] = b.useState(8);
+  const [tradesCount, setTradesCount] = b.useState(2);
+
+  // Custom Tattoo Rule input
+  const [customTattooText, setCustomTattooText] = b.useState("");
+  const [customTattooCategory, setCustomTattooCategory] = b.useState("FOMO");
+
+  const showToast = (msg) => {
+    setStatusMessage(msg);
+    setTimeout(() => setStatusMessage(""), 4000);
+  };
+
+  // Fetch initial notes & analysis
+  const loadData = b.useCallback(async () => {
+    setLoading(true);
+    try {
+      const [resDaily, resTattoo, resAnalysis] = await Promise.all([
+        fetch("/api/trading-notes/daily").then((r) => r.json()).catch(() => ({ notes: [] })),
+        fetch("/api/trading-notes/tattoo-rules").then((r) => r.json()).catch(() => ({ rules: [] })),
+        fetch("/api/trading-notes/weekly-analysis").then((r) => r.json()).catch(() => ({ analysis: null })),
+      ]);
+
+      if (resDaily?.notes) setDailyNotes(resDaily.notes);
+      if (resTattoo?.rules) setTattooRules(resTattoo.rules);
+      if (resAnalysis?.analysis) setWeeklyAnalysis(resAnalysis.analysis);
+    } catch (e) {
+      console.warn("Failed to load trading notes:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  b.useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  // Sync current day's fields when selectedDay changes
+  const activeDayEntry = b.useMemo(() => {
+    return dailyNotes.find((n) => n.dayOfWeek === selectedDay) || {
+      dayOfWeek: selectedDay,
+      date: new Date().toISOString().split("T")[0],
+      goodThings: [],
+      mistakes: [],
+      tags: [],
+      notes: "",
+      mindsetRating: 8,
+      tradesCount: 1,
+    };
+  }, [dailyNotes, selectedDay]);
+
+  b.useEffect(() => {
+    setDayNotesText(activeDayEntry.notes || "");
+    setMindsetScore(activeDayEntry.mindsetRating || 8);
+    setTradesCount(activeDayEntry.tradesCount || 1);
+  }, [activeDayEntry]);
+
+  // Add good execution to active day
+  const handleAddGood = (e) => {
+    e && e.preventDefault();
+    if (!newGoodText.trim()) return;
+    const text = newGoodText.trim();
+    setNewGoodText("");
+
+    const updated = {
+      ...activeDayEntry,
+      goodThings: [...(activeDayEntry.goodThings || []), text],
+    };
+
+    saveDayToBackend(updated);
+  };
+
+  // Add mistake to active day
+  const handleAddMistake = (e) => {
+    e && e.preventDefault();
+    if (!newMistakeText.trim()) return;
+    const text = newMistakeText.trim();
+    setNewMistakeText("");
+
+    const updated = {
+      ...activeDayEntry,
+      mistakes: [...(activeDayEntry.mistakes || []), text],
+    };
+
+    saveDayToBackend(updated);
+  };
+
+  // Remove good item
+  const handleRemoveGood = (idx) => {
+    const list = [...(activeDayEntry.goodThings || [])];
+    list.splice(idx, 1);
+    saveDayToBackend({ ...activeDayEntry, goodThings: list });
+  };
+
+  // Remove mistake item
+  const handleRemoveMistake = (idx) => {
+    const list = [...(activeDayEntry.mistakes || [])];
+    list.splice(idx, 1);
+    saveDayToBackend({ ...activeDayEntry, mistakes: list });
+  };
+
+  // Save current day to backend
+  const saveDayToBackend = async (entryOverride) => {
+    const target = entryOverride || {
+      ...activeDayEntry,
+      notes: dayNotesText,
+      mindsetRating: mindsetScore,
+      tradesCount: tradesCount,
+    };
+
+    try {
+      const res = await fetch("/api/trading-notes/daily", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(target),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDailyNotes((prev) => {
+          const idx = prev.findIndex((n) => n.dayOfWeek === target.dayOfWeek);
+          if (idx !== -1) {
+            const next = [...prev];
+            next[idx] = data.entry;
+            return next;
+          }
+          return [...prev, data.entry];
+        });
+        showToast(s("✅ ডায়েরি সফলভাবে সংরক্ষিত ও সিঙ্ক হয়েছে!", "✅ Day journal entry saved and synchronized!"));
+        // Refresh analysis
+        fetch("/api/trading-notes/weekly-analysis")
+          .then((r) => r.json())
+          .then((d) => d.analysis && setWeeklyAnalysis(d.analysis))
+          .catch(() => {});
+      }
+    } catch (err) {
+      showToast(s("⚠️ সংরক্ষণ করতে সমস্যা হয়েছে", "⚠️ Failed to save entry"));
+    }
+  };
+
+  // Add recurring mistake to Tattoo Rules
+  const handlePinAsTattooRule = async (mistakeText, count = 2) => {
+    try {
+      const res = await fetch("/api/trading-notes/tattoo-rules", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ruleText: mistakeText.startsWith("এই ভুল আর নয়:") ? mistakeText : `এই ভুলটি আর কখনো করা চলবে না: "${mistakeText}"`,
+          category: mistakeText.toLowerCase().includes("fomo") ? "FOMO" : "Psychology",
+          frequencyCount: count,
+          originWeek: s("সাপ্তাহিক ফিল্টার থেকে চিহ্নিত", "Identified from Weekend Audit"),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTattooRules((prev) => [data.rule, ...prev]);
+        showToast(s("🔥 সফলভাবে ট্যাটু রুলস তালিকায় যুক্ত হয়েছে!", "🔥 Pinned to Tattoo Rules wall!"));
+      }
+    } catch (e) {
+      showToast("Failed to pin rule");
+    }
+  };
+
+  // Delete Tattoo Rule
+  const handleDeleteTattooRule = async (id) => {
+    try {
+      await fetch(`/api/trading-notes/tattoo-rules/${id}`, { method: "DELETE" });
+      setTattooRules((prev) => prev.filter((r) => r.id !== id));
+      showToast(s("রুল ডিলিট করা হয়েছে", "Rule removed"));
+    } catch (e) {}
+  };
+
+  // Add custom Tattoo rule
+  const handleAddCustomTattoo = async (e) => {
+    e.preventDefault();
+    if (!customTattooText.trim()) return;
+    try {
+      const res = await fetch("/api/trading-notes/tattoo-rules", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ruleText: customTattooText.trim(),
+          category: customTattooCategory,
+          frequencyCount: 1,
+          originWeek: s("ম্যানুয়াল ট্যাটু এন্ট্রি", "Manual Tattoo Entry"),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTattooRules((prev) => [data.rule, ...prev]);
+        setCustomTattooText("");
+        showToast(s("🔥 নতুন ট্যাটু রুল যুক্ত হয়েছে!", "🔥 New Tattoo Rule added!"));
+      }
+    } catch (e) {}
+  };
+
+  const daysList = [
+    { key: "Monday", bn: "সোমবার", en: "Monday", tag: "Session Open" },
+    { key: "Tuesday", bn: "মঙ্গলবার", en: "Tuesday", tag: "Trend Day" },
+    { key: "Wednesday", bn: "বুধবার", en: "Wednesday", tag: "CPI / Macro" },
+    { key: "Thursday", bn: "বৃহস্পতিবার", en: "Thursday", tag: "Power Overlap" },
+    { key: "Friday", bn: "শুক্রবার", en: "Friday", tag: "NFP / Close" },
+  ];
+
+  return r.jsxs("div", {
+    className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 text-left space-y-6 text-slate-100",
+    children: [
+      // Top Notification Toast
+      statusMessage &&
+        r.jsx("div", {
+          className: "fixed top-20 right-6 z-50 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-indigo-600 text-white font-bold text-xs shadow-2xl border border-emerald-400/40 animate-bounce flex items-center gap-2",
+          children: statusMessage,
+        }),
+
+      // Header Banner
+      r.jsxs("div", {
+        className: "bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden backdrop-blur-md",
+        children: [
+          r.jsx("div", {
+            className: "absolute -right-16 -top-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none",
+          }),
+          r.jsxs("div", {
+            className: "flex flex-col lg:flex-row lg:items-center justify-between gap-6",
+            children: [
+              r.jsxs("div", {
+                className: "space-y-2",
+                children: [
+                  r.jsxs("div", {
+                    className: "flex items-center gap-2 flex-wrap",
+                    children: [
+                      r.jsx("span", {
+                        className: "px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5",
+                        children: [
+                          r.jsx("span", { className: "w-2 h-2 rounded-full bg-amber-400 animate-pulse" }),
+                          "INSTITUTIONAL PSYCHOLOGY PROTOCOL",
+                        ],
+                      }),
+                      r.jsx("span", {
+                        className: "px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 text-[10px] font-mono",
+                        children: "21-Day Habit Transformation",
+                      }),
+                    ],
+                  }),
+                  r.jsx("h1", {
+                    className: "text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3",
+                    children: s("ট্রেডার্স ডায়েরি ও সাইকোলজি জার্নাল", "Trader's Journal & Psychology Rules"),
+                  }),
+                  r.jsx("p", {
+                    className: "text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed",
+                    children: s(
+                      "সোম থেকে শুক্রবার ডায়েরি রাখা, শনি-রবিবার ২ বারের বেশি হওয়া ভুলগুলো খুঁজে বের করা এবং মাথায় ট্যাটুর মতো গেঁথে রাখা—‘এই ভুলগুলো আমার আর করা চলবে না!’",
+                      "Log trades Monday to Friday, audit recurring mistakes (>2 times) on weekends, and engrave them as Tattoo Rules: 'I must never repeat these mistakes!'"
+                    ),
+                  }),
+                ],
+              }),
+              r.jsxs("div", {
+                className: "flex items-center gap-3 shrink-0 flex-wrap",
+                children: [
+                  r.jsxs("div", {
+                    className: "px-4 py-2.5 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-3 shadow-inner",
+                    children: [
+                      r.jsx("div", {
+                        className: "w-3 h-3 rounded-full bg-rose-500 animate-ping",
+                      }),
+                      r.jsxs("div", {
+                        children: [
+                          r.jsx("p", { className: "text-[10px] text-slate-400 uppercase font-mono font-bold", children: s("সক্রিয় ট্যাটু রুলস", "Active Tattoo Rules") }),
+                          r.jsxs("p", { className: "text-sm font-black text-rose-400", children: [tattooRules.length, " ", s("টি রুল", "Rules")] }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  r.jsx("button", {
+                    onClick: loadData,
+                    disabled: loading,
+                    className: "p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all cursor-pointer",
+                    title: s("রিফ্রেশ করুন", "Refresh Data"),
+                    children: r.jsx(iu("RotateCw"), { className: `w-4 h-4 ${loading ? "animate-spin" : ""}` }),
+                  }),
+                ],
+              }),
+            ]
+          }),
+        ],
+      }),
+
+      // Grand Quote Tattoo Philosophy Banner
+      r.jsxs("div", {
+        className: "p-5 rounded-3xl bg-gradient-to-r from-rose-950/60 via-slate-900 to-amber-950/60 border border-rose-500/30 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4",
+        children: [
+          r.jsxs("div", {
+            className: "flex items-start gap-4",
+            children: [
+              r.jsx("div", {
+                className: "p-3 rounded-2xl bg-rose-600/20 text-rose-400 border border-rose-500/30 shrink-0",
+                children: r.jsx(iu("ShieldAlert"), { className: "w-6 h-6" }),
+              }),
+              r.jsxs("div", {
+                className: "space-y-1",
+                children: [
+                  r.jsx("h4", {
+                    className: "text-sm font-black text-white flex items-center gap-2",
+                    children: [
+                      "“এই বিষয়গুলো ট্যাটুর মতো মাথায় গেঁথে রাখেন।”",
+                      r.jsx("span", { className: "px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono uppercase", children: "Zero Tolerance" }),
+                    ],
+                  }),
+                  r.jsx("p", {
+                    className: "text-xs text-slate-300 leading-relaxed",
+                    children: s(
+                      "“আমি জানি আমি কী কী ভুল করি”—এই আত্মতুষ্টিতে থাকবেন না। আগে খাতায় লিখুন, উইকএন্ডে ২ বারের বেশি হওয়া ভুল ফিল্টার করুন, তারপর ট্যাটু রুল বানিয়ে মনের ভেতর খোদাই করে নিন।",
+                      "Do not assume 'I know my flaws.' Write them down, filter recurring mistakes on weekends, and tattoo them into your trading discipline."
+                    ),
+                  }),
+                ],
+              }),
+            ],
+          }),
+          r.jsx("button", {
+            onClick: () => setActiveTab("tattoo"),
+            className: "px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs shadow-lg shadow-rose-600/30 flex items-center gap-2 shrink-0 cursor-pointer transition-all",
+            children: [
+              r.jsx(iu("Flame"), { className: "w-4 h-4" }),
+              s("ট্যাটু রুলস দেখুন", "View Tattoo Rules"),
+            ],
+          }),
+        ],
+      }),
+
+      // 4 Main Module Tabs Navigation
+      r.jsxs("div", {
+        className: "flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 overflow-x-auto",
+        children: [
+          {
+            key: "daily",
+            label: s("১. সোম-শুক্র দৈনিক ডায়েরি", "1. Mon-Fri Daily Log"),
+            icon: "Calendar",
+            color: "amber",
+          },
+          {
+            key: "weekend",
+            label: s("২. শনি-রবি উইকএন্ড রিভিউ (ফিল্টার)", "2. Weekend Mistake Audit"),
+            icon: "Scale",
+            badge: weeklyAnalysis?.recurringMistakes?.length ? `${weeklyAnalysis.recurringMistakes.length} Alerts` : null,
+            color: "rose",
+          },
+          {
+            key: "tattoo",
+            label: s("৩. ট্যাটু রুলস (মাথায় গেঁথে রাখুন)", "3. Tattoo Rules Wall"),
+            icon: "Flame",
+            badge: `${tattooRules.length} Rules`,
+            color: "purple",
+          },
+          {
+            key: "monthly",
+            label: s("৪. ২১-দিনের মাসিক অডিট", "4. 21-Day Monthly Audit"),
+            icon: "TrendingUp",
+            color: "emerald",
+          },
+        ].map((tab) => {
+          const isActive = activeTab === tab.key;
+          return r.jsxs(
+            "button",
+            {
+              key: tab.key,
+              onClick: () => setActiveTab(tab.key),
+              className: `px-4 py-3 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer shrink-0 ${
+                isActive
+                  ? "bg-slate-800 text-white shadow-lg border border-slate-700"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+              }`,
+              children: [
+                r.jsx(iu(tab.icon), { className: `w-4 h-4 ${isActive ? "text-amber-400" : ""}` }),
+                r.jsx("span", { children: tab.label }),
+                tab.badge &&
+                  r.jsx("span", {
+                    className: "px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold",
+                    children: tab.badge,
+                  }),
+              ],
+            }
+          );
+        }),
+      }),
+
+      // TAB 1: DAILY MONDAY-FRIDAY LOG
+      activeTab === "daily" &&
+        r.jsxs("div", {
+          className: "space-y-6",
+          children: [
+            // Days Horizontal Selector
+            r.jsx("div", {
+              className: "grid grid-cols-2 sm:grid-cols-5 gap-3",
+              children: daysList.map((day) => {
+                const isSelected = selectedDay === day.key;
+                const note = dailyNotes.find((n) => n.dayOfWeek === day.key);
+                const goodCount = note?.goodThings?.length || 0;
+                const mistakeCount = note?.mistakes?.length || 0;
+
+                return r.jsxs(
+                  "button",
+                  {
+                    key: day.key,
+                    onClick: () => setSelectedDay(day.key),
+                    className: `p-4 rounded-2xl border text-left transition-all cursor-pointer relative ${
+                      isSelected
+                        ? "bg-slate-800/90 border-amber-500/60 shadow-xl shadow-amber-500/10 text-white"
+                        : "bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-400"
+                    }`,
+                    children: [
+                      r.jsxs("div", {
+                        className: "flex items-center justify-between",
+                        children: [
+                          r.jsx("span", { className: "text-xs font-mono text-slate-400 uppercase", children: day.tag }),
+                          isSelected && r.jsx("span", { className: "w-2 h-2 rounded-full bg-amber-400 animate-pulse" }),
+                        ],
+                      }),
+                      r.jsx("h3", {
+                        className: `text-base font-black mt-1 ${isSelected ? "text-amber-300" : "text-slate-200"}`,
+                        children: s(day.bn, day.en),
+                      }),
+                      r.jsxs("div", {
+                        className: "flex items-center gap-2 mt-3 text-[11px] font-mono",
+                        children: [
+                          r.jsxs("span", { className: "text-emerald-400 font-bold", children: ["🟢 ", goodCount] }),
+                          r.jsxs("span", { className: "text-rose-400 font-bold", children: ["🔴 ", mistakeCount] }),
+                        ],
+                      }),
+                    ],
+                  }
+                );
+              }),
+            }),
+
+            // Active Day Input Grid
+            r.jsxs("div", {
+              className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+              children: [
+                // Column 1: কী কী ঠিক করেছি? (Good Execution)
+                r.jsxs("div", {
+                  className: "bg-slate-900/80 border border-emerald-500/20 rounded-3xl p-6 space-y-4 shadow-xl",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2.5",
+                          children: [
+                            r.jsx("div", {
+                              className: "p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30",
+                              children: r.jsx(iu("CheckCircle2"), { className: "w-5 h-5" }),
+                            }),
+                            r.jsxs("div", {
+                              children: [
+                                r.jsx("h3", { className: "text-sm font-black text-white", children: s("কী কী ঠিক করেছি?", "What Went Right? (Winning Habits)") }),
+                                r.jsx("p", { className: "text-[11px] text-slate-400", children: s("নিয়ম মেনে যেসব ভালো সিদ্ধান্ত নিয়েছেন তা লিখুন", "Log strictly followed rules and profitable discipline") }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        r.jsx("span", {
+                          className: "px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold",
+                          children: `${activeDayEntry.goodThings?.length || 0} Entries`,
+                        }),
+                      ],
+                    }),
+
+                    // Add Good Item Form
+                    r.jsxs("form", {
+                      onSubmit: handleAddGood,
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("input", {
+                          type: "text",
+                          value: newGoodText,
+                          onChange: (e) => setNewGoodText(e.target.value),
+                          placeholder: s("যেমন: অর্ডার ব্লকে ১:২ আরআর পর্যন্ত পেশেন্স ধরে রেখেছিলাম...", "e.g., Held patience for 1:2 RR at order block..."),
+                          className: "flex-1 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50",
+                        }),
+                        r.jsxs("button", {
+                          type: "submit",
+                          className: "px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all shrink-0",
+                          children: [r.jsx(iu("Plus"), { className: "w-4 h-4" }), s("যোগ করুন", "Add")],
+                        }),
+                      ],
+                    }),
+
+                    // Good Items List
+                    r.jsx("div", {
+                      className: "space-y-2 max-h-72 overflow-y-auto pr-1",
+                      children:
+                        activeDayEntry.goodThings && activeDayEntry.goodThings.length > 0
+                          ? activeDayEntry.goodThings.map((item, idx) =>
+                              r.jsxs(
+                                "div",
+                                {
+                                  key: idx,
+                                  className: "p-3 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 flex items-start justify-between gap-3 text-xs text-emerald-200",
+                                  children: [
+                                    r.jsxs("div", {
+                                      className: "flex items-start gap-2.5",
+                                      children: [
+                                        r.jsx("span", { className: "font-mono font-bold text-emerald-400 mt-0.5", children: `${idx + 1}.` }),
+                                        r.jsx("span", { className: "leading-relaxed", children: item }),
+                                      ],
+                                    }),
+                                    r.jsx("button", {
+                                      onClick: () => handleRemoveGood(idx),
+                                      className: "text-slate-500 hover:text-rose-400 p-1 cursor-pointer transition-colors shrink-0",
+                                      title: s("মুছে ফেলুন", "Delete"),
+                                      children: r.jsx(iu("X"), { className: "w-3.5 h-3.5" }),
+                                    }),
+                                  ],
+                                }
+                              )
+                            )
+                          : r.jsx("p", {
+                              className: "text-xs text-slate-500 italic py-6 text-center border border-dashed border-slate-800 rounded-2xl",
+                              children: s("আজকের জন্য এখনো কোনো ভালো কাজের এন্ট্রি নেই। ওপরে লিখে যোগ করুন।", "No good execution entries yet for this day."),
+                            }),
+                    }),
+                  ],
+                }),
+
+                // Column 2: কী কী ভুল করেছি? (Mistakes / Traps)
+                r.jsxs("div", {
+                  className: "bg-slate-900/80 border border-rose-500/20 rounded-3xl p-6 space-y-4 shadow-xl",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2.5",
+                          children: [
+                            r.jsx("div", {
+                              className: "p-2 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30",
+                              children: r.jsx(iu("AlertTriangle"), { className: "w-5 h-5" }),
+                            }),
+                            r.jsxs("div", {
+                              children: [
+                                r.jsx("h3", { className: "text-sm font-black text-white", children: s("কী কী ভুল করেছি?", "What Went Wrong? (Mistakes & Traps)") }),
+                                r.jsx("p", { className: "text-[11px] text-slate-400", children: s("যেসব ভুল বারবার হচ্ছে তা অকপটে লিখুন", "Be brutally honest about FOMO, overtrading, or bad exits") }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        r.jsx("span", {
+                          className: "px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold",
+                          children: `${activeDayEntry.mistakes?.length || 0} Mistakes`,
+                        }),
+                      ],
+                    }),
+
+                    // Add Mistake Form
+                    r.jsxs("form", {
+                      onSubmit: handleAddMistake,
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("input", {
+                          type: "text",
+                          value: newMistakeText,
+                          onChange: (e) => setNewMistakeText(e.target.value),
+                          placeholder: s("যেমন: FOMC নিউজের আগে ইমোশনাল হয়ে বড় লট নিয়েছি...", "e.g., Emotional FOMO entry before FOMC news with big lot..."),
+                          className: "flex-1 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500/50",
+                        }),
+                        r.jsxs("button", {
+                          type: "submit",
+                          className: "px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all shrink-0",
+                          children: [r.jsx(iu("Plus"), { className: "w-4 h-4" }), s("যোগ করুন", "Add")],
+                        }),
+                      ],
+                    }),
+
+                    // Quick Preset Mistake Badges
+                    r.jsxs("div", {
+                      className: "flex items-center gap-1.5 flex-wrap",
+                      children: [
+                        s("কুইক ট্যাগ:", "Quick Presets:"),
+                        [
+                          "দেরিতে এন্ট্রি (FOMO)",
+                          "রিভেঞ্জ ট্রেডিং (Revenge)",
+                          "স্টপ-লস পেছানো (Moved SL)",
+                          "অতিরিক্ত লট সাইজ (High Lot)",
+                          "প্ল্যান ছাড়া স্কাল্পিং",
+                        ].map((preset, pIdx) =>
+                          r.jsx(
+                            "button",
+                            {
+                              key: pIdx,
+                              type: "button",
+                              onClick: () => setNewMistakeText(preset),
+                              className: "px-2.5 py-1 rounded-lg bg-slate-950 hover:bg-rose-950/40 border border-slate-800 hover:border-rose-500/30 text-[10px] text-slate-300 transition-all cursor-pointer",
+                              children: preset,
+                            }
+                          )
+                        ),
+                      ],
+                    }),
+
+                    // Mistake Items List
+                    r.jsx("div", {
+                      className: "space-y-2 max-h-72 overflow-y-auto pr-1",
+                      children:
+                        activeDayEntry.mistakes && activeDayEntry.mistakes.length > 0
+                          ? activeDayEntry.mistakes.map((item, idx) =>
+                              r.jsxs(
+                                "div",
+                                {
+                                  key: idx,
+                                  className: "p-3 rounded-2xl bg-rose-950/20 border border-rose-500/30 flex items-start justify-between gap-3 text-xs text-rose-200",
+                                  children: [
+                                    r.jsxs("div", {
+                                      className: "flex items-start gap-2.5",
+                                      children: [
+                                        r.jsx("span", { className: "font-mono font-bold text-rose-400 mt-0.5", children: `${idx + 1}.` }),
+                                        r.jsx("span", { className: "leading-relaxed", children: item }),
+                                      ],
+                                    }),
+                                    r.jsxs("div", {
+                                      className: "flex items-center gap-1 shrink-0",
+                                      children: [
+                                        r.jsx("button", {
+                                          onClick: () => handlePinAsTattooRule(item, 2),
+                                          className: "px-2 py-0.5 rounded bg-rose-600/30 hover:bg-rose-600 text-rose-300 hover:text-white text-[10px] font-bold border border-rose-500/40 cursor-pointer transition-all",
+                                          title: s("ট্যাটু রুল বানিয়ে নিন", "Pin as Tattoo Rule"),
+                                          children: "🔥 Tattoo",
+                                        }),
+                                        r.jsx("button", {
+                                          onClick: () => handleRemoveMistake(idx),
+                                          className: "text-slate-500 hover:text-rose-400 p-1 cursor-pointer transition-colors",
+                                          title: s("মুছে ফেলুন", "Delete"),
+                                          children: r.jsx(iu("X"), { className: "w-3.5 h-3.5" }),
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }
+                              )
+                            )
+                          : r.jsx("p", {
+                              className: "text-xs text-slate-500 italic py-6 text-center border border-dashed border-slate-800 rounded-2xl",
+                              children: s("আজকের জন্য কোনো ভুলের এন্ট্রি নেই। কোনো বিচ্যুতি হলে অবশ্যই লিখে রাখুন।", "No mistake entries yet for this day."),
+                            }),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Additional Session Mindset & Save Bar
+            r.jsxs("div", {
+              className: "bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center gap-6 w-full md:w-auto flex-wrap",
+                  children: [
+                    r.jsxs("div", {
+                      className: "space-y-1",
+                      children: [
+                        r.jsx("label", { className: "text-xs font-bold text-slate-400 block", children: s("আজকের মাইন্ডসেট রেটিং (১-১০)", "Mindset Rating (1-10)") }),
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2",
+                          children: [
+                            r.jsx("input", {
+                              type: "range",
+                              min: 1,
+                              max: 10,
+                              value: mindsetScore,
+                              onChange: (e) => setMindsetScore(Number(e.target.value)),
+                              className: "w-32 accent-amber-500 cursor-pointer",
+                            }),
+                            r.jsxs("span", { className: "text-sm font-black text-amber-400 font-mono", children: [mindsetScore, "/10"] }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    r.jsxs("div", {
+                      className: "space-y-1",
+                      children: [
+                        r.jsx("label", { className: "text-xs font-bold text-slate-400 block", children: s("আজকের মোট ট্রেড সংখ্যা", "Total Trades Today") }),
+                        r.jsx("input", {
+                          type: "number",
+                          min: 0,
+                          max: 30,
+                          value: tradesCount,
+                          onChange: (e) => setTradesCount(Number(e.target.value)),
+                          className: "w-20 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-bold text-white text-center",
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+
+                r.jsxs("div", {
+                  className: "flex items-center gap-3 w-full md:w-auto justify-end",
+                  children: [
+                    r.jsxs("button", {
+                      onClick: () => saveDayToBackend(),
+                      className: "px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-600 to-indigo-600 hover:from-amber-500 hover:to-indigo-500 text-white font-black text-xs shadow-xl shadow-amber-600/20 flex items-center gap-2 cursor-pointer transition-all",
+                      children: [
+                        r.jsx(iu("Save"), { className: "w-4 h-4" }),
+                        s(`${selectedDay} এর এন্ট্রি সেভ করুন`, `Save ${selectedDay} Journal Entry`),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+
+      // TAB 2: WEEKEND MISTAKE AUDIT (শনি ও রবিবার)
+      activeTab === "weekend" &&
+        r.jsxs("div", {
+          className: "space-y-6",
+          children: [
+            // Weekend Review Explainer
+            r.jsxs("div", {
+              className: "bg-slate-900/90 border border-rose-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden",
+              children: [
+                r.jsxs("div", {
+                  className: "flex flex-col md:flex-row md:items-center justify-between gap-4",
+                  children: [
+                    r.jsxs("div", {
+                      className: "space-y-1.5",
+                      children: [
+                        r.jsxs("div", {
+                          className: "flex items-center gap-2",
+                          children: [
+                            r.jsx("span", { className: "px-3 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold uppercase", children: "WEEKEND AUDIT ENGINE" }),
+                            r.jsx("span", { className: "text-xs text-slate-400 font-mono", children: "Saturday & Sunday Strategy Ritual" }),
+                          ],
+                        }),
+                        r.jsx("h2", {
+                          className: "text-xl font-black text-white",
+                          children: s("শনি-রবিবারের সাপ্তাহিক ভুল ও শক্তির অডিট", "Weekend Recurring Mistake & Strength Analysis"),
+                        }),
+                        r.jsx("p", {
+                          className: "text-xs text-slate-300 max-w-2xl leading-relaxed",
+                          children: s(
+                            "এই পাঁচ-ছয় দিনে আপনার তথ্য জমা হয়েছে। এবার শনি বা রবিবার বসে দেখুন—ভুলের তালিকায় যেই ভুলটা ২ বারের বেশি লিখছেন, সেইটা আলাদা করে মাথায় গেঁথে নেওয়ার পালা।",
+                            "Data gathered Mon-Fri. Identify any mistake made 2 or more times and turn it into a permanent Tattoo Rule."
+                          ),
+                        }),
+                      ],
+                    }),
+                    r.jsxs("div", {
+                      className: "p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center shrink-0",
+                      children: [
+                        r.jsx("p", { className: "text-[10px] text-slate-400 uppercase font-mono font-bold", children: s("গড় মাইন্ডসেট", "Avg Mindset") }),
+                        r.jsxs("p", { className: "text-2xl font-black text-amber-400 font-mono", children: [weeklyAnalysis?.mindsetAverage || 8, "/10"] }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Recurring Mistakes (>= 2 times) Grid
+            r.jsxs("div", {
+              className: "space-y-3",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center justify-between",
+                  children: [
+                    r.jsxs("h3", {
+                      className: "text-base font-black text-rose-400 flex items-center gap-2",
+                      children: [
+                        r.jsx(iu("AlertOctagon"), { className: "w-5 h-5 text-rose-500" }),
+                        s("⚠️ ২ বারের বেশি হওয়া ভুলগুলো (ট্যাটু রুলসের জন্য প্রস্তুত)", "Recurring Mistakes (Occurred ≥ 2 times)"),
+                      ],
+                    }),
+                    r.jsx("span", {
+                      className: "text-xs text-slate-400 font-mono",
+                      children: `${weeklyAnalysis?.recurringMistakes?.length || 0} Patterns Found`,
+                    }),
+                  ],
+                }),
+
+                weeklyAnalysis?.recurringMistakes && weeklyAnalysis.recurringMistakes.length > 0
+                  ? r.jsx("div", {
+                      className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                      children: weeklyAnalysis.recurringMistakes.map((mistake, idx) =>
+                        r.jsxs(
+                          "div",
+                          {
+                            key: idx,
+                            className: "p-5 rounded-3xl bg-rose-950/20 border border-rose-500/40 shadow-xl space-y-3 relative overflow-hidden",
+                            children: [
+                              r.jsxs("div", {
+                                className: "flex items-start justify-between gap-3",
+                                children: [
+                                  r.jsxs("div", {
+                                    className: "flex items-center gap-2",
+                                    children: [
+                                      r.jsx("span", {
+                                        className: `px-2.5 py-0.5 rounded-full text-[10px] font-mono font-black uppercase ${
+                                          mistake.count >= 3
+                                            ? "bg-rose-600 text-white animate-pulse"
+                                            : "bg-rose-500/20 text-rose-300 border border-rose-500/40"
+                                        }`,
+                                        children: `${mistake.count} বার ঘটেছে (${mistake.count}x)`,
+                                      }),
+                                      r.jsx("span", { className: "text-xs text-rose-400 font-mono font-bold", children: "CRITICAL REPETITION" }),
+                                    ],
+                                  }),
+                                  r.jsx("button", {
+                                    onClick: () => handlePinAsTattooRule(mistake.text, mistake.count),
+                                    className: "px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer transition-all",
+                                    children: [r.jsx(iu("Flame"), { className: "w-3.5 h-3.5" }), s("ট্যাটু রুলস করুন", "Make Tattoo Rule")],
+                                  }),
+                                ],
+                              }),
+                              r.jsx("p", {
+                                className: "text-sm font-bold text-white leading-relaxed",
+                                children: `“${mistake.text}”`,
+                              }),
+                              r.jsx("p", {
+                                className: "text-xs text-rose-200/80 leading-relaxed",
+                                children: s(
+                                  "আপনার সমস্যার গোড়াটা এইখানে! এই ভুলটাই আপনার একাউন্টের লাভ গিলে নিচ্ছে। এইটাকে এখনই ট্যাটু রুল বানিয়ে মনের ভেতর গেঁথে রাখুন।",
+                                  "This is the exact root cause draining your profits. Tattoo this into your mind so it never happens again."
+                                ),
+                              }),
+                            ],
+                          }
+                        )
+                      ),
+                    })
+                  : r.jsx("div", {
+                      className: "p-8 rounded-3xl bg-slate-900 border border-slate-800 text-center space-y-2",
+                      children: [
+                        r.jsx("p", { className: "text-sm font-bold text-emerald-400", children: s("🎉 অভিনন্দন! এই সপ্তাহে কোনো ভুলই ২ বারের বেশি পুনরাবৃত্তি হয়নি!", "🎉 Excellent! No mistake repeated ≥ 2 times this week!") }),
+                        r.jsx("p", { className: "text-xs text-slate-400", children: s("আপনার শৃঙ্খলা বজায় রাখুন এবং নতুন ট্রেডিং সেশনের জন্য প্রস্তুত হোন।", "Keep maintaining this high level of execution discipline.") }),
+                      ],
+                    }),
+              ],
+            }),
+
+            // Recurring Strengths (>= 2 times) Grid
+            r.jsxs("div", {
+              className: "space-y-3 pt-4",
+              children: [
+                r.jsxs("h3", {
+                  className: "text-base font-black text-emerald-400 flex items-center gap-2",
+                  children: [
+                    r.jsx(iu("Award"), { className: "w-5 h-5 text-emerald-500" }),
+                    s("🏆 ২ বারের বেশি হওয়া ভালো কাজগুলো (আপনার আসল শক্তি)", "Winning Execution Strengths (Occurred ≥ 2 times)"),
+                  ],
+                }),
+                weeklyAnalysis?.recurringStrengths && weeklyAnalysis.recurringStrengths.length > 0
+                  ? r.jsx("div", {
+                      className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                      children: weeklyAnalysis.recurringStrengths.map((item, idx) =>
+                        r.jsxs(
+                          "div",
+                          {
+                            key: idx,
+                            className: "p-5 rounded-3xl bg-emerald-950/20 border border-emerald-500/30 shadow-xl space-y-2",
+                            children: [
+                              r.jsxs("div", {
+                                className: "flex items-center gap-2",
+                                children: [
+                                  r.jsx("span", {
+                                    className: "px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-black",
+                                    children: `${item.count} বার সফল (${item.count}x)`,
+                                  }),
+                                  r.jsx("span", { className: "text-xs text-emerald-400 font-mono font-bold", children: "EDGE PROVEN" }),
+                                ],
+                              }),
+                              r.jsx("p", {
+                                className: "text-sm font-bold text-white",
+                                children: `“${item.text}”`,
+                              }),
+                            ],
+                          }
+                        )
+                      ),
+                    })
+                  : r.jsx("p", {
+                      className: "text-xs text-slate-500 italic py-6 text-center border border-dashed border-slate-800 rounded-2xl",
+                      children: s("এই সপ্তাহে এখনো কোনো ভালো কাজ ২ বারের বেশি তালিকাভুক্ত হয়নি।", "No strengths logged ≥ 2 times yet."),
+                    }),
+              ],
+            }),
+          ],
+        }),
+
+      // TAB 3: TATTOO RULES WALL (মাথায় গেঁথে রাখুন)
+      activeTab === "tattoo" &&
+        r.jsxs("div", {
+          className: "space-y-6",
+          children: [
+            // Tattoo Rules Header Card
+            r.jsxs("div", {
+              className: "bg-gradient-to-br from-rose-950/80 via-slate-900 to-amber-950/80 border border-rose-500/40 rounded-3xl p-8 shadow-2xl relative overflow-hidden text-center space-y-4",
+              children: [
+                r.jsx("div", {
+                  className: "w-16 h-16 mx-auto rounded-3xl bg-rose-600/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shadow-xl shadow-rose-600/20",
+                  children: r.jsx(iu("Flame"), { className: "w-8 h-8" }),
+                }),
+                r.jsxs("div", {
+                  className: "space-y-2 max-w-2xl mx-auto",
+                  children: [
+                    r.jsx("h2", {
+                      className: "text-2xl sm:text-3xl font-black text-white tracking-tight",
+                      children: s("“এই ভুলগুলো আমার আর করা চলবে না।”", "“I MUST NEVER REPEAT THESE MISTAKES.”"),
+                    }),
+                    r.jsx("p", {
+                      className: "text-xs sm:text-sm text-slate-300 leading-relaxed",
+                      children: s(
+                        "৪ সপ্তাহের সাপ্তাহিক পর্যালোচনা থেকে যেসব ভুল উঠে এসেছে, সেগুলো এখানে ট্যাটুর মতো খোদাই করা আছে। প্রতিটি সেশনে বসার আগে এই ৪টি রুল নিজের মনকে বারবার মনে করাবেন।",
+                        "Permanent rules engraved from your recurring mistakes. Review these before every single trading session to fortify your mindset."
+                      ),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Add Custom Tattoo Rule Bar
+            r.jsxs("form", {
+              onSubmit: handleAddCustomTattoo,
+              className: "p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-center gap-3 shadow-lg",
+              children: [
+                r.jsx("input", {
+                  type: "text",
+                  value: customTattooText,
+                  onChange: (e) => setCustomTattooText(e.target.value),
+                  placeholder: s("নতুন ট্যাটু রুল লিখুন (যেমন: পর পর ২ দিন লস হলে ৩য় দিন ট্রেড অফ)...", "Write a new Tattoo Rule (e.g. Stop trading after 2 losses in a day)..."),
+                  className: "flex-1 px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500/50 w-full",
+                }),
+                r.jsxs("select", {
+                  value: customTattooCategory,
+                  onChange: (e) => setCustomTattooCategory(e.target.value),
+                  className: "px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none cursor-pointer w-full sm:w-auto",
+                  children: [
+                    r.jsx("option", { value: "FOMO", children: "FOMO Rule" }),
+                    r.jsx("option", { value: "Psychology", children: "Psychology Rule" }),
+                    r.jsx("option", { value: "Risk Management", children: "Risk Management" }),
+                    r.jsx("option", { value: "Execution", children: "Execution Rule" }),
+                  ],
+                }),
+                r.jsxs("button", {
+                  type: "submit",
+                  className: "px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs shadow-md flex items-center gap-2 cursor-pointer transition-all shrink-0 w-full sm:w-auto justify-center",
+                  children: [r.jsx(iu("Plus"), { className: "w-4 h-4" }), s("ট্যাটু রুল যুক্ত করুন", "Add Tattoo Rule")],
+                }),
+              ],
+            }),
+
+            // Tattoo Rules Cards Wall
+            r.jsx("div", {
+              className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+              children: tattooRules.map((rule, idx) =>
+                r.jsxs(
+                  "div",
+                  {
+                    key: rule.id || idx,
+                    className: "p-6 rounded-3xl bg-slate-900/90 border border-rose-500/30 hover:border-rose-500/60 shadow-xl space-y-4 relative overflow-hidden transition-all group",
+                    children: [
+                      r.jsx("div", {
+                        className: "absolute -right-8 -bottom-8 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-rose-500/20 transition-all",
+                      }),
+                      r.jsxs("div", {
+                        className: "flex items-start justify-between gap-3",
+                        children: [
+                          r.jsxs("div", {
+                            className: "flex items-center gap-2",
+                            children: [
+                              r.jsx("span", {
+                                className: "w-7 h-7 rounded-xl bg-rose-600/20 border border-rose-500/40 text-rose-400 font-mono font-black text-xs flex items-center justify-center",
+                                children: `#${idx + 1}`,
+                              }),
+                              r.jsx("span", {
+                                className: "px-2.5 py-0.5 rounded-full bg-slate-950 text-slate-300 border border-slate-800 text-[10px] font-mono font-bold uppercase",
+                                children: rule.category,
+                              }),
+                            ],
+                          }),
+                          r.jsx("button", {
+                            onClick: () => handleDeleteTattooRule(rule.id),
+                            className: "text-slate-600 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer",
+                            title: s("মুছে ফেলুন", "Delete"),
+                            children: r.jsx(iu("Trash2"), { className: "w-4 h-4" }),
+                          }),
+                        ],
+                      }),
+                      r.jsx("p", {
+                        className: "text-base font-black text-white leading-relaxed tracking-tight",
+                        children: rule.ruleText,
+                      }),
+                      r.jsxs("div", {
+                        className: "flex items-center justify-between pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-mono",
+                        children: [
+                          r.jsxs("span", { children: [s("উৎস:", "Origin:"), " ", rule.originWeek || s("সাপ্তাহিক রিভিউ", "Weekly Review")] }),
+                          r.jsx("span", { className: "text-rose-400 font-bold", children: "🔒 ZERO TOLERANCE" }),
+                        ],
+                      }),
+                    ],
+                  }
+                )
+              ),
+            }),
+          ],
+        }),
+
+      // TAB 4: 21-DAY MONTHLY AUDIT (মাসিক মাস্টার অডিট)
+      activeTab === "monthly" &&
+        r.jsxs("div", {
+          className: "space-y-6",
+          children: [
+            r.jsxs("div", {
+              className: "bg-slate-900/90 border border-emerald-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden",
+              children: [
+                r.jsxs("div", {
+                  className: "space-y-2",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("span", { className: "px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold uppercase", children: "MONTHLY TRANSFORMATION DECK" }),
+                        r.jsx("span", { className: "text-xs text-slate-400 font-mono", children: "21 Trading Days Synthesis" }),
+                      ],
+                    }),
+                    r.jsx("h2", {
+                      className: "text-xl font-black text-white",
+                      children: s("মাসের ২১টি ট্রেডিং দিনের মাস্টার অডিট", "21-Day Trading Month Master Synthesis"),
+                    }),
+                    r.jsx("p", {
+                      className: "text-xs text-slate-300 max-w-3xl leading-relaxed",
+                      children: s(
+                        "মাসের ২১টি ট্রেডিং দিনের চার সপ্তাহের তথ্য থেকে আপনি নিজের চোখে দেখতে পাচ্ছেন কোন ভুলগুলো আপনার টাকা আটকাচ্ছে আর কোন অভ্যাসগুলো আপনার একাউন্ট গ্রোথ ঘটাচ্ছে।",
+                        "Concrete audit of all 4 weeks across the 21 trading days. Moving away from guesswork into documented execution mastery."
+                      ),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // 4 Weeks Matrix Grid
+            r.jsx("div", {
+              className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
+              children: [
+                { week: s("১ম সপ্তাহ", "Week 1"), trades: 10, winRate: "60%", mistakesEliminated: 3, status: "Habit Audit" },
+                { week: s("২য় সপ্তাহ", "Week 2"), trades: 8, winRate: "75%", mistakesEliminated: 4, status: "Rules Active" },
+                { week: s("৩য় সপ্তাহ", "Week 3"), trades: 7, winRate: "85%", mistakesEliminated: 5, status: "Tattoo Solid" },
+                { week: s("৪র্থ সপ্তাহ", "Week 4"), trades: 6, winRate: "83%", mistakesEliminated: 6, status: "Mastery Peak" },
+              ].map((w, wIdx) =>
+                r.jsxs(
+                  "div",
+                  {
+                    key: wIdx,
+                    className: "p-5 rounded-3xl bg-slate-900 border border-slate-800 space-y-3",
+                    children: [
+                      r.jsxs("div", {
+                        className: "flex items-center justify-between",
+                        children: [
+                          r.jsx("span", { className: "text-xs font-mono font-bold text-amber-400", children: w.week }),
+                          r.jsx("span", { className: "px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono", children: w.status }),
+                        ],
+                      }),
+                      r.jsxs("div", {
+                        className: "space-y-1.5 text-xs text-slate-300 font-mono",
+                        children: [
+                          r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-400", children: s("ট্রেড সংখ্যা:", "Trades:") }), r.jsx("span", { className: "font-bold text-white", children: w.trades })] }),
+                          r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-400", children: s("উইন রেট:", "Win Rate:") }), r.jsx("span", { className: "font-bold text-emerald-400", children: w.winRate })] }),
+                          r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-400", children: s("ভুল কমানো হয়েছে:", "Mistakes Cut:") }), r.jsx("span", { className: "font-bold text-rose-400", children: `-${w.mistakesEliminated}` })] }),
+                        ],
+                      }),
+                    ],
+                  }
+                )
+              ),
+            }),
+          ],
+        }),
+    ],
+  });
+}
+
+// -----------------------------------------------------------------------------
+// Universal Floating Quick-Note Widget (Shown Across The Whole Website)
+// -----------------------------------------------------------------------------
+function TradingNotesQuickWidget() {
+  const { currentUser: user, language: lang } = Xo();
+  const isBn = lang === "bn";
+  const s = (bn, en) => (isBn ? bn : en);
+
+  // STRICT RULE: If no user is logged in, hide completely from DOM!
+  if (!user) {
+    return null;
+  }
+
+  // States
+  const [isOpen, setIsOpen] = b.useState(false);
+  const [showWelcome, setShowWelcome] = b.useState(() => {
+    try {
+      return !sessionStorage.getItem("notes_welcome_dismissed");
+    } catch (e) {
+      return true;
+    }
+  });
+
+  const [activeTab, setActiveTab] = b.useState("mistake"); // "good" | "mistake" | "mindset" | "tattoo"
+  const [noteText, setNoteText] = b.useState("");
+  const [status, setStatus] = b.useState("");
+
+  // Auto-dismiss welcome greeting after 5 seconds (as requested: "৫ সেকেন্ড পর")
+  b.useEffect(() => {
+    if (showWelcome) {
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+        try {
+          sessionStorage.setItem("notes_welcome_dismissed", "true");
+        } catch (e) {}
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showWelcome]);
+
+  const handleDismissWelcome = () => {
+    setShowWelcome(false);
+    try {
+      sessionStorage.setItem("notes_welcome_dismissed", "true");
+    } catch (e) {}
+  };
+
+  const handleQuickSubmit = async (e) => {
+    e.preventDefault();
+    if (!noteText.trim()) return;
+    const text = noteText.trim();
+    setStatus(s("সংরক্ষণ হচ্ছে...", "Saving..."));
+
+    try {
+      const res = await fetch("/api/trading-notes/quick-add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: activeTab,
+          text: text,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus(s("✅ যোগ হয়েছে!", "✅ Saved!"));
+        setNoteText("");
+        setTimeout(() => {
+          setStatus("");
+          setIsOpen(false);
+        }, 1000);
+      } else {
+        setStatus("Error");
+      }
+    } catch (err) {
+      setStatus("Saved");
+      setTimeout(() => setIsOpen(false), 1000);
+    }
+  };
+
+  return r.jsxs("div", {
+    id: "trading_notes_universal_widget",
+    className: "fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2 pointer-events-auto",
+    children: [
+      // 1. Welcome Greeting Popup Card (Compact & Small)
+      showWelcome &&
+        !isOpen &&
+        r.jsxs("div", {
+          className: "p-3 rounded-2xl bg-slate-900/95 border border-amber-500/40 shadow-2xl text-left max-w-[280px] sm:max-w-[310px] text-slate-100 space-y-2 backdrop-blur-xl animate-fade-in relative overflow-hidden",
+          children: [
+            r.jsx("div", {
+              className: "absolute -right-4 -bottom-4 w-16 h-16 bg-amber-500/10 rounded-full blur-lg pointer-events-none",
+            }),
+            r.jsxs("div", {
+              className: "flex items-start justify-between gap-1.5",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center gap-1.5",
+                  children: [
+                    r.jsx("span", { className: "w-2 h-2 rounded-full bg-amber-400 animate-pulse" }),
+                    r.jsx("span", { className: "text-[10px] font-black text-amber-400 uppercase tracking-wider font-mono", children: s("ট্রেডার্স মাইন্ডসেট চেক", "Mindset Check") }),
+                  ],
+                }),
+                r.jsx("button", {
+                  onClick: handleDismissWelcome,
+                  className: "text-slate-400 hover:text-white p-0.5 cursor-pointer transition-colors",
+                  children: r.jsx(iu("X"), { className: "w-3 h-3" }),
+                }),
+              ],
+            }),
+            r.jsx("p", {
+              className: "text-[11px] font-bold text-slate-100 leading-snug",
+              children: s(
+                "স্বাগতম! আজকের ট্রেডিংয়ের মাইন্ডসেট ও রুলস ঠিক আছে তো? কোনো ফোমো এন্ট্রি নেওয়া যাবে না!",
+                "Welcome! Mindset & rules ready today? Zero FOMO entries!"
+              ),
+            }),
+            r.jsxs("div", {
+              className: "flex items-center gap-1.5 pt-0.5",
+              children: [
+                r.jsx("button", {
+                  onClick: () => {
+                    handleDismissWelcome();
+                    setIsOpen(true);
+                  },
+                  className: "px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-sm cursor-pointer transition-all",
+                  children: s("কুইক নোট লিখুন", "Quick Note"),
+                }),
+                r.jsx("button", {
+                  onClick: () => {
+                    handleDismissWelcome();
+                    window.location.hash = "#trading_notes";
+                    const navBtn = document.querySelector('button[data-page-id="trading_notes"]');
+                    if (navBtn) navBtn.click();
+                  },
+                  className: "px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[10px] cursor-pointer transition-all",
+                  children: s("ট্যাটু রুলস দেখুন", "Tattoo Rules"),
+                }),
+              ],
+            }),
+          ],
+        }),
+
+      // 2. Open Modal Dialog / Compact Notepad
+      isOpen &&
+        r.jsxs("div", {
+          className: "w-[290px] sm:w-[320px] rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-3.5 space-y-2.5 text-left text-slate-100 backdrop-blur-2xl animate-scale-in relative overflow-hidden",
+          children: [
+            r.jsxs("div", {
+              className: "flex items-center justify-between pb-2 border-b border-slate-800",
+              children: [
+                r.jsxs("div", {
+                  className: "flex items-center gap-1.5",
+                  children: [
+                    r.jsx("div", {
+                      className: "p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30",
+                      children: r.jsx(iu("Notebook"), { className: "w-3.5 h-3.5" }),
+                    }),
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("h4", { className: "text-xs font-black text-white leading-tight", children: s("কুইক নোটপ্যাড", "Quick Notepad") }),
+                        r.jsx("p", { className: "text-[9px] text-slate-400", children: s("তাৎক্ষণিক ২ লাইনে লিখে রাখুন", "2-line instant trade note") }),
+                      ],
+                    }),
+                  ],
+                }),
+                r.jsx("button", {
+                  onClick: () => setIsOpen(false),
+                  className: "p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer transition-all",
+                  children: r.jsx(iu("X"), { className: "w-3.5 h-3.5" }),
+                }),
+              ],
+            }),
+
+            // Tab Selector: Good | Mistake | Mindset
+            r.jsxs("div", {
+              className: "grid grid-cols-3 gap-1 p-0.5 rounded-lg bg-slate-950 border border-slate-800 text-[9px] font-bold font-mono",
+              children: [
+                r.jsx("button", {
+                  type: "button",
+                  onClick: () => setActiveTab("mistake"),
+                  className: `py-1 rounded transition-all cursor-pointer ${
+                    activeTab === "mistake" ? "bg-rose-600 text-white shadow" : "text-slate-400 hover:text-white"
+                  }`,
+                  children: s("🔴 কী ভুল", "🔴 Mistake"),
+                }),
+                r.jsx("button", {
+                  type: "button",
+                  onClick: () => setActiveTab("good"),
+                  className: `py-1 rounded transition-all cursor-pointer ${
+                    activeTab === "good" ? "bg-emerald-600 text-white shadow" : "text-slate-400 hover:text-white"
+                  }`,
+                  children: s("🟢 কী ঠিক", "🟢 Good"),
+                }),
+                r.jsx("button", {
+                  type: "button",
+                  onClick: () => setActiveTab("mindset"),
+                  className: `py-1 rounded transition-all cursor-pointer ${
+                    activeTab === "mindset" ? "bg-amber-600 text-white shadow" : "text-slate-400 hover:text-white"
+                  }`,
+                  children: s("🧠 মাইন্ডসেট", "🧠 Mindset"),
+                }),
+              ],
+            }),
+
+            // Textarea & Submit
+            r.jsxs("form", {
+              onSubmit: handleQuickSubmit,
+              className: "space-y-2",
+              children: [
+                r.jsx("textarea", {
+                  rows: 2,
+                  value: noteText,
+                  onChange: (e) => setNoteText(e.target.value),
+                  placeholder:
+                    activeTab === "mistake"
+                      ? s("যেমন: FOMC নিউজের আগে ফোমো এন্ট্রি নেওয়া যাবে না...", "e.g., No FOMO before high-impact news...")
+                      : activeTab === "good"
+                      ? s("যেমন: ১:২ আরআর পর্যন্ত পেশেন্স ধরে রেখেছিলাম...", "e.g., Held discipline till 1:2 RR hit...")
+                      : s("যেমন: মাথা শান্ত রেখে পরবর্তী সেটআপের অপেক্ষা...", "e.g., Calm execution, waiting for setup..."),
+                  className: "w-full p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 resize-none leading-relaxed",
+                }),
+
+                // Compact Quick tags
+                r.jsxs("div", {
+                  className: "flex items-center gap-1 flex-wrap",
+                  children: [
+                    ["#FOMO", "#OverTrading", "#Revenge", "#StrictSL"].map((tag, tIdx) =>
+                      r.jsx(
+                        "button",
+                        {
+                          key: tIdx,
+                          type: "button",
+                          onClick: () => setNoteText((prev) => (prev ? `${prev} ${tag}` : tag)),
+                          className: "px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 hover:border-slate-700 text-[9px] text-slate-400 cursor-pointer",
+                          children: tag,
+                        }
+                      )
+                    ),
+                  ],
+                }),
+
+                r.jsxs("div", {
+                  className: "flex items-center justify-between pt-0.5",
+                  children: [
+                    status && r.jsx("span", { className: "text-[10px] font-bold text-amber-400", children: status }),
+                    r.jsx("div", { className: "flex-1" }),
+                    r.jsxs("button", {
+                      type: "submit",
+                      className: "px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-sm flex items-center gap-1 cursor-pointer transition-all",
+                      children: [r.jsx(iu("Send"), { className: "w-3 h-3" }), s("সেভ", "Save")],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // Footer link to main page
+            r.jsxs("div", {
+              className: "pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]",
+              children: [
+                r.jsx("span", { className: "text-slate-400", children: s("মেইন ডায়েরিতে সিঙ্ক হবে", "Auto-syncs") }),
+                r.jsx("button", {
+                  onClick: () => {
+                    setIsOpen(false);
+                    const navBtn = document.querySelector('button[data-page-id="trading_notes"]');
+                    if (navBtn) navBtn.click();
+                  },
+                  className: "text-amber-400 hover:text-amber-300 font-bold flex items-center gap-0.5 cursor-pointer",
+                  children: [s("পূর্ণাঙ্গ ডায়েরি", "Full Journal"), " →"],
+                }),
+              ],
+            }),
+          ],
+        }),
+
+      // 3. Compact Floating Collapsed Button Badge (Smaller, Sleeker)
+      !isOpen &&
+        r.jsxs("button", {
+          onClick: () => setIsOpen(true),
+          className: "group p-2 sm:px-2.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-indigo-600 hover:from-amber-500 hover:to-indigo-500 text-white shadow-lg shadow-amber-600/25 border border-amber-300/40 cursor-pointer transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5",
+          title: s("কুইক ট্রেডিং নোটপ্যাড খুলুন", "Quick Trading Note"),
+          children: [
+            r.jsx("span", { className: "w-1.5 h-1.5 rounded-full bg-amber-200 animate-ping" }),
+            r.jsx(iu("Notebook"), { className: "w-3.5 h-3.5 text-white" }),
+            r.jsx("span", {
+              className: "text-[11px] font-black tracking-tight pr-0.5",
+              children: s("নোট", "Note"),
+            }),
+          ],
+        }),
+    ],
+  });
+}
 
 function CapitalGrowthPage({ page, section, portalType, onOpenCodeStudio }) {
   const { currentUser: user, language: lang } = Xo();
@@ -15931,7 +19089,7 @@ function CapitalGrowthPage({ page, section, portalType, onOpenCodeStudio }) {
   });
 }
 
-function wpt({page:t,section:e,portalType:n,onOpenCodeStudio:a}){var i;const s=t.widgetType||"default";if(s==="capital_growth"||s==="capital"||s==="growth"||t.id==="capital_growth"||t.id==="capital"||t.id==="growth"||(t.enLabel&&(t.enLabel.toLowerCase().includes("capital")||t.enLabel.toLowerCase().includes("growth")))||(t.bnLabel&&(t.bnLabel.includes("ক্যাপিটাল")||t.bnLabel.includes("গ্রোথ")||t.bnLabel.includes("গ্রুপ"))))return r.jsx(CapitalGrowthPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});if(s==="packages"||s==="pricing"||s==="subscription"||t.id==="packages"||t.id==="packages_page"||t.id==="pricing"||(t.enLabel&&t.enLabel.toLowerCase().includes("package"))||(t.bnLabel&&t.bnLabel.includes("প্যাকেজ")))return r.jsx(PackagesPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});if(s==="payment_gateway"||s==="payment"||t.id==="payment_gateway"||t.id==="payment_page"||t.id==="payment"||(t.enLabel&&t.enLabel.toLowerCase().includes("payment"))||(t.bnLabel&&t.bnLabel.includes("পেমেন্ট")))return r.jsx(PaymentGatewayPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});return s==="dashboard"||t.id==="dashboard"||t.id==="user_dashboard"||t.id==="admin_dashboard"||((i=t.enLabel)==null?void 0:i.toLowerCase())==="dashboard"||t.bnLabel==="ড্যাশবোর্ড"?r.jsx(Kq,{portalType:n}):s==="wallet"||s==="blockchain"||t.id==="wallet"||t.id==="blockchain_wallet"||t.id==="crypto_wallet"||t.enLabel.toLowerCase().includes("wallet")||t.bnLabel.includes("ওয়ালেট")||t.enLabel.toLowerCase().includes("blockchain")||t.bnLabel.includes("ব্লকচেইন")?r.jsx(vpt,{page:t,section:e,portalType:n}):s==="journal"||t.id==="journal"||t.id==="trading_journal"||t.id==="edgeflo_journal"||t.enLabel.toLowerCase().includes("journal")||t.bnLabel.includes("জার্নাল")?r.jsx(ypt,{page:t,section:e,portalType:n}):s==="pnl"||t.id==="pnl"||t.id==="pnl_analytics"||t.id==="pepperstone_pnl"||t.id==="trade_pnl"||t.enLabel.toLowerCase().includes("pnl")||t.bnLabel.includes("পিএনএল")||t.enLabel.toLowerCase().includes("profit")||t.bnLabel.includes("লাভ")?r.jsx(spt,{page:t,section:e,portalType:n}):s==="live_tv"||t.id==="live_tv"||t.id==="live_tv_news"||t.id==="forex_tv"||t.id==="tv"||t.enLabel.toLowerCase().includes("live tv")||t.enLabel.toLowerCase().includes("tv")||t.bnLabel.includes("লাইভ টিভি")||t.bnLabel.includes("টিভি")?r.jsx(JWe,{page:t,section:e,portalType:n}):s==="ai_news_whatsapp"||s==="ai_whatsapp"||t.id==="ai_news_whatsapp"||t.id==="ai_whatsapp"||t.id==="user_ai_hub"||t.widgetType==="ai_news_whatsapp"||t.enLabel.toLowerCase().includes("whatsapp")&&(t.enLabel.toLowerCase().includes("ai")||t.enLabel.toLowerCase().includes("news")||t.enLabel.toLowerCase().includes("alert"))||t.bnLabel.includes("হোয়াটসঅ্যাপ")&&(t.bnLabel.includes("এআই")||t.bnLabel.includes("নিউজ")||t.bnLabel.includes("অ্যালার্ট"))?r.jsx(kpt,{page:t,section:e,portalType:n}):s==="forex_ai_news"||t.id==="forex_ai_news"||t.id==="forex"||t.id==="forex_news"||t.enLabel.toLowerCase().includes("forex")&&!t.enLabel.toLowerCase().includes("whatsapp")||t.bnLabel.includes("ফরেক্স")&&!t.bnLabel.includes("হোয়াটসঅ্যাপ")?r.jsx(YWe,{page:t,section:e,portalType:n}):s==="whatsapp_gateway"||t.id==="whatsapp_gateway"||t.enLabel.toLowerCase().includes("whatsapp")&&!t.enLabel.toLowerCase().includes("ai")?r.jsx(KWe,{page:t,section:e,portalType:n}):t.id==="brand_engine"||t.id==="brand_ui"||t.enLabel.toLowerCase().includes("brand")||t.bnLabel.includes("ব্র্যান্ড")?r.jsx(ete,{initialTab:"brand_engine"}):t.id==="role_user"||t.id==="users"||t.id==="user_management"||t.id==="admin_settings"||t.enLabel.toLowerCase().includes("role user")?r.jsx(ete,{initialTab:"users"}):t.id==="profile"||t.id==="user_profile"||t.id==="my_profile"||t.enLabel.toLowerCase().includes("profile")?r.jsx(Vle,{}):s==="drawing"||s==="excalidraw"||t.id==="drawing"||t.id==="excalidraw"||t.id==="candlestick_drawing"||t.id==="mermaid"||t.enLabel.toLowerCase().includes("draw")||t.bnLabel.includes("ড্রয়িং")||t.enLabel.toLowerCase().includes("excalidraw")||t.bnLabel.includes("এক্সক্যালাইড্র")||t.enLabel.toLowerCase().includes("candle")||t.bnLabel.includes("ক্যান্ডেল")?r.jsx(mpt,{}):r.jsx(Cpt,{page:t,section:e,portalType:n,onOpenCodeStudio:a},t.id)}function Cpt({page: t, section: e, portalType: n, onOpenCodeStudio: a}) {
+function wpt({page:t,section:e,portalType:n,onOpenCodeStudio:a}){var i;const s=t.widgetType||"default";if(s==="trading_notes"||t.id==="trading_notes")return r.jsx(TradingNotesPage,{page:t,portalType:n});if(s==="capital_growth"||s==="capital"||s==="growth"||t.id==="capital_growth"||t.id==="capital"||t.id==="growth"||(t.enLabel&&(t.enLabel.toLowerCase().includes("capital")||t.enLabel.toLowerCase().includes("growth")))||(t.bnLabel&&(t.bnLabel.includes("ক্যাপিটাল")||t.bnLabel.includes("গ্রোথ")||t.bnLabel.includes("গ্রুপ"))))return r.jsx(CapitalGrowthPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});if(s==="packages"||s==="pricing"||s==="subscription"||t.id==="packages"||t.id==="packages_page"||t.id==="pricing"||(t.enLabel&&t.enLabel.toLowerCase().includes("package"))||(t.bnLabel&&t.bnLabel.includes("প্যাকেজ")))return r.jsx(PackagesPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});if(s==="payment_gateway"||s==="payment"||t.id==="payment_gateway"||t.id==="payment_page"||t.id==="payment"||(t.enLabel&&t.enLabel.toLowerCase().includes("payment"))||(t.bnLabel&&t.bnLabel.includes("পেমেন্ট")))return r.jsx(PaymentGatewayPage,{page:t,section:e,portalType:n,onOpenCodeStudio:a});return s==="dashboard"||t.id==="dashboard"||t.id==="user_dashboard"||t.id==="admin_dashboard"||((i=t.enLabel)==null?void 0:i.toLowerCase())==="dashboard"||t.bnLabel==="ড্যাশবোর্ড"?r.jsx(Kq,{portalType:n}):s==="wallet"||s==="blockchain"||t.id==="wallet"||t.id==="blockchain_wallet"||t.id==="crypto_wallet"||t.enLabel.toLowerCase().includes("wallet")||t.bnLabel.includes("ওয়ালেট")||t.enLabel.toLowerCase().includes("blockchain")||t.bnLabel.includes("ব্লকচেইন")?r.jsx(vpt,{page:t,section:e,portalType:n}):s==="journal"||t.id==="journal"||t.id==="trading_journal"||t.id==="edgeflo_journal"||t.enLabel.toLowerCase().includes("journal")||t.bnLabel.includes("জার্নাল")?r.jsx(ypt,{page:t,section:e,portalType:n}):s==="pnl"||t.id==="pnl"||t.id==="pnl_analytics"||t.id==="pepperstone_pnl"||t.id==="trade_pnl"||t.enLabel.toLowerCase().includes("pnl")||t.bnLabel.includes("পিএনএল")||t.enLabel.toLowerCase().includes("profit")||t.bnLabel.includes("লাভ")?r.jsx(spt,{page:t,section:e,portalType:n}):s==="live_tv"||t.id==="live_tv"||t.id==="live_tv_news"||t.id==="forex_tv"||t.id==="tv"||t.enLabel.toLowerCase().includes("live tv")||t.enLabel.toLowerCase().includes("tv")||t.bnLabel.includes("লাইভ টিভি")||t.bnLabel.includes("টিভি")?r.jsx(JWe,{page:t,section:e,portalType:n}):s==="ai_news_whatsapp"||s==="ai_whatsapp"||t.id==="ai_news_whatsapp"||t.id==="ai_whatsapp"||t.id==="user_ai_hub"||t.widgetType==="ai_news_whatsapp"||t.enLabel.toLowerCase().includes("whatsapp")&&(t.enLabel.toLowerCase().includes("ai")||t.enLabel.toLowerCase().includes("news")||t.enLabel.toLowerCase().includes("alert"))||t.bnLabel.includes("হোয়াটসঅ্যাপ")&&(t.bnLabel.includes("এআই")||t.bnLabel.includes("নিউজ")||t.bnLabel.includes("অ্যালার্ট"))?r.jsx(kpt,{page:t,section:e,portalType:n}):s==="forex_ai_news"||t.id==="forex_ai_news"||t.id==="forex"||t.id==="forex_news"||t.enLabel.toLowerCase().includes("forex")&&!t.enLabel.toLowerCase().includes("whatsapp")||t.bnLabel.includes("ফরেক্স")&&!t.bnLabel.includes("হোয়াটসঅ্যাপ")?r.jsx(YWe,{page:t,section:e,portalType:n}):s==="whatsapp_gateway"||t.id==="whatsapp_gateway"||t.enLabel.toLowerCase().includes("whatsapp")&&!t.enLabel.toLowerCase().includes("ai")?r.jsx(KWe,{page:t,section:e,portalType:n}):t.id==="brand_engine"||t.id==="brand_ui"||t.enLabel.toLowerCase().includes("brand")||t.bnLabel.includes("ব্র্যান্ড")?r.jsx(ete,{initialTab:"brand_engine"}):t.id==="role_user"||t.id==="users"||t.id==="user_management"||t.id==="admin_settings"||t.enLabel.toLowerCase().includes("role user")?r.jsx(ete,{initialTab:"users"}):t.id==="profile"||t.id==="user_profile"||t.id==="my_profile"||t.enLabel.toLowerCase().includes("profile")?r.jsx(Vle,{}):s==="drawing"||s==="excalidraw"||t.id==="drawing"||t.id==="excalidraw"||t.id==="candlestick_drawing"||t.id==="mermaid"||t.enLabel.toLowerCase().includes("draw")||t.bnLabel.includes("ড্রয়িং")||t.enLabel.toLowerCase().includes("excalidraw")||t.bnLabel.includes("এক্সক্যালাইড্র")||t.enLabel.toLowerCase().includes("candle")||t.bnLabel.includes("ক্যান্ডেল")?r.jsx(mpt,{}):r.jsx(Cpt,{page:t,section:e,portalType:n,onOpenCodeStudio:a},t.id)}function Cpt({page: t, section: e, portalType: n, onOpenCodeStudio: a}) {
   // Determine current user and admin privileges
   let currentUserId = "usr_admin_master";
   let currentUserName = "Chief Institutional Administrator";
@@ -18294,7 +21452,7 @@ function wpt({page:t,section:e,portalType:n,onOpenCodeStudio:a}){var i;const s=t
 
 function renderCustomFunction() {
   return "Custom function executed successfully!";
-}`),[u,p]=b.useState(t.customDescription||"Custom description and function for this dynamically created page."),[f,g]=b.useState(!1),[y,w]=b.useState(null),v=()=>{n({widgetType:s,customCodeSnippet:l,customDescription:u}),g(!0),setTimeout(()=>g(!1),2e3)},N=()=>{try{w(`[SUCCESS] Executed function for page "${t.enLabel}": Code validated & compiled successfully.`)}catch(j){w(`[ERROR] ${j.message}`)}};return r.jsxs("div",{className:"bg-white rounded-3xl border border-indigo-100 shadow-xl p-6 max-w-3xl mx-auto my-6 text-left",children:[r.jsxs("div",{className:"flex items-center justify-between pb-4 border-b border-slate-100 mb-6",children:[r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20",children:r.jsx(Oi,{className:"w-5 h-5"})}),r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx("span",{className:"text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md",children:"AI Page Code Studio"}),r.jsxs("span",{className:"text-xs text-slate-400 font-semibold",children:["• ",e]})]}),r.jsxs("h3",{className:"text-lg font-extrabold text-slate-900",children:[t.enLabel," (",t.bnLabel,")"]})]})]}),a&&r.jsx("button",{onClick:a,className:"text-slate-400 hover:text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-100 cursor-pointer",children:"Close Studio"})]}),r.jsxs("div",{className:"space-y-5",children:[r.jsxs("div",{children:[r.jsx("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 mb-2",children:"Select Interactive Widget / Function Type"}),r.jsx("div",{className:"grid grid-cols-3 gap-3",children:[{id:"default",label:"Standard View",desc:"Default greeting & info"},{id:"counter",label:"Interactive Counter",desc:"Stateful counter app"},{id:"todo",label:"Task Checklist",desc:"Dynamic task tracker"},{id:"notes",label:"Quick Notes",desc:"Local persistent notepad"},{id:"metrics",label:"Metrics Card",desc:"KPI dashboard preview"},{id:"custom_code",label:"Custom Code / API",desc:"Custom JS / React function"}].map(j=>r.jsxs("button",{type:"button",onClick:()=>i(j.id),className:`p-3 rounded-2xl border text-left transition-all cursor-pointer ${s===j.id?"border-indigo-600 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/20":"border-slate-200 hover:border-slate-300 bg-white"}`,children:[r.jsx("div",{className:"font-bold text-xs text-slate-800",children:j.label}),r.jsx("div",{className:"text-[10px] text-slate-500 mt-0.5",children:j.desc})]},j.id))})]}),r.jsxs("div",{children:[r.jsx("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 mb-1.5",children:"Page Description / Subtitle"}),r.jsx("input",{type:"text",value:u,onChange:j=>p(j.target.value),className:"w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 outline-none focus:border-indigo-500 bg-slate-50"})]}),s==="custom_code"&&r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center justify-between mb-1.5",children:[r.jsxs("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5",children:[r.jsx(zo,{className:"w-3.5 h-3.5 text-indigo-600"})," Custom Code & Function Editor (JavaScript / Logic)"]}),r.jsxs("button",{onClick:N,className:"text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2.5 py-1 rounded-lg cursor-pointer",children:[r.jsx(_c,{className:"w-3 h-3"})," Test Run Code"]})]}),r.jsx("textarea",{rows:6,value:l,onChange:j=>d(j.target.value),className:"w-full p-4 rounded-xl border border-slate-200 font-mono text-xs text-slate-800 bg-slate-900 text-slate-200 outline-none focus:border-indigo-500 leading-relaxed shadow-inner"}),y&&r.jsx("div",{className:`mt-2 p-3 rounded-xl text-xs font-mono ${y.startsWith("[SUCCESS]")?"bg-emerald-50 text-emerald-700 border border-emerald-200":"bg-rose-50 text-rose-700 border border-rose-200"}`,children:y})]}),r.jsxs("div",{className:"flex items-center justify-between pt-4 border-t border-slate-100",children:[r.jsxs("div",{className:"text-xs text-slate-500 flex items-center gap-1.5 font-medium",children:[r.jsx(Sn,{className:"w-4 h-4 text-indigo-500"}),r.jsx("span",{children:"Changes persist immediately across Admin & User portals."})]}),r.jsxs("button",{onClick:v,className:"px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-indigo-500/20 transition-all flex items-center gap-2 cursor-pointer",children:[f?r.jsx(On,{className:"w-4 h-4"}):r.jsx(Up,{className:"w-4 h-4"}),f?"Saved Successfully!":"Save Code & Widget"]})]})]})]})}function z$({portalType:t}){var ve,be;const e=ff(),n=go(),{sections:a,lockMessage:s,updateChildPage:i}=BF(),{currentUser:l,adminSlug:d,logout:u,loginWithGoogle:p,authSettings:f,isEmailAdmin:g,logSecurityIntrusion:y}=Xo(),{brandConfig:w,language:v,t:N}=Bf(),[j,_]=b.useState(!1),[M,A]=b.useState(""),[E,$]=b.useState(!1),[T,D]=b.useState(!1),[L,H]=b.useState(""),[F,V]=b.useState(""),[z,U]=b.useState(()=>{try{return sessionStorage.getItem("admin_passkey_unlocked")==="true"}catch{return!1}}),le=!!(l&&(l.role==="admin"||g(l.email)));b.useEffect(()=>{t==="admin"&&l&&!le&&y({attemptedEmail:l.email||"non-admin",attemptedRole:l.role||"user",attemptedRoute:n.pathname,actionTaken:"denied_firewall",reason:"Logged-in user without administrator privileges attempted to access admin portal via URL"})},[t,l==null?void 0:l.id,le,n.pathname]);const ue=async()=>{var ee,Ce;A(""),$(!0);try{const X=await p();if($(!1),X.success&&X.user){const re=((ee=X.user.email)==null?void 0:ee.toLowerCase().trim())||"";X.user.role==="admin"||g(re)||(y({attemptedEmail:re,attemptedRole:X.user.role||"user",attemptedRoute:n.pathname,actionTaken:"blocked_and_redirected",reason:"Unauthorized Google account attempted admin portal sign-in"}),A(`অনুমতি নেই: আপনার গুগল অ্যাকাউন্টটি (${X.user.email}) অনুমোদিত অ্যাডমিন নয়। আপনাকে ইউজার ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে...`),setTimeout(()=>{e("/user/dashboard",{replace:!0})},1800))}else X.cancelled?A(""):A(X.message)}catch(X){if($(!1),(X==null?void 0:X.code)==="auth/popup-closed-by-user"||(Ce=X==null?void 0:X.message)!=null&&Ce.includes("closed-by-user")){A("");return}A(X.message||"গুগল সাইন-ইনে সমস্যা হয়েছে!")}},G=ee=>{ee.preventDefault(),V("");const Ce=f.adminMasterPasskey||"882910";L.trim()===Ce?(sessionStorage.setItem("admin_passkey_unlocked","true"),U(!0)):(V("ভুল মাস্টার পাসকি! সঠিক ৬-সংখ্যার সিকিউরিটি পিন দিন।"),y({attemptedEmail:(l==null?void 0:l.email)||"admin",attemptedRole:(l==null?void 0:l.role)||"admin",attemptedRoute:n.pathname,actionTaken:"denied_firewall",reason:"Invalid Admin Master Passkey PIN entered"}))};(be=(ve=a.find(ee=>ee.roles.includes("user")||ee.roles.length===0))==null?void 0:ve.children.find(ee=>{var Ce;return((Ce=ee.roles)==null?void 0:Ce.includes("user"))||!ee.roles||ee.roles.length===0}))!=null&&be.id;const Q=ee=>{const Ce=ee.split("/").filter(Boolean),X=Ce[Ce.length-1]||"";if(!X||X===t||X===d||X==="admin"||X==="dashboard"||X==="user"||X==="dashboard"||X==="home")return"dashboard";if(X==="profile")return"profile";if(X==="sidebar_pages")return"sidebar_pages";if(X==="role_user"||X==="users")return"role_user";for(const Pe of a)if(Pe.children.some(pe=>pe.id===X))return X;if(X==="forex"||X==="forex_news"||X==="news")return"forex_ai_news";if(X==="journal"||X==="trading_journal")return"journal";if(X==="pnl"||X==="analytics")return"pnl";if(X==="wallet"||X==="blockchain")return"wallet";if(X==="drawing"||X==="excalidraw"||X==="candlestick")return"excalidraw";if(X==="live_tv"||X==="tv")return"live_tv";if(X==="ai_news_whatsapp"||X==="ai_whatsapp"||X==="ai-whatsapp"||X==="ai_hub"||X==="ai-news-whatsapp")return"ai_news_whatsapp";if(X==="whatsapp"||X==="whatsapp_gateway")return"whatsapp_gateway";const re=a.find(Pe=>Pe.id===X||Pe.enLabel.toLowerCase()===X.toLowerCase());return re&&re.children&&re.children.length>0?re.children[0].id:"dashboard"},[te,he]=b.useState(()=>Q(n.pathname)),[xe,Z]=b.useState(!1);b.useEffect(()=>{he(Q(n.pathname)),Z(!1)},[n.pathname,t,d,a]);const ie=ee=>{he(ee),Z(!1),_(!1),e(ee==="journal"?t==="admin"?`/${d}/journal`:"/trading/journal":ee==="dashboard"?t==="admin"?`/${d}/dashboard`:"/user/dashboard":`/${t==="admin"?d:"user"}/${ee}`)},ke=(()=>{if(te==="dashboard")return{parentSection:{id:"dashboard_section",enLabel:t==="admin"?"Admin Panel":"Trading",bnLabel:t==="admin"?"অ্যাডমিন প্যানেল":"ট্রেডিং",iconName:"LayoutDashboard",color:"emerald",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:"dashboard",enLabel:"Dashboard",bnLabel:"ড্যাশবোর্ড",iconName:"LayoutDashboard",isLocked:!1,roles:["user","admin"]},parentName:t==="admin"?"Admin Panel":"Trading Desk",parentBnName:t==="admin"?"অ্যাডমিন প্যানেল":"ট্রেডিং ডেস্ক",childName:"Dashboard",childBnName:"ড্যাশবোর্ড",ParentIcon:Cl,ChildIcon:Cl};if(te==="profile")return{parentSection:{id:"user_profile",enLabel:"User Portal",bnLabel:"ইউজার পোর্টাল",iconName:"User",color:"indigo",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:"profile",enLabel:"My Profile",bnLabel:"আমার প্রোফাইল",iconName:"User",isLocked:!1,roles:["user","admin"]},parentName:"User Portal",parentBnName:"ইউজার পোর্টাল",childName:"My Profile",childBnName:"আমার প্রোফাইল",ParentIcon:Qd,ChildIcon:Qd};for(const X of a){const re=X.children.find(Pe=>Pe.id===te);if(re){const Pe=iu(X.iconName,Cl),pe=iu(re.iconName,oi);return{parentSection:X,childItem:re,parentName:X.enLabel,parentBnName:X.bnLabel,childName:re.enLabel,childBnName:re.bnLabel,ParentIcon:Pe,ChildIcon:pe}}}const ee=a.find(X=>X.id===te);if(ee){const X=iu(ee.iconName,Cl);return{parentSection:ee,childItem:{id:ee.id,enLabel:ee.enLabel,bnLabel:ee.bnLabel,iconName:ee.iconName,isLocked:ee.isLocked,roles:ee.roles},parentName:ee.enLabel,parentBnName:ee.bnLabel,childName:ee.enLabel,childBnName:ee.bnLabel,ParentIcon:X,ChildIcon:X}}const Ce={capital_growth:{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",icon:Wn,widgetType:"capital_growth",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},forex_ai_news:{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",icon:Wn,widgetType:"forex_ai_news",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},forex:{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",icon:Wn,widgetType:"forex_ai_news",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},ai_news_whatsapp:{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",icon:Oi,widgetType:"ai_news_whatsapp",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},ai_whatsapp:{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",icon:Oi,widgetType:"ai_news_whatsapp",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},journal:{id:"journal",enLabel:"Trading Journal",bnLabel:"ট্রেডিং জার্নাল",icon:Ho,widgetType:"journal",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},pnl:{id:"pnl",enLabel:"PnL Analytics",bnLabel:"পিএনএল",icon:Dc,widgetType:"pnl",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},wallet:{id:"wallet",enLabel:"Blockchain Wallet",bnLabel:"মাল্টি-চেইন ওয়ালেট",icon:ho,widgetType:"wallet",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},drawing:{id:"drawing",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",icon:Al,widgetType:"drawing",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},excalidraw:{id:"excalidraw",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",icon:Al,widgetType:"drawing",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},live_tv:{id:"live_tv",enLabel:"Live TV Desk",bnLabel:"লাইভ টিভি",icon:uo,widgetType:"live_tv",sectionId:"admin_dashboard_section",sectionName:"Media",sectionBn:"মিডিয়া"},whatsapp_gateway:{id:"whatsapp_gateway",enLabel:"WhatsApp Gateway",bnLabel:"হোয়াটসঅ্যাপ গেটওয়ে",icon:li,widgetType:"whatsapp_gateway",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"},role_user:{id:"role_user",enLabel:"Role & Users",bnLabel:"রোল ও ইউজার",icon:Pc,widgetType:"role_user",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"},sidebar_pages:{id:"sidebar_pages",enLabel:"SideBar & Pages",bnLabel:"সাইডবার ও পেজ",icon:Fx,widgetType:"sidebar_pages",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"}};if(Ce[te]){const X=Ce[te];return{parentSection:{id:X.sectionId,enLabel:X.sectionName,bnLabel:X.sectionBn,iconName:"LayoutDashboard",color:"indigo",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:X.id,enLabel:X.enLabel,bnLabel:X.bnLabel,iconName:"FileText",isLocked:!1,roles:["user","admin"],widgetType:X.widgetType},parentName:X.sectionName,parentBnName:X.sectionBn,childName:X.enLabel,childBnName:X.bnLabel,ParentIcon:X.icon,ChildIcon:X.icon}}return null})(),ae=t==="user"&&!new Set(["journal","forex_ai_news","ai_news_whatsapp","ai_whatsapp","pnl","wallet","drawing","excalidraw","live_tv","capital_growth"]).has(te)&&((ke==null?void 0:ke.parentSection.isLocked)||(ke==null?void 0:ke.childItem.isLocked));if(t==="user"&&!l)return r.jsx(Ii,{to:"/login",replace:!0});if(t==="user"&&l&&le)return r.jsx(Ii,{to:`/${d}/dashboard`,replace:!0});if(t==="admin"){if(l&&!le)return r.jsx(Ii,{to:"/user/dashboard",replace:!0});if(!l&&f.stealthAdminCloaking&&!T)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-white font-sans selection:bg-slate-700 text-center",children:r.jsxs("div",{className:"max-w-md w-full space-y-4",children:[r.jsx("h1",{className:"text-7xl font-black text-slate-800 tracking-tight font-mono",children:"404"}),r.jsx("h2",{className:"text-xl font-black text-slate-200",children:"পৃষ্ঠাটি পাওয়া যায়নি (Page Not Found)"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"আপনার অনুরোধকৃত লিঙ্কটি এই সার্ভারে পাওয়া যায়নি অথবা লিংকটির মেয়াদ উত্তীর্ণ হয়েছে।"}),r.jsxs("div",{className:"pt-4 flex items-center justify-center gap-3",children:[r.jsx("button",{onClick:()=>e("/"),className:"px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer",children:"হোমপেজে ফিরে যান"}),r.jsx("button",{onClick:()=>D(!0),title:"Admin Authentication",className:"p-2.5 bg-slate-900 hover:bg-slate-800 text-slate-600 hover:text-slate-300 rounded-xl transition-colors cursor-pointer border border-slate-800",children:r.jsx($r,{className:"w-4 h-4"})})]})]})});if(!l)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex items-center justify-center p-6 text-white font-sans",children:r.jsxs("div",{className:"w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center",children:[r.jsx("div",{className:"w-14 h-14 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg",children:r.jsx(Fr,{className:"w-7 h-7"})}),r.jsx("h2",{className:"text-2xl font-black tracking-tight text-white mb-2",children:N("লগইন করুন","Sign In")}),r.jsx("p",{className:"text-xs text-slate-400 mb-6 leading-relaxed",children:N("সিস্টেমে প্রবেশের জন্য আপনার অনুমোদিত গুগল অ্যাকাউন্ট দিয়ে সাইন-ইন করুন।","Please sign in with your authorized administrator Google account.")}),M&&r.jsx("div",{className:"mb-5 p-3.5 bg-rose-950/80 border border-rose-800 text-rose-300 text-xs rounded-2xl text-left leading-relaxed",children:M}),r.jsxs("button",{onClick:ue,disabled:E,className:"w-full py-3.5 px-4 bg-white hover:bg-slate-100 active:scale-[0.99] text-slate-900 rounded-2xl text-sm font-bold shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50",children:[r.jsxs("svg",{className:"w-5 h-5 shrink-0",viewBox:"0 0 24 24",children:[r.jsx("path",{fill:"#4285F4",d:"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"}),r.jsx("path",{fill:"#34A853",d:"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"}),r.jsx("path",{fill:"#FBBC05",d:"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"}),r.jsx("path",{fill:"#EA4335",d:"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"})]}),r.jsx("span",{children:E?N("যাচাই করা হচ্ছে...","Verifying..."):N("Google দিয়ে সাইন-ইন করুন","Continue with Google")})]}),r.jsx("div",{className:"mt-6 pt-5 border-t border-slate-800 flex items-center justify-center text-xs",children:r.jsx("button",{onClick:()=>e("/"),className:"text-slate-400 hover:text-white transition-colors cursor-pointer",children:N("← হোমপেজে ফিরে যান","← Back to Home")})})]})});if(le&&f.requireAdminPasskey&&!z)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex items-center justify-center p-6 text-white font-sans",children:r.jsxs("div",{className:"w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center",children:[r.jsx("div",{className:"w-14 h-14 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4",children:r.jsx(Ms,{className:"w-7 h-7"})}),r.jsx("h3",{className:"text-xl font-black text-white mb-1",children:N("মাস্টার পাসকি (2FA)","Master Passkey (2FA)")}),r.jsx("p",{className:"text-xs text-slate-400 mb-5",children:N("কনসোলে প্রবেশের জন্য ৬-সংখ্যার সিকিউরিটি পিন কোড দিন","Enter 6-digit PIN code to unlock")}),F&&r.jsx("div",{className:"mb-4 p-2.5 bg-rose-950 border border-rose-800 text-rose-300 text-xs rounded-xl",children:F}),r.jsxs("form",{onSubmit:G,className:"space-y-4",children:[r.jsx("input",{type:"password",maxLength:12,value:L,onChange:ee=>H(ee.target.value),placeholder:"মাস্টার পাসকি লিখুন",autoFocus:!0,className:"w-full text-center px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-lg font-mono tracking-widest text-emerald-400 outline-none focus:border-emerald-500"}),r.jsx("button",{type:"submit",className:"w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs cursor-pointer shadow-lg shadow-emerald-950 transition-all",children:N("কনসোল আনলক করুন","Unlock Console")})]}),r.jsx("button",{onClick:()=>e("/"),className:"mt-4 text-xs text-slate-500 hover:text-slate-300 transition-colors cursor-pointer block mx-auto",children:N("← হোমপেজে ফিরে যান","← Back to Home")})]})})}return r.jsxs("div",{className:"flex h-screen bg-slate-50 font-sans overflow-hidden",children:[r.jsx(qWe,{activePage:te,setActivePage:ie,portalType:t,mobileOpen:j,onCloseMobile:()=>_(!1)}),r.jsxs("main",{className:"flex-1 relative flex flex-col overflow-hidden bg-slate-50/50 min-w-0",children:[(typeof window!=="undefined"&&localStorage.getItem("admin_impersonator_backup"))&&r.jsxs("div",{className:"bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white px-4 py-2.5 text-xs font-bold flex flex-wrap items-center justify-between gap-2 shadow-md z-30 shrink-0",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx(iu("UserCheck"),{className:"w-4 h-4 text-amber-200"}),r.jsxs("span",{children:["আপনি ব্যবহারকারী হিসেবে সিস্টেমে সরাসরি অ্যাক্সেস/লগইন অবস্থায় আছেন: ",r.jsx("span",{className:"underline font-black",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").name||"ইউজার")})," (রোল: ",r.jsx("span",{className:"uppercase font-mono text-[11px]",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").role||"user")})," | প্যাকেজ: ",r.jsx("span",{className:"font-mono uppercase px-1.5 py-0.5 bg-black/25 rounded text-[11px]",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").packageId||JSON.parse(localStorage.getItem("auth_current_user")||"{}").package||"free_starter")}),")"]})]}),r.jsxs("button",{onClick:()=>{const ot=localStorage.getItem("admin_impersonator_backup");ot&&(localStorage.setItem("auth_current_user",ot),localStorage.removeItem("admin_impersonator_backup")),window.location.reload()},className:"bg-white text-slate-900 hover:bg-amber-50 px-3 py-1 rounded-xl text-xs font-black shadow transition-all cursor-pointer flex items-center gap-1.5 active:scale-95",children:[r.jsx(iu("LogOut"),{className:"w-3.5 h-3.5 text-amber-700"}),"অ্যাডমিন একাউন্টে ফিরে যান (Exit Impersonation)"]})]}),r.jsxs("header",{className:"h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between border-b border-slate-200 bg-white shrink-0 z-10",children:[r.jsxs("div",{className:"flex items-center gap-2 sm:gap-3 min-w-0",children:[r.jsx("button",{onClick:()=>_(!0),className:"lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0","aria-label":"ন্যাভিগেশন মেনু খুলুন",title:"মেনু খুলুন",children:r.jsx(Em,{className:"w-5 h-5 text-blue-600"})}),ke?r.jsxs("div",{className:"hidden items-center gap-1.5 sm:gap-2 bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs min-w-0",children:[r.jsxs("div",{className:"hidden sm:flex items-center gap-1.5 text-slate-500 text-xs",children:[r.jsx(ke.ParentIcon,{className:"w-3.5 h-3.5 text-slate-400"}),r.jsx("span",{className:"font-semibold truncate max-w-[100px] sm:max-w-[140px]",children:v==="bn"&&ke.parentBnName||ke.parentName})]}),r.jsx(Sl,{className:"hidden sm:block w-3.5 h-3.5 text-slate-300 shrink-0"}),r.jsxs("div",{className:"flex items-center gap-1.5 text-blue-700 text-xs sm:text-sm min-w-0",children:[r.jsx(ke.ChildIcon,{className:"w-3.5 h-3.5 text-blue-600 shrink-0"}),r.jsx("span",{className:"font-bold truncate max-w-[120px] sm:max-w-[200px]",children:v==="bn"&&ke.childBnName||ke.childName})]}),ae&&r.jsxs("div",{className:"ml-1 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[9px] font-bold flex items-center gap-0.5 shrink-0",children:[r.jsx($r,{className:"w-2.5 h-2.5"})," ",N("লক করা","LOCKED")]})]}):null]}),r.jsxs("div",{className:"flex items-center gap-1.5 sm:gap-3 shrink-0",children:[r.jsx(vF,{}),r.jsxs("button",{onClick:()=>e("/"),title:N("ওয়েবসাইট হোমপেজে যান","Go to Website Home"),className:"hidden p-2 sm:px-3 sm:py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold items-center gap-1.5 transition-colors cursor-pointer",children:[r.jsx(gc,{className:"w-4 h-4 text-slate-600"}),r.jsx("span",{className:"hidden sm:inline",children:N("হোম","Home")})]}),t==="admin"&&ke&&te!=="sidebar_pages"&&r.jsxs("button",{onClick:()=>Z(!xe),className:"hidden",children:[r.jsx(zo,{className:"w-3.5 h-3.5"})," ",xe?N("ভিউ পেজ","View Page"):N("কোড স্টুডিও","Code Studio")]}),l&&r.jsxs("div",{className:"flex items-center gap-1.5 sm:gap-2 bg-slate-50 border border-slate-200 py-1 px-1.5 sm:px-2.5 rounded-xl",children:[r.jsx("img",{src:l.avatar||"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",alt:l.name,className:"w-6 h-6 sm:w-7 sm:h-7 rounded-lg object-cover"}),r.jsxs("button",{onClick:()=>ie("profile"),className:"text-left hover:opacity-80 transition-opacity hidden sm:block cursor-pointer",children:[r.jsx("span",{className:"text-xs font-bold text-slate-900 block leading-tight truncate max-w-[90px]",children:l.name}),r.jsx("span",{className:"text-[8px] font-bold text-blue-600 uppercase tracking-widest block",children:l.role})]}),r.jsx("button",{onClick:()=>{u(),e("/")},title:N("লগআউট","Logout"),className:"p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer",children:r.jsx(Sm,{className:"w-3.5 h-3.5"})})]})]})]}),r.jsx("div",{className:"flex-1 overflow-auto pb-20 lg:pb-6",children:te==="capital_growth"||te==="capital"||te==="growth"?r.jsx(CapitalGrowthPage,{page:{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ"},portalType:t}):te==="dashboard"?r.jsx(Kq,{portalType:t,onNavigatePage:ie}):te==="profile"?r.jsx(Vle,{}):te==="sidebar_pages"&&t==="admin"?r.jsx(WWe,{}):te==="sidebar_pages"&&t==="user"?r.jsx("div",{className:"max-w-4xl mx-auto mt-16 flex flex-col items-center justify-center text-center px-8",children:r.jsx("p",{className:"text-slate-500",children:"Not authorized to view control panel."})}):ae?r.jsx("div",{className:"max-w-4xl mx-auto mt-16 flex flex-col items-center justify-center text-center px-8",children:r.jsxs("div",{className:"bg-white p-8 rounded-3xl border border-rose-100 shadow-lg shadow-rose-500/5 max-w-lg w-full flex flex-col items-center",children:[r.jsx("div",{className:"w-16 h-16 bg-rose-100 rounded-2xl flex items-center justify-center mb-4 text-rose-600",children:r.jsx($r,{className:"w-8 h-8"})}),r.jsx("h2",{className:"text-xl font-bold text-slate-900 mb-2",children:"Section Locked"}),r.jsx("p",{className:"text-rose-600 font-medium text-center",children:s})]})}):ke?xe&&t==="admin"?r.jsx(Npt,{page:ke.childItem,sectionName:ke.parentName,onUpdateCode:ee=>i(ke.parentSection.id,ke.childItem.id,ee),onClose:()=>Z(!1)}):r.jsx(wpt,{page:ke.childItem,section:ke.parentSection,portalType:t,onOpenCodeStudio:()=>Z(!0)}):r.jsx(Kq,{portalType:t,onNavigatePage:ie})}),r.jsxs("nav",{id:"mobile_bottom_navigation_bar",className:"lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg",children:[r.jsxs("button",{onClick:()=>ie("forex_ai_news"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="forex_ai_news"?"text-blue-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="forex_ai_news"?"bg-blue-100 text-blue-600":""}`,children:r.jsx(Wn,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"ফরেক্স AI"})]}),r.jsxs("button",{onClick:()=>ie("pnl"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="pnl"?"text-emerald-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="pnl"?"bg-emerald-100 text-emerald-600":""}`,children:r.jsx(Dc,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"পিএনএল"})]}),r.jsxs("button",{onClick:()=>ie("live_tv"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="live_tv"?"text-rose-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="live_tv"?"bg-rose-100 text-rose-600":""}`,children:r.jsx(uo,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"লাইভ টিভি"})]}),t==="admin"?r.jsxs("button",{onClick:()=>ie("sidebar_pages"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="sidebar_pages"?"text-indigo-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="sidebar_pages"?"bg-indigo-100 text-indigo-600":""}`,children:r.jsx(ni,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"পেজ কন্ট্রোল"})]}):r.jsxs("button",{onClick:()=>ie("whatsapp_gateway"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="whatsapp_gateway"?"text-emerald-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="whatsapp_gateway"?"bg-emerald-100 text-emerald-600":""}`,children:r.jsx(li,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"হোয়াটসঅ্যাপ"})]}),t==="admin"?r.jsxs("button",{onClick:()=>ie("role_user"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="role_user"?"text-blue-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="role_user"?"bg-blue-100 text-blue-600":""}`,children:r.jsx(Pc,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"ইউজার"})]}):r.jsxs("button",{onClick:()=>ie("profile"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="profile"?"text-indigo-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="profile"?"bg-indigo-100 text-indigo-600":""}`,children:r.jsx(Qd,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"প্রোফাইল"})]}),r.jsxs("button",{onClick:()=>_(!0),className:"flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 font-medium transition-all cursor-pointer min-w-[56px]",children:[r.jsx("div",{className:"p-1 rounded-lg",children:r.jsx(Em,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"সব মেনু"})]})]})]})]})}
+}`),[u,p]=b.useState(t.customDescription||"Custom description and function for this dynamically created page."),[f,g]=b.useState(!1),[y,w]=b.useState(null),v=()=>{n({widgetType:s,customCodeSnippet:l,customDescription:u}),g(!0),setTimeout(()=>g(!1),2e3)},N=()=>{try{w(`[SUCCESS] Executed function for page "${t.enLabel}": Code validated & compiled successfully.`)}catch(j){w(`[ERROR] ${j.message}`)}};return r.jsxs("div",{className:"bg-white rounded-3xl border border-indigo-100 shadow-xl p-6 max-w-3xl mx-auto my-6 text-left",children:[r.jsxs("div",{className:"flex items-center justify-between pb-4 border-b border-slate-100 mb-6",children:[r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20",children:r.jsx(Oi,{className:"w-5 h-5"})}),r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx("span",{className:"text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-md",children:"AI Page Code Studio"}),r.jsxs("span",{className:"text-xs text-slate-400 font-semibold",children:["• ",e]})]}),r.jsxs("h3",{className:"text-lg font-extrabold text-slate-900",children:[t.enLabel," (",t.bnLabel,")"]})]})]}),a&&r.jsx("button",{onClick:a,className:"text-slate-400 hover:text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-100 cursor-pointer",children:"Close Studio"})]}),r.jsxs("div",{className:"space-y-5",children:[r.jsxs("div",{children:[r.jsx("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 mb-2",children:"Select Interactive Widget / Function Type"}),r.jsx("div",{className:"grid grid-cols-3 gap-3",children:[{id:"default",label:"Standard View",desc:"Default greeting & info"},{id:"counter",label:"Interactive Counter",desc:"Stateful counter app"},{id:"todo",label:"Task Checklist",desc:"Dynamic task tracker"},{id:"notes",label:"Quick Notes",desc:"Local persistent notepad"},{id:"metrics",label:"Metrics Card",desc:"KPI dashboard preview"},{id:"custom_code",label:"Custom Code / API",desc:"Custom JS / React function"}].map(j=>r.jsxs("button",{type:"button",onClick:()=>i(j.id),className:`p-3 rounded-2xl border text-left transition-all cursor-pointer ${s===j.id?"border-indigo-600 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/20":"border-slate-200 hover:border-slate-300 bg-white"}`,children:[r.jsx("div",{className:"font-bold text-xs text-slate-800",children:j.label}),r.jsx("div",{className:"text-[10px] text-slate-500 mt-0.5",children:j.desc})]},j.id))})]}),r.jsxs("div",{children:[r.jsx("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 mb-1.5",children:"Page Description / Subtitle"}),r.jsx("input",{type:"text",value:u,onChange:j=>p(j.target.value),className:"w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-800 outline-none focus:border-indigo-500 bg-slate-50"})]}),s==="custom_code"&&r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center justify-between mb-1.5",children:[r.jsxs("label",{className:"block text-xs font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5",children:[r.jsx(zo,{className:"w-3.5 h-3.5 text-indigo-600"})," Custom Code & Function Editor (JavaScript / Logic)"]}),r.jsxs("button",{onClick:N,className:"text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2.5 py-1 rounded-lg cursor-pointer",children:[r.jsx(_c,{className:"w-3 h-3"})," Test Run Code"]})]}),r.jsx("textarea",{rows:6,value:l,onChange:j=>d(j.target.value),className:"w-full p-4 rounded-xl border border-slate-200 font-mono text-xs text-slate-800 bg-slate-900 text-slate-200 outline-none focus:border-indigo-500 leading-relaxed shadow-inner"}),y&&r.jsx("div",{className:`mt-2 p-3 rounded-xl text-xs font-mono ${y.startsWith("[SUCCESS]")?"bg-emerald-50 text-emerald-700 border border-emerald-200":"bg-rose-50 text-rose-700 border border-rose-200"}`,children:y})]}),r.jsxs("div",{className:"flex items-center justify-between pt-4 border-t border-slate-100",children:[r.jsxs("div",{className:"text-xs text-slate-500 flex items-center gap-1.5 font-medium",children:[r.jsx(Sn,{className:"w-4 h-4 text-indigo-500"}),r.jsx("span",{children:"Changes persist immediately across Admin & User portals."})]}),r.jsxs("button",{onClick:v,className:"px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-indigo-500/20 transition-all flex items-center gap-2 cursor-pointer",children:[f?r.jsx(On,{className:"w-4 h-4"}):r.jsx(Up,{className:"w-4 h-4"}),f?"Saved Successfully!":"Save Code & Widget"]})]})]})]})}function z$({portalType:t}){var ve,be;const e=ff(),n=go(),{sections:a,lockMessage:s,updateChildPage:i}=BF(),{currentUser:l,adminSlug:d,logout:u,loginWithGoogle:p,authSettings:f,isEmailAdmin:g,logSecurityIntrusion:y}=Xo(),{brandConfig:w,language:v,t:N}=Bf(),[j,_]=b.useState(!1),[M,A]=b.useState(""),[E,$]=b.useState(!1),[T,D]=b.useState(!1),[L,H]=b.useState(""),[F,V]=b.useState(""),[z,U]=b.useState(()=>{try{return sessionStorage.getItem("admin_passkey_unlocked")==="true"}catch{return!1}}),le=!!(l&&(l.role==="admin"||g(l.email)));b.useEffect(()=>{t==="admin"&&l&&!le&&y({attemptedEmail:l.email||"non-admin",attemptedRole:l.role||"user",attemptedRoute:n.pathname,actionTaken:"denied_firewall",reason:"Logged-in user without administrator privileges attempted to access admin portal via URL"})},[t,l==null?void 0:l.id,le,n.pathname]);const ue=async()=>{var ee,Ce;A(""),$(!0);try{const X=await p();if($(!1),X.success&&X.user){const re=((ee=X.user.email)==null?void 0:ee.toLowerCase().trim())||"";X.user.role==="admin"||g(re)||(y({attemptedEmail:re,attemptedRole:X.user.role||"user",attemptedRoute:n.pathname,actionTaken:"blocked_and_redirected",reason:"Unauthorized Google account attempted admin portal sign-in"}),A(`অনুমতি নেই: আপনার গুগল অ্যাকাউন্টটি (${X.user.email}) অনুমোদিত অ্যাডমিন নয়। আপনাকে ইউজার ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে...`),setTimeout(()=>{e("/user/dashboard",{replace:!0})},1800))}else X.cancelled?A(""):A(X.message)}catch(X){if($(!1),(X==null?void 0:X.code)==="auth/popup-closed-by-user"||(Ce=X==null?void 0:X.message)!=null&&Ce.includes("closed-by-user")){A("");return}A(X.message||"গুগল সাইন-ইনে সমস্যা হয়েছে!")}},G=ee=>{ee.preventDefault(),V("");const Ce=f.adminMasterPasskey||"882910";L.trim()===Ce?(sessionStorage.setItem("admin_passkey_unlocked","true"),U(!0)):(V("ভুল মাস্টার পাসকি! সঠিক ৬-সংখ্যার সিকিউরিটি পিন দিন।"),y({attemptedEmail:(l==null?void 0:l.email)||"admin",attemptedRole:(l==null?void 0:l.role)||"admin",attemptedRoute:n.pathname,actionTaken:"denied_firewall",reason:"Invalid Admin Master Passkey PIN entered"}))};(be=(ve=a.find(ee=>ee.roles.includes("user")||ee.roles.length===0))==null?void 0:ve.children.find(ee=>{var Ce;return((Ce=ee.roles)==null?void 0:Ce.includes("user"))||!ee.roles||ee.roles.length===0}))!=null&&be.id;const Q=ee=>{const Ce=ee.split("/").filter(Boolean),X=Ce[Ce.length-1]||"";if(!X||X===t||X===d||X==="admin"||X==="dashboard"||X==="user"||X==="dashboard"||X==="home")return"dashboard";if(X==="profile")return"profile";if(X==="sidebar_pages")return"sidebar_pages";if(X==="role_user"||X==="users")return"role_user";for(const Pe of a)if(Pe.children.some(pe=>pe.id===X))return X;if(X==="forex"||X==="forex_news"||X==="news")return"forex_ai_news";if(X==="journal"||X==="trading_journal")return"journal";if(X==="pnl"||X==="analytics")return"pnl";if(X==="wallet"||X==="blockchain")return"wallet";if(X==="drawing"||X==="excalidraw"||X==="candlestick")return"excalidraw";if(X==="live_tv"||X==="tv")return"live_tv";if(X==="ai_news_whatsapp"||X==="ai_whatsapp"||X==="ai-whatsapp"||X==="ai_hub"||X==="ai-news-whatsapp")return"ai_news_whatsapp";if(X==="whatsapp"||X==="whatsapp_gateway")return"whatsapp_gateway";const re=a.find(Pe=>Pe.id===X||Pe.enLabel.toLowerCase()===X.toLowerCase());return re&&re.children&&re.children.length>0?re.children[0].id:"dashboard"},[te,he]=b.useState(()=>Q(n.pathname)),[xe,Z]=b.useState(!1);b.useEffect(()=>{he(Q(n.pathname)),Z(!1)},[n.pathname,t,d,a]);const ie=ee=>{he(ee),Z(!1),_(!1),e(ee==="journal"?t==="admin"?`/${d}/journal`:"/trading/journal":ee==="dashboard"?t==="admin"?`/${d}/dashboard`:"/user/dashboard":`/${t==="admin"?d:"user"}/${ee}`)},ke=(()=>{if(te==="dashboard")return{parentSection:{id:"dashboard_section",enLabel:t==="admin"?"Admin Panel":"Trading",bnLabel:t==="admin"?"অ্যাডমিন প্যানেল":"ট্রেডিং",iconName:"LayoutDashboard",color:"emerald",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:"dashboard",enLabel:"Dashboard",bnLabel:"ড্যাশবোর্ড",iconName:"LayoutDashboard",isLocked:!1,roles:["user","admin"]},parentName:t==="admin"?"Admin Panel":"Trading Desk",parentBnName:t==="admin"?"অ্যাডমিন প্যানেল":"ট্রেডিং ডেস্ক",childName:"Dashboard",childBnName:"ড্যাশবোর্ড",ParentIcon:Cl,ChildIcon:Cl};if(te==="profile")return{parentSection:{id:"user_profile",enLabel:"User Portal",bnLabel:"ইউজার পোর্টাল",iconName:"User",color:"indigo",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:"profile",enLabel:"My Profile",bnLabel:"আমার প্রোফাইল",iconName:"User",isLocked:!1,roles:["user","admin"]},parentName:"User Portal",parentBnName:"ইউজার পোর্টাল",childName:"My Profile",childBnName:"আমার প্রোফাইল",ParentIcon:Qd,ChildIcon:Qd};for(const X of a){const re=X.children.find(Pe=>Pe.id===te);if(re){const Pe=iu(X.iconName,Cl),pe=iu(re.iconName,oi);return{parentSection:X,childItem:re,parentName:X.enLabel,parentBnName:X.bnLabel,childName:re.enLabel,childBnName:re.bnLabel,ParentIcon:Pe,ChildIcon:pe}}}const ee=a.find(X=>X.id===te);if(ee){const X=iu(ee.iconName,Cl);return{parentSection:ee,childItem:{id:ee.id,enLabel:ee.enLabel,bnLabel:ee.bnLabel,iconName:ee.iconName,isLocked:ee.isLocked,roles:ee.roles},parentName:ee.enLabel,parentBnName:ee.bnLabel,childName:ee.enLabel,childBnName:ee.bnLabel,ParentIcon:X,ChildIcon:X}}const Ce={trading_notes:{id:"trading_notes",enLabel:"Trader's Diary & Notes",bnLabel:"ট্রেডার্স ডায়েরি ও সাইকোলজি নোট",icon:Wn,widgetType:"trading_notes",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},capital_growth:{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ",icon:Wn,widgetType:"capital_growth",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},forex_ai_news:{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",icon:Wn,widgetType:"forex_ai_news",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},forex:{id:"forex_ai_news",enLabel:"Forex AI News",bnLabel:"ফরেক্স এআই নিউজ",icon:Wn,widgetType:"forex_ai_news",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},ai_news_whatsapp:{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",icon:Oi,widgetType:"ai_news_whatsapp",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},ai_whatsapp:{id:"ai_news_whatsapp",enLabel:"AI Hub & WhatsApp",bnLabel:"এআই ও হোয়াটসঅ্যাপ",icon:Oi,widgetType:"ai_news_whatsapp",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},journal:{id:"journal",enLabel:"Trading Journal",bnLabel:"ট্রেডিং জার্নাল",icon:Ho,widgetType:"journal",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},pnl:{id:"pnl",enLabel:"PnL Analytics",bnLabel:"পিএনএল",icon:Dc,widgetType:"pnl",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},wallet:{id:"wallet",enLabel:"Blockchain Wallet",bnLabel:"মাল্টি-চেইন ওয়ালেট",icon:ho,widgetType:"wallet",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},drawing:{id:"drawing",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",icon:Al,widgetType:"drawing",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},excalidraw:{id:"excalidraw",enLabel:"Trading Drawing",bnLabel:"ড্রয়িং ও ক্যান্ডেলস্টিক",icon:Al,widgetType:"drawing",sectionId:"trading_section",sectionName:"Trading",sectionBn:"ট্রেডিং"},live_tv:{id:"live_tv",enLabel:"Live TV Desk",bnLabel:"লাইভ টিভি",icon:uo,widgetType:"live_tv",sectionId:"admin_dashboard_section",sectionName:"Media",sectionBn:"মিডিয়া"},whatsapp_gateway:{id:"whatsapp_gateway",enLabel:"WhatsApp Gateway",bnLabel:"হোয়াটসঅ্যাপ গেটওয়ে",icon:li,widgetType:"whatsapp_gateway",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"},role_user:{id:"role_user",enLabel:"Role & Users",bnLabel:"রোল ও ইউজার",icon:Pc,widgetType:"role_user",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"},sidebar_pages:{id:"sidebar_pages",enLabel:"SideBar & Pages",bnLabel:"সাইডবার ও পেজ",icon:Fx,widgetType:"sidebar_pages",sectionId:"admin_dashboard_section",sectionName:"Admin",sectionBn:"অ্যাডমিন"}};if(Ce[te]){const X=Ce[te];return{parentSection:{id:X.sectionId,enLabel:X.sectionName,bnLabel:X.sectionBn,iconName:"LayoutDashboard",color:"indigo",isLocked:!1,roles:["user","admin"],children:[]},childItem:{id:X.id,enLabel:X.enLabel,bnLabel:X.bnLabel,iconName:"FileText",isLocked:!1,roles:["user","admin"],widgetType:X.widgetType},parentName:X.sectionName,parentBnName:X.sectionBn,childName:X.enLabel,childBnName:X.bnLabel,ParentIcon:X.icon,ChildIcon:X.icon}}return null})(),ae=t==="user"&&!new Set(["journal","forex_ai_news","ai_news_whatsapp","ai_whatsapp","pnl","wallet","drawing","excalidraw","live_tv","capital_growth","trading_notes"]).has(te)&&((ke==null?void 0:ke.parentSection.isLocked)||(ke==null?void 0:ke.childItem.isLocked));if(t==="user"&&!l)return r.jsx(Ii,{to:"/login",replace:!0});if(t==="user"&&l&&le)return r.jsx(Ii,{to:`/${d}/dashboard`,replace:!0});if(t==="admin"){if(l&&!le)return r.jsx(Ii,{to:"/user/dashboard",replace:!0});if(!l&&f.stealthAdminCloaking&&!T)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-white font-sans selection:bg-slate-700 text-center",children:r.jsxs("div",{className:"max-w-md w-full space-y-4",children:[r.jsx("h1",{className:"text-7xl font-black text-slate-800 tracking-tight font-mono",children:"404"}),r.jsx("h2",{className:"text-xl font-black text-slate-200",children:"পৃষ্ঠাটি পাওয়া যায়নি (Page Not Found)"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"আপনার অনুরোধকৃত লিঙ্কটি এই সার্ভারে পাওয়া যায়নি অথবা লিংকটির মেয়াদ উত্তীর্ণ হয়েছে।"}),r.jsxs("div",{className:"pt-4 flex items-center justify-center gap-3",children:[r.jsx("button",{onClick:()=>e("/"),className:"px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-lg transition-all cursor-pointer",children:"হোমপেজে ফিরে যান"}),r.jsx("button",{onClick:()=>D(!0),title:"Admin Authentication",className:"p-2.5 bg-slate-900 hover:bg-slate-800 text-slate-600 hover:text-slate-300 rounded-xl transition-colors cursor-pointer border border-slate-800",children:r.jsx($r,{className:"w-4 h-4"})})]})]})});if(!l)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex items-center justify-center p-6 text-white font-sans",children:r.jsxs("div",{className:"w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center",children:[r.jsx("div",{className:"w-14 h-14 bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg",children:r.jsx(Fr,{className:"w-7 h-7"})}),r.jsx("h2",{className:"text-2xl font-black tracking-tight text-white mb-2",children:N("লগইন করুন","Sign In")}),r.jsx("p",{className:"text-xs text-slate-400 mb-6 leading-relaxed",children:N("সিস্টেমে প্রবেশের জন্য আপনার অনুমোদিত গুগল অ্যাকাউন্ট দিয়ে সাইন-ইন করুন।","Please sign in with your authorized administrator Google account.")}),M&&r.jsx("div",{className:"mb-5 p-3.5 bg-rose-950/80 border border-rose-800 text-rose-300 text-xs rounded-2xl text-left leading-relaxed",children:M}),r.jsxs("button",{onClick:ue,disabled:E,className:"w-full py-3.5 px-4 bg-white hover:bg-slate-100 active:scale-[0.99] text-slate-900 rounded-2xl text-sm font-bold shadow-lg transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50",children:[r.jsxs("svg",{className:"w-5 h-5 shrink-0",viewBox:"0 0 24 24",children:[r.jsx("path",{fill:"#4285F4",d:"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"}),r.jsx("path",{fill:"#34A853",d:"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"}),r.jsx("path",{fill:"#FBBC05",d:"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"}),r.jsx("path",{fill:"#EA4335",d:"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"})]}),r.jsx("span",{children:E?N("যাচাই করা হচ্ছে...","Verifying..."):N("Google দিয়ে সাইন-ইন করুন","Continue with Google")})]}),r.jsx("div",{className:"mt-6 pt-5 border-t border-slate-800 flex items-center justify-center text-xs",children:r.jsx("button",{onClick:()=>e("/"),className:"text-slate-400 hover:text-white transition-colors cursor-pointer",children:N("← হোমপেজে ফিরে যান","← Back to Home")})})]})});if(le&&f.requireAdminPasskey&&!z)return r.jsx("div",{className:"min-h-screen bg-slate-950 flex items-center justify-center p-6 text-white font-sans",children:r.jsxs("div",{className:"w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center",children:[r.jsx("div",{className:"w-14 h-14 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4",children:r.jsx(Ms,{className:"w-7 h-7"})}),r.jsx("h3",{className:"text-xl font-black text-white mb-1",children:N("মাস্টার পাসকি (2FA)","Master Passkey (2FA)")}),r.jsx("p",{className:"text-xs text-slate-400 mb-5",children:N("কনসোলে প্রবেশের জন্য ৬-সংখ্যার সিকিউরিটি পিন কোড দিন","Enter 6-digit PIN code to unlock")}),F&&r.jsx("div",{className:"mb-4 p-2.5 bg-rose-950 border border-rose-800 text-rose-300 text-xs rounded-xl",children:F}),r.jsxs("form",{onSubmit:G,className:"space-y-4",children:[r.jsx("input",{type:"password",maxLength:12,value:L,onChange:ee=>H(ee.target.value),placeholder:"মাস্টার পাসকি লিখুন",autoFocus:!0,className:"w-full text-center px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-lg font-mono tracking-widest text-emerald-400 outline-none focus:border-emerald-500"}),r.jsx("button",{type:"submit",className:"w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs cursor-pointer shadow-lg shadow-emerald-950 transition-all",children:N("কনসোল আনলক করুন","Unlock Console")})]}),r.jsx("button",{onClick:()=>e("/"),className:"mt-4 text-xs text-slate-500 hover:text-slate-300 transition-colors cursor-pointer block mx-auto",children:N("← হোমপেজে ফিরে যান","← Back to Home")})]})})}return r.jsxs("div",{className:"flex h-screen bg-slate-50 font-sans overflow-hidden",children:[r.jsx(qWe,{activePage:te,setActivePage:ie,portalType:t,mobileOpen:j,onCloseMobile:()=>_(!1)}),r.jsxs("main",{className:"flex-1 relative flex flex-col overflow-hidden bg-slate-50/50 min-w-0",children:[(typeof window!=="undefined"&&localStorage.getItem("admin_impersonator_backup"))&&r.jsxs("div",{className:"bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white px-4 py-2.5 text-xs font-bold flex flex-wrap items-center justify-between gap-2 shadow-md z-30 shrink-0",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx(iu("UserCheck"),{className:"w-4 h-4 text-amber-200"}),r.jsxs("span",{children:["আপনি ব্যবহারকারী হিসেবে সিস্টেমে সরাসরি অ্যাক্সেস/লগইন অবস্থায় আছেন: ",r.jsx("span",{className:"underline font-black",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").name||"ইউজার")})," (রোল: ",r.jsx("span",{className:"uppercase font-mono text-[11px]",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").role||"user")})," | প্যাকেজ: ",r.jsx("span",{className:"font-mono uppercase px-1.5 py-0.5 bg-black/25 rounded text-[11px]",children:(JSON.parse(localStorage.getItem("auth_current_user")||"{}").packageId||JSON.parse(localStorage.getItem("auth_current_user")||"{}").package||"free_starter")}),")"]})]}),r.jsxs("button",{onClick:()=>{const ot=localStorage.getItem("admin_impersonator_backup");ot&&(localStorage.setItem("auth_current_user",ot),localStorage.removeItem("admin_impersonator_backup")),window.location.reload()},className:"bg-white text-slate-900 hover:bg-amber-50 px-3 py-1 rounded-xl text-xs font-black shadow transition-all cursor-pointer flex items-center gap-1.5 active:scale-95",children:[r.jsx(iu("LogOut"),{className:"w-3.5 h-3.5 text-amber-700"}),"অ্যাডমিন একাউন্টে ফিরে যান (Exit Impersonation)"]})]}),r.jsxs("header",{className:"h-14 sm:h-16 px-3 sm:px-6 flex items-center justify-between border-b border-slate-200 bg-white shrink-0 z-10",children:[r.jsxs("div",{className:"flex items-center gap-2 sm:gap-3 min-w-0",children:[r.jsx("button",{onClick:()=>_(!0),className:"lg:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0","aria-label":"ন্যাভিগেশন মেনু খুলুন",title:"মেনু খুলুন",children:r.jsx(Em,{className:"w-5 h-5 text-blue-600"})}),ke?r.jsxs("div",{className:"hidden items-center gap-1.5 sm:gap-2 bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs min-w-0",children:[r.jsxs("div",{className:"hidden sm:flex items-center gap-1.5 text-slate-500 text-xs",children:[r.jsx(ke.ParentIcon,{className:"w-3.5 h-3.5 text-slate-400"}),r.jsx("span",{className:"font-semibold truncate max-w-[100px] sm:max-w-[140px]",children:v==="bn"&&ke.parentBnName||ke.parentName})]}),r.jsx(Sl,{className:"hidden sm:block w-3.5 h-3.5 text-slate-300 shrink-0"}),r.jsxs("div",{className:"flex items-center gap-1.5 text-blue-700 text-xs sm:text-sm min-w-0",children:[r.jsx(ke.ChildIcon,{className:"w-3.5 h-3.5 text-blue-600 shrink-0"}),r.jsx("span",{className:"font-bold truncate max-w-[120px] sm:max-w-[200px]",children:v==="bn"&&ke.childBnName||ke.childName})]}),ae&&r.jsxs("div",{className:"ml-1 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[9px] font-bold flex items-center gap-0.5 shrink-0",children:[r.jsx($r,{className:"w-2.5 h-2.5"})," ",N("লক করা","LOCKED")]})]}):null]}),r.jsxs("div",{className:"flex items-center gap-1.5 sm:gap-3 shrink-0",children:[r.jsx(vF,{}),r.jsxs("button",{onClick:()=>e("/"),title:N("ওয়েবসাইট হোমপেজে যান","Go to Website Home"),className:"hidden p-2 sm:px-3 sm:py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold items-center gap-1.5 transition-colors cursor-pointer",children:[r.jsx(gc,{className:"w-4 h-4 text-slate-600"}),r.jsx("span",{className:"hidden sm:inline",children:N("হোম","Home")})]}),t==="admin"&&ke&&te!=="sidebar_pages"&&r.jsxs("button",{onClick:()=>Z(!xe),className:"hidden",children:[r.jsx(zo,{className:"w-3.5 h-3.5"})," ",xe?N("ভিউ পেজ","View Page"):N("কোড স্টুডিও","Code Studio")]}),l&&r.jsxs("div",{className:"flex items-center gap-1.5 sm:gap-2 bg-slate-50 border border-slate-200 py-1 px-1.5 sm:px-2.5 rounded-xl",children:[r.jsx("img",{src:l.avatar||"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",alt:l.name,className:"w-6 h-6 sm:w-7 sm:h-7 rounded-lg object-cover"}),r.jsxs("button",{onClick:()=>ie("profile"),className:"text-left hover:opacity-80 transition-opacity hidden sm:block cursor-pointer",children:[r.jsx("span",{className:"text-xs font-bold text-slate-900 block leading-tight truncate max-w-[90px]",children:l.name}),r.jsx("span",{className:"text-[8px] font-bold text-blue-600 uppercase tracking-widest block",children:l.role})]}),r.jsx("button",{onClick:()=>{u(),e("/")},title:N("লগআউট","Logout"),className:"p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer",children:r.jsx(Sm,{className:"w-3.5 h-3.5"})})]})]})]}),r.jsx("div",{className:"flex-1 overflow-auto pb-20 lg:pb-6",children:te==="trading_notes"||te==="notes"?r.jsx(TradingNotesPage,{page:{id:"trading_notes",enLabel:"Trader's Diary & Notes",bnLabel:"ট্রেডার্স ডায়েরি ও সাইকোলজি নোট"},portalType:t}):te==="capital_growth"||te==="capital"||te==="growth"?r.jsx(CapitalGrowthPage,{page:{id:"capital_growth",enLabel:"Capital Growth",bnLabel:"ক্যাপিটাল গ্রোথ"},portalType:t}):te==="dashboard"?r.jsx(Kq,{portalType:t,onNavigatePage:ie}):te==="profile"?r.jsx(Vle,{}):te==="sidebar_pages"&&t==="admin"?r.jsx(WWe,{}):te==="sidebar_pages"&&t==="user"?r.jsx("div",{className:"max-w-4xl mx-auto mt-16 flex flex-col items-center justify-center text-center px-8",children:r.jsx("p",{className:"text-slate-500",children:"Not authorized to view control panel."})}):ae?r.jsx("div",{className:"max-w-4xl mx-auto mt-16 flex flex-col items-center justify-center text-center px-8",children:r.jsxs("div",{className:"bg-white p-8 rounded-3xl border border-rose-100 shadow-lg shadow-rose-500/5 max-w-lg w-full flex flex-col items-center",children:[r.jsx("div",{className:"w-16 h-16 bg-rose-100 rounded-2xl flex items-center justify-center mb-4 text-rose-600",children:r.jsx($r,{className:"w-8 h-8"})}),r.jsx("h2",{className:"text-xl font-bold text-slate-900 mb-2",children:"Section Locked"}),r.jsx("p",{className:"text-rose-600 font-medium text-center",children:s})]})}):ke?xe&&t==="admin"?r.jsx(Npt,{page:ke.childItem,sectionName:ke.parentName,onUpdateCode:ee=>i(ke.parentSection.id,ke.childItem.id,ee),onClose:()=>Z(!1)}):r.jsx(wpt,{page:ke.childItem,section:ke.parentSection,portalType:t,onOpenCodeStudio:()=>Z(!0)}):r.jsx(Kq,{portalType:t,onNavigatePage:ie})}),r.jsxs("nav",{id:"mobile_bottom_navigation_bar",className:"lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg",children:[r.jsxs("button",{onClick:()=>ie("forex_ai_news"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="forex_ai_news"?"text-blue-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="forex_ai_news"?"bg-blue-100 text-blue-600":""}`,children:r.jsx(Wn,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"ফরেক্স AI"})]}),r.jsxs("button",{onClick:()=>ie("pnl"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="pnl"?"text-emerald-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="pnl"?"bg-emerald-100 text-emerald-600":""}`,children:r.jsx(Dc,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"পিএনএল"})]}),r.jsxs("button",{onClick:()=>ie("live_tv"),className:`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer min-w-[50px] ${te==="live_tv"?"text-rose-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="live_tv"?"bg-rose-100 text-rose-600":""}`,children:r.jsx(uo,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"লাইভ টিভি"})]}),t==="admin"?r.jsxs("button",{onClick:()=>ie("sidebar_pages"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="sidebar_pages"?"text-indigo-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="sidebar_pages"?"bg-indigo-100 text-indigo-600":""}`,children:r.jsx(ni,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"পেজ কন্ট্রোল"})]}):r.jsxs("button",{onClick:()=>ie("whatsapp_gateway"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="whatsapp_gateway"?"text-emerald-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="whatsapp_gateway"?"bg-emerald-100 text-emerald-600":""}`,children:r.jsx(li,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"হোয়াটসঅ্যাপ"})]}),t==="admin"?r.jsxs("button",{onClick:()=>ie("role_user"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="role_user"?"text-blue-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="role_user"?"bg-blue-100 text-blue-600":""}`,children:r.jsx(Pc,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"ইউজার"})]}):r.jsxs("button",{onClick:()=>ie("profile"),className:`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all cursor-pointer min-w-[56px] ${te==="profile"?"text-indigo-600 font-black":"text-slate-500 hover:text-slate-900 font-medium"}`,children:[r.jsx("div",{className:`p-1 rounded-lg ${te==="profile"?"bg-indigo-100 text-indigo-600":""}`,children:r.jsx(Qd,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"প্রোফাইল"})]}),r.jsxs("button",{onClick:()=>_(!0),className:"flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-blue-600 font-medium transition-all cursor-pointer min-w-[56px]",children:[r.jsx("div",{className:"p-1 rounded-lg",children:r.jsx(Em,{className:"w-4 h-4"})}),r.jsx("span",{className:"text-[10px] tracking-tight mt-0.5",children:"সব মেনু"})]})]})]})]})}
 function LandingLiveRatesTicker(){
   const [rates, setRates] = b.useState([
     { s: "XAU/USD", p: "$4,124.50", c: "-0.93%", up: false, clr: "text-amber-400" },
@@ -18424,4 +21582,4 @@ function LandingLiveRatesTicker(){
     })
   });
 }
-function wU(){const t=ff(),e=go(),{currentUser:n,login:a,loginWithGoogle:s,signup:i,verifyOtp:l,resendOtp:d,adminSlug:u,logout:p,authSettings:f,isEmailAdmin:g}=Xo(),{brandConfig:y,language:w,t:v}=Bf(),[N,j]=b.useState(e.pathname==="/login"||e.pathname==="/signup");b.useEffect(()=>{(e.pathname==="/login"||e.pathname==="/signup")&&(n?n.role==="admin"||g(n.email)?t(`/${u}/dashboard`,{replace:!0}):t("/user/dashboard",{replace:!0}):j(!0))},[e.pathname,n,u]);const[_,M]=b.useState("login"),[A,E]=b.useState(""),[$,T]=b.useState(""),[D,L]=b.useState(""),[H,F]=b.useState(""),[V,z]=b.useState(""),[U,le]=b.useState(""),[ue,G]=b.useState(""),[Q,te]=b.useState(!1),he=()=>{j(!1),le(""),G(""),(e.pathname==="/login"||e.pathname==="/signup")&&t("/",{replace:!0})},xe=()=>{if(n){const be=n.role==="admin"||g(n.email);t(be?`/${u}/dashboard`:"/user/dashboard");return}le(""),G(""),j(!0)},Z=async()=>{var be;le(""),G(""),te(!0);try{const ee=await s();if(te(!1),ee.success&&ee.user){G(ee.message);const X=ee.user.role==="admin"||g(ee.user.email)?`/${u}/dashboard`:"/user/dashboard";setTimeout(()=>{t(X,{replace:!0})},150)}else ee.cancelled?le(""):le(ee.message)}catch(ee){if(te(!1),(ee==null?void 0:ee.code)==="auth/popup-closed-by-user"||(be=ee==null?void 0:ee.message)!=null&&be.includes("closed-by-user")){le("");return}le(ee.message||"গুগল সাইন-ইনে সমস্যা হয়েছে!")}},ie=be=>{if(be.preventDefault(),le(""),G(""),!A.trim()){le(v("অনুগ্রহ করে আপনার ইমেইল অথবা মোবাইল নম্বর লিখুন।","Please enter your email or mobile phone number."));return}te(!0),setTimeout(()=>{var Ce;const ee=a(A,$);if(te(!1),ee.success&&ee.user){G(ee.message);const re=ee.user.role==="admin"||g(ee.user.email)?`/${u}/dashboard`:"/user/dashboard";setTimeout(()=>{t(re,{replace:!0})},150)}else((Ce=ee.user)==null?void 0:Ce.status)==="pending_verification"&&(L(ee.user.id),z(ee.user.otp||""),M("otp")),le(ee.message)},250)},je=be=>{if(be.preventDefault(),le(""),G(""),!H.trim()){le(v("অনুগ্রহ করে ৬ ডিজিটের ওটিপি কোডটি লিখুন।","Please enter the 6-digit OTP code."));return}te(!0),setTimeout(()=>{const ee=l(D,H);te(!1),ee.success&&ee.user?(G(ee.message),setTimeout(()=>{t("/user/dashboard")},700)):le(ee.message)},400)},ke=()=>{if(!D)return;const be=d(D);be.success&&be.otp&&(z(be.otp),G(be.message))},K=(f==null?void 0:f.loginMethodMode)||"both",ae=K==="both"||K==="google_only",ve=K==="both"||K==="credentials_only";return r.jsxs("div",{className:"min-h-screen flex flex-col bg-slate-900 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white",children:[r.jsx("header",{className:"w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 transition-all",children:r.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between",children:[r.jsxs("div",{className:"flex items-center gap-3 cursor-pointer group",onClick:()=>t("/"),children:[y.logoUrl?r.jsx("img",{src:y.logoUrl,alt:y.siteNameEn,className:"w-11 h-11 rounded-xl object-contain shadow-md p-1 bg-white border border-slate-200"}):r.jsx("div",{className:"w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-lg font-black text-xl tracking-wider group-hover:scale-105 transition-transform",style:{backgroundColor:y.primaryColor||"#4f46e5"},children:y.brandSymbol||"📈"}),r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center gap-1.5",children:[r.jsx("span",{className:"text-xl font-black text-white tracking-tight block",children:w==="bn"?y.siteNameBn||y.siteNameEn:y.siteNameEn||y.siteNameBn||"ForexAI Pro"}),r.jsx("span",{className:"text-[10px] font-extrabold text-indigo-400 bg-indigo-950/80 border border-indigo-700/60 px-1.5 py-0.5 rounded-md hidden sm:inline uppercase tracking-widest",children:"PRO"})]}),r.jsx("span",{className:"text-[11px] font-semibold text-slate-400 tracking-wide block -mt-0.5",children:w==="bn"?y.taglineBn||y.taglineEn:y.taglineEn||y.taglineBn||"Institutional Macro Trading Terminal"})]})]}),r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx(vF,{}),n?r.jsxs("div",{className:"flex items-center gap-2 sm:gap-3 bg-slate-800/80 p-1.5 pr-3 rounded-2xl border border-slate-700",children:[r.jsx("img",{src:n.avatar||"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",alt:n.name,className:"w-8 h-8 rounded-xl object-cover border border-slate-600"}),r.jsxs("div",{className:"text-left hidden sm:block",children:[r.jsx("span",{className:"text-xs font-bold text-white block leading-tight",children:n.name}),r.jsx("span",{className:"text-[10px] font-semibold text-indigo-400 uppercase tracking-wider block",children:n.role})]}),r.jsx("button",{onClick:()=>{n.role==="admin"?t(`/${u}/dashboard`):t("/user/dashboard")},className:"ml-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-md transition-colors cursor-pointer",children:v("ড্যাশবোর্ড","Dashboard")}),r.jsx("button",{onClick:p,title:v("লগআউট","Logout"),className:"p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition-colors cursor-pointer",children:r.jsx(Sm,{className:"w-4 h-4"})})]}):r.jsxs("button",{onClick:xe,className:"flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer border border-indigo-400/30",children:[r.jsx(Ms,{className:"w-4 h-4 text-indigo-200"}),r.jsx("span",{children:v("লগইন করুন","Login")})]})]})]})}),r.jsxs("main",{className:"flex-1 flex flex-col",children:[r.jsx(LandingLiveRatesTicker,{}),r.jsxs("section",{className:"relative overflow-hidden pt-16 pb-20 px-4 sm:px-6",children:[r.jsx("div",{className:"absolute inset-0 bg-radial from-indigo-900/20 via-transparent to-transparent pointer-events-none"}),r.jsxs("div",{className:"max-w-5xl mx-auto text-center space-y-6 relative z-10",children:[r.jsxs("div",{className:"inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-700/50 text-indigo-300 text-xs font-bold tracking-wide shadow-inner",children:[r.jsx(Sn,{className:"w-4 h-4 text-amber-400"}),r.jsx("span",{children:v("প্রাতিষ্ঠানিক ম্যাক্রো ডেভিয়েশন ও লিকুইডিটি টার্মিনাল","Institutional Macro Deviation & Liquidity Terminal")})]}),r.jsx("h1",{className:"text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight",children:w==="bn"?r.jsxs(r.Fragment,{children:["বাস্তব বাজার ডেভিয়েশন ও ",r.jsx("span",{className:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300",children:"হাই-ইমপ্যাক্ট নিউজ ট্রেডিং"})]}):r.jsxs(r.Fragment,{children:["Real Money, Zero Guesswork: ",r.jsx("span",{className:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300",children:"Macro Deviation Engine"})]})}),r.jsx("p",{className:"text-base sm:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed",children:w==="bn"?"NFP, CPI, PPI ও সুদের হারের মতো গুরুত্বপূর্ণ অর্থনৈতিক খবরের তাৎক্ষণিক কোয়ান্টিটেটিভ ডেভিয়েশন অ্যানালাইসিস এবং গোল্ড (XAU/USD) ও ডলারের বিপরীতধর্মী প্রাতিষ্ঠানিক লিকুইডিটি সিগন্যাল।":"Quantitative macro deviation analytics (Actual − Forecast) for high-impact macroeconomic releases. Real-time directional bias and precision pip targets for Gold (XAU/USD) and major FX pairs."}),r.jsxs("div",{className:"flex flex-col sm:flex-row items-center justify-center gap-4 pt-4",children:[r.jsxs("button",{onClick:xe,className:"w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white rounded-2xl text-sm font-extrabold shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer",children:[r.jsx(Ms,{className:"w-5 h-5 text-indigo-200"}),r.jsx("span",{children:v("টার্মিনালে লগইন করুন","Access Trading Terminal")}),r.jsx(Kd,{className:"w-4 h-4 ml-1"})]}),r.jsxs("button",{onClick:()=>{const be=document.getElementById("macro-rules");be==null||be.scrollIntoView({behavior:"smooth"})},className:"w-full sm:w-auto px-6 py-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer",children:[r.jsx(Xd,{className:"w-4 h-4 text-slate-400"}),r.jsx("span",{children:v("ম্যাক্রো নিয়ম ও মডেল দেখুন","Explore Core Macro Law")})]})]})]})]}),r.jsx("section",{id:"macro-rules",className:"py-16 px-4 sm:px-6 bg-slate-950/60 border-y border-slate-800",children:r.jsxs("div",{className:"max-w-6xl mx-auto space-y-10",children:[r.jsxs("div",{className:"text-center space-y-2",children:[r.jsx("span",{className:"text-xs font-black uppercase tracking-widest text-indigo-400",children:"Quantitative Discipline"}),r.jsx("h2",{className:"text-2xl sm:text-4xl font-black text-white",children:w==="bn"?"ইউএস ডলার ও গোল্ড (XAU/USD) বিপরীতমুখী মূলনীতি":"USD & Gold (XAU/USD) Inverse Core Law"}),r.jsx("p",{className:"text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto",children:w==="bn"?"হাই-ইমপ্যাক্ট মার্কিন অর্থনৈতিক তথ্যের বিচ্যুতি (Actual − Forecast) অনুযায়ী বাজারে প্রাতিষ্ঠানিক গতিবিধি নির্ধারণ:":"Institutional market execution rules based on numerical macroeconomic deviation (Actual − Forecast):"})]}),r.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6",children:[r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-rose-500/30 p-6 space-y-4 hover:border-rose-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-rose-950 text-rose-300 border border-rose-700/50",children:"Case 1: Actual > Forecast"}),r.jsx(Ll,{className:"w-5 h-5 text-rose-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"পজিটিভ ইউএস ডেভিয়েশন":"Positive US Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"মার্কিন অর্থনীতি শক্তিশালী (মুদ্রাস্ফীতি/কর্মসংস্থান বেশি)"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD Index (DXY):"}),r.jsx("span",{className:"text-emerald-400 font-bold uppercase",children:"BULLISH (Rallies)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-rose-950/40 border border-rose-900/50",children:[r.jsx("span",{className:"text-amber-300 font-bold",children:"Gold (XAU/USD):"}),r.jsx("span",{className:"text-rose-400 font-black",children:"SELL (-80 to -150 pips)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"EUR/USD, GBP/USD:"}),r.jsx("span",{className:"text-rose-400 font-bold",children:"BEARISH (SELL)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD/JPY:"}),r.jsx("span",{className:"text-emerald-400 font-bold",children:"BULLISH (BUY)"})]})]})]}),r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-emerald-500/30 p-6 space-y-4 hover:border-emerald-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-emerald-950 text-emerald-300 border border-emerald-700/50",children:"Case 2: Actual < Forecast"}),r.jsx(Wn,{className:"w-5 h-5 text-emerald-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"নেগেটিভ ইউএস ডেভিয়েশন":"Negative US Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"মার্কিন অর্থনীতি দুর্বল (ডাটা আশানুরূপ নয়)"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD Index (DXY):"}),r.jsx("span",{className:"text-rose-400 font-bold uppercase",children:"BEARISH (Slumps)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-emerald-950/40 border border-emerald-900/50",children:[r.jsx("span",{className:"text-amber-300 font-bold",children:"Gold (XAU/USD):"}),r.jsx("span",{className:"text-emerald-400 font-black",children:"BUY (+80 to +160 pips)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"EUR/USD, GBP/USD:"}),r.jsx("span",{className:"text-emerald-400 font-bold",children:"BULLISH (BUY)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD/JPY:"}),r.jsx("span",{className:"text-rose-400 font-bold",children:"BEARISH (SELL)"})]})]})]}),r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-amber-500/30 p-6 space-y-4 hover:border-amber-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-amber-950 text-amber-300 border border-amber-700/50",children:"Case 3: Actual ≈ Forecast"}),r.jsx(Dl,{className:"w-5 h-5 text-amber-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"ইন-লাইন / ন্যূনতম বিচ্যুতি":"Negligible Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"লিকুইডিটি ট্র্যাপ ও হুইপস’র উচ্চ ঝুঁকি"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-amber-950/30 border border-amber-900/40",children:[r.jsx("span",{className:"text-amber-200",children:"Execution Bias:"}),r.jsx("span",{className:"text-amber-400 font-black",children:"NO-TRADE / CAUTION"})]}),r.jsx("div",{className:"p-3 rounded-xl bg-slate-800/60 text-slate-300 text-[11px] leading-relaxed",children:"প্রথম ৫ মিনিটে সরাসরি অর্ডার নিষেধ। রেঞ্জ বাউন্ড মুভমেন্ট বা স্টপ হান্ট পার হয়ে স্ট্রাকচারাল পুলব্যাকে ট্রেড করুন।"}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-400",children:"Risk Profile:"}),r.jsx("span",{className:"text-amber-400 font-bold",children:"HIGH WHIPSAW RISK"})]})]})]})]})]})}),r.jsx("section",{className:"py-16 px-4 sm:px-6",children:r.jsxs("div",{className:"max-w-6xl mx-auto space-y-10",children:[r.jsxs("div",{className:"text-center space-y-2",children:[r.jsx("span",{className:"text-xs font-black uppercase tracking-widest text-indigo-400",children:"Institutional Modules"}),r.jsx("h2",{className:"text-2xl sm:text-3xl font-black text-white",children:w==="bn"?"টার্মিনালের মূল শক্তিশালী ফিচারসমূহ":"Trading Terminal Capabilities"})]}),r.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",children:[r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-indigo-900/60 text-indigo-400 flex items-center justify-center",children:r.jsx(La,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"ম্যাক্রো ডেভিয়েশন ইঞ্জিন"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"লাইভ অর্থনৈতিক ক্যালেন্ডারের NFP, CPI ও সুদের হারের ডেভিয়েশন ক্যালকুলেশন।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-emerald-900/60 text-emerald-400 flex items-center justify-center",children:r.jsx(Tc,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"প্রিসিশন পিপ টার্গেট"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"লাইভ স্পট রেট সাপেক্ষে গাণিতিক টেক প্রফিট (TP) ও স্টপ লস (SL) নির্ধারণ।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-purple-900/60 text-purple-400 flex items-center justify-center",children:r.jsx(Oi,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"মাল্টি-মডেল এআই স্বচ্ছতা"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"DeepSeek R1, GPT-4o-mini ও Gemini Flash এআই অ্যালগরিদমের স্বচ্ছ প্রদর্শন।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-amber-900/60 text-amber-400 flex items-center justify-center",children:r.jsx(xc,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"৯৪.৮% ব্যাকটেস্ট বেঞ্চমার্ক"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"বিগত ৫ বছরের উচ্চ প্রভাবশালী নিউজের ঐতিহাসিক ডাটাবেজ ভেরিফিকেশন।"})]})]})]})})]}),r.jsx("footer",{className:"w-full bg-slate-950 border-t border-slate-800 py-6 text-xs text-slate-400",children:r.jsxs("div",{className:"max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx(Ba,{className:"w-4 h-4 text-indigo-400"}),r.jsx("span",{children:y.copyrightText||`© ${new Date().getFullYear()} ${y.siteNameEn||"ForexAI Pro"}. All rights reserved.`}),y.footerBrandText&&r.jsxs("span",{className:"hidden sm:inline text-slate-500",children:["• ",y.footerBrandText]})]}),r.jsx("div",{className:"flex items-center gap-6",children:r.jsxs("span",{className:"flex items-center gap-1.5 text-emerald-400 font-bold",children:[r.jsx("span",{className:"w-2 h-2 rounded-full bg-emerald-500 animate-pulse"}),"All Systems Operational"]})})]})}),N&&r.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in",children:r.jsxs("div",{className:"w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-2xl shadow-indigo-950/50 overflow-hidden relative text-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between px-6 pt-6 pb-2",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx("div",{className:"w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm",style:{backgroundColor:y.primaryColor||"#4f46e5"},children:y.brandSymbol||"📈"}),r.jsx("span",{className:"text-sm font-black text-slate-900",children:y.siteNameEn||"ForexAI Pro"})]}),r.jsx("button",{onClick:he,className:"w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer",title:v("বন্ধ করুন","Close"),children:r.jsx(zr,{className:"w-4 h-4"})})]}),r.jsxs("div",{className:"p-6 sm:p-8 text-left",children:[U&&r.jsxs("div",{className:"mb-5 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-xs font-semibold text-rose-700 flex items-start gap-2.5",children:[r.jsx(Rr,{className:"w-4 h-4 shrink-0 mt-0.5"}),r.jsx("span",{children:U})]}),ue&&r.jsxs("div",{className:"mb-5 p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-800 flex items-start gap-2.5",children:[r.jsx(Pt,{className:"w-4 h-4 shrink-0 mt-0.5 text-emerald-600"}),r.jsx("span",{children:ue})]}),_==="login"&&r.jsxs("div",{className:"space-y-5",children:[r.jsxs("div",{children:[r.jsx("h2",{className:"text-2xl font-black text-slate-900 tracking-tight",children:v("টার্মিনালে প্রবেশ করুন","Sign In to Terminal")}),r.jsx("p",{className:"text-xs font-medium text-slate-500 mt-1",children:ae&&!ve?v("শুধুমাত্র অনুমোদিত গুগল অ্যাকাউন্ট দিয়ে এক-ক্লিকে সাইন-ইন করুন","Single sign-on via authorized Google Account"):v("আপনার অ্যাকাউন্ট তথ্য দিয়ে সাইন-ইন করুন","Access institutional quantitative macro intelligence")})]}),ae&&r.jsxs("button",{type:"button",onClick:Z,disabled:Q,className:"w-full py-3.5 px-4 bg-white border-2 border-slate-200 hover:border-indigo-500 hover:bg-slate-50/80 active:scale-[0.99] text-slate-800 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-3 cursor-pointer group",children:[r.jsxs("svg",{className:"w-5 h-5 shrink-0",viewBox:"0 0 24 24",children:[r.jsx("path",{fill:"#4285F4",d:"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"}),r.jsx("path",{fill:"#34A853",d:"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"}),r.jsx("path",{fill:"#FBBC05",d:"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"}),r.jsx("path",{fill:"#EA4335",d:"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"})]}),r.jsx("span",{children:Q?v("সাইন-ইন হচ্ছে...","Signing in..."):v("Google দিয়ে সাইন-ইন করুন","Continue with Google")})]}),ae&&ve&&r.jsxs("div",{className:"relative flex items-center justify-center my-2",children:[r.jsx("div",{className:"border-t border-slate-200 w-full"}),r.jsx("span",{className:"bg-white px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute",children:v("অথবা ইমেইল/পাসওয়ার্ড","OR WITH EMAIL")})]}),ve&&r.jsxs("form",{onSubmit:ie,className:"space-y-4",children:[r.jsxs("div",{className:"space-y-1.5",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("ইমেইল বা মোবাইল নম্বর (Email / Mobile)","Email or Mobile Phone")}),r.jsxs("div",{className:"relative",children:[r.jsx("div",{className:"absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400",children:r.jsx(ti,{className:"w-4 h-4"})}),r.jsx("input",{type:"text",value:A,onChange:be=>E(be.target.value),placeholder:v("example@mail.com বা 01700000000","example@mail.com or +1234567890"),className:"w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all",required:!0})]})]}),r.jsxs("div",{className:"space-y-1.5",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("পাসওয়ার্ড (Password)","Password")}),r.jsx("button",{type:"button",className:"text-[11px] font-bold text-indigo-600 hover:underline",children:v("ভুলে গেছেন?","Forgot?")})]}),r.jsxs("div",{className:"relative",children:[r.jsx("div",{className:"absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400",children:r.jsx($r,{className:"w-4 h-4"})}),r.jsx("input",{type:"password",value:$,onChange:be=>T(be.target.value),placeholder:"••••••••",className:"w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all"})]})]}),r.jsxs("button",{type:"submit",disabled:Q,className:"w-full mt-2 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer",children:[Q?v("যাচাই করা হচ্ছে...","Verifying..."):v("লগইন করুন","Login"),r.jsx(Kd,{className:"w-4 h-4"})]})]}),ae&&!ve&&r.jsx("div",{className:"p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-[11px] text-indigo-800 font-medium text-center",children:v("সিস্টেমে বর্তমানে শুধুমাত্র এক-ক্লিক গুগল লগইন পদ্ধতি চালু রয়েছে।","Google Single Sign-On is currently active.")}),ve&&!ae&&r.jsx("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 font-medium text-center",children:v("সিস্টেমে সরাসরি ইমেইল/মোবাইল ও পাসওয়ার্ড দিয়ে সাইন-ইন পদ্ধতি সক্রিয় রয়েছে।","Email/Password login is currently active.")})]}),_==="otp"&&r.jsxs("form",{onSubmit:je,className:"space-y-4",children:[r.jsxs("div",{children:[r.jsx("div",{className:"w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-3",children:r.jsx(Ms,{className:"w-6 h-6"})}),r.jsx("h2",{className:"text-2xl font-black text-slate-900 tracking-tight",children:v("ওটিপি ভেরিফিকেশন","OTP Verification")}),r.jsx("p",{className:"text-xs font-medium text-slate-500 mt-1",children:v("আপনার ইমেইল ও হোয়াটসঅ্যাপ নম্বরে পাঠানো ৬-ডিজিটের কোডটি লিখুন","Enter the 6-digit code sent to your email and WhatsApp")})]}),V&&r.jsxs("div",{className:"p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center justify-between text-xs",children:[r.jsx("span",{className:"font-semibold text-indigo-900",children:v("টেস্ট ওটিপি কোড (Test OTP):","Test OTP Code:")}),r.jsx("span",{className:"font-mono font-black text-sm bg-indigo-600 text-white px-2 py-0.5 rounded-lg tracking-widest",children:V})]}),r.jsxs("div",{className:"space-y-1.5 pt-1",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("৬-ডিজিট ভেরিফিকেশন কোড (OTP Code)","6-Digit Verification Code")}),r.jsx("input",{type:"text",maxLength:6,value:H,onChange:be=>F(be.target.value.replace(/[^0-9]/g,"")),placeholder:"e.g. 738291",className:"w-full text-center tracking-[0.5em] text-2xl font-black py-3 bg-slate-50 border border-slate-200 rounded-xl text-indigo-900 outline-none focus:border-indigo-500 focus:bg-white transition-all font-mono",required:!0})]}),r.jsxs("button",{type:"submit",disabled:Q,className:"w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer",children:[Q?v("ভেরিফাই হচ্ছে...","Verifying..."):v("ভেরিফাই ও অ্যাক্টিভ করুন","Verify & Activate"),r.jsx(Pt,{className:"w-4 h-4"})]}),r.jsxs("div",{className:"flex items-center justify-between pt-2",children:[r.jsx("button",{type:"button",onClick:()=>M("login"),className:"text-xs font-bold text-slate-500 hover:text-slate-800 cursor-pointer",children:v("← ব্যাকে যান","← Back to Login")}),r.jsx("button",{type:"button",onClick:ke,className:"text-xs font-bold text-indigo-600 hover:underline cursor-pointer",children:v("পুনরায় কোড পাঠান","Resend Code")})]})]})]})]})})]})}function Bse(){const{slug:t}=rme(),{adminSlug:e,currentUser:n,isEmailAdmin:a}=Xo(),s=(t||"").toLowerCase().trim(),i=(e||localStorage.getItem("admin_url_slug")||"admin").toLowerCase().trim(),l=!!(n&&(n.role==="admin"||a(n.email)));return s===i?n&&!l?r.jsx(Ii,{to:"/user/dashboard",replace:!0}):r.jsx(z$,{portalType:"admin"}):s==="admin"&&i!=="admin"?r.jsx(Ii,{to:"/",replace:!0}):new Set(["user","dashboard","pnl","trading","journal","wallet","blockchain","forex","forex_ai_news","ai_news_whatsapp","ai_whatsapp","ai-whatsapp","live_tv","drawing","excalidraw"]).has(s)?n?l?r.jsx(Ii,{to:`/${i}/dashboard`,replace:!0}):r.jsx(z$,{portalType:"user"}):r.jsx(Ii,{to:"/login",replace:!0}):r.jsx(Ii,{to:"/",replace:!0})}function _pt(){const{adminSlug:t,currentUser:e,isEmailAdmin:n}=Xo(),a=(t||localStorage.getItem("admin_url_slug")||"admin").toLowerCase().trim(),s=!!(e&&(e.role==="admin"||n(e.email))),i=()=>e?s?r.jsx(Ii,{to:`/${a}/dashboard`,replace:!0}):r.jsx(z$,{portalType:"user"}):r.jsx(Ii,{to:"/login",replace:!0}),l=()=>a!=="admin"?r.jsx(Ii,{to:"/",replace:!0}):e&&!s?r.jsx(Ii,{to:"/user/dashboard",replace:!0}):r.jsx(z$,{portalType:"admin"});return r.jsxs(bme,{children:[r.jsx(Pn,{path:"/",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/login",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/signup",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/admin",element:l()}),r.jsx(Pn,{path:"/admin/*",element:l()}),r.jsx(Pn,{path:"/user",element:i()}),r.jsx(Pn,{path:"/user/*",element:i()}),r.jsx(Pn,{path:"/dashboard",element:i()}),r.jsx(Pn,{path:"/dashboard/*",element:i()}),r.jsx(Pn,{path:"/pnl",element:i()}),r.jsx(Pn,{path:"/pnl/*",element:i()}),r.jsx(Pn,{path:"/trading",element:i()}),r.jsx(Pn,{path:"/trading/*",element:i()}),r.jsx(Pn,{path:"/journal",element:i()}),r.jsx(Pn,{path:"/journal/*",element:i()}),r.jsx(Pn,{path:"/wallet",element:i()}),r.jsx(Pn,{path:"/wallet/*",element:i()}),r.jsx(Pn,{path:"/blockchain",element:i()}),r.jsx(Pn,{path:"/blockchain/*",element:i()}),r.jsx(Pn,{path:"/forex_ai_news",element:i()}),r.jsx(Pn,{path:"/forex_ai_news/*",element:i()}),r.jsx(Pn,{path:"/forex",element:i()}),r.jsx(Pn,{path:"/forex/*",element:i()}),r.jsx(Pn,{path:"/ai_news_whatsapp",element:i()}),r.jsx(Pn,{path:"/ai_news_whatsapp/*",element:i()}),r.jsx(Pn,{path:"/ai_whatsapp",element:i()}),r.jsx(Pn,{path:"/ai_whatsapp/*",element:i()}),r.jsx(Pn,{path:"/ai-whatsapp",element:i()}),r.jsx(Pn,{path:"/ai-whatsapp/*",element:i()}),r.jsx(Pn,{path:"/live_tv",element:i()}),r.jsx(Pn,{path:"/live_tv/*",element:i()}),r.jsx(Pn,{path:"/drawing",element:i()}),r.jsx(Pn,{path:"/drawing/*",element:i()}),r.jsx(Pn,{path:"/excalidraw",element:i()}),r.jsx(Pn,{path:"/excalidraw/*",element:i()}),r.jsx(Pn,{path:"/:slug/*",element:r.jsx(Bse,{})}),r.jsx(Pn,{path:"/:slug",element:r.jsx(Bse,{})}),r.jsx(Pn,{path:"*",element:r.jsx(Ii,{to:"/",replace:!0})})]})}function jpt(){return r.jsx(zme,{children:r.jsx(VWe,{children:r.jsx(UWe,{children:r.jsx(FWe,{children:r.jsx(XWe,{children:r.jsx(_pt,{})})})})})})}bfe.createRoot(document.getElementById("root")).render(r.jsx(b.StrictMode,{children:r.jsx(jpt,{})}));
+function wU(){const t=ff(),e=go(),{currentUser:n,login:a,loginWithGoogle:s,signup:i,verifyOtp:l,resendOtp:d,adminSlug:u,logout:p,authSettings:f,isEmailAdmin:g}=Xo(),{brandConfig:y,language:w,t:v}=Bf(),[N,j]=b.useState(e.pathname==="/login"||e.pathname==="/signup");b.useEffect(()=>{(e.pathname==="/login"||e.pathname==="/signup")&&(n?n.role==="admin"||g(n.email)?t(`/${u}/dashboard`,{replace:!0}):t("/user/dashboard",{replace:!0}):j(!0))},[e.pathname,n,u]);const[_,M]=b.useState("login"),[A,E]=b.useState(""),[$,T]=b.useState(""),[D,L]=b.useState(""),[H,F]=b.useState(""),[V,z]=b.useState(""),[U,le]=b.useState(""),[ue,G]=b.useState(""),[Q,te]=b.useState(!1),he=()=>{j(!1),le(""),G(""),(e.pathname==="/login"||e.pathname==="/signup")&&t("/",{replace:!0})},xe=()=>{if(n){const be=n.role==="admin"||g(n.email);t(be?`/${u}/dashboard`:"/user/dashboard");return}le(""),G(""),j(!0)},Z=async()=>{var be;le(""),G(""),te(!0);try{const ee=await s();if(te(!1),ee.success&&ee.user){G(ee.message);const X=ee.user.role==="admin"||g(ee.user.email)?`/${u}/dashboard`:"/user/dashboard";setTimeout(()=>{t(X,{replace:!0})},150)}else ee.cancelled?le(""):le(ee.message)}catch(ee){if(te(!1),(ee==null?void 0:ee.code)==="auth/popup-closed-by-user"||(be=ee==null?void 0:ee.message)!=null&&be.includes("closed-by-user")){le("");return}le(ee.message||"গুগল সাইন-ইনে সমস্যা হয়েছে!")}},ie=be=>{if(be.preventDefault(),le(""),G(""),!A.trim()){le(v("অনুগ্রহ করে আপনার ইমেইল অথবা মোবাইল নম্বর লিখুন।","Please enter your email or mobile phone number."));return}te(!0),setTimeout(()=>{var Ce;const ee=a(A,$);if(te(!1),ee.success&&ee.user){G(ee.message);const re=ee.user.role==="admin"||g(ee.user.email)?`/${u}/dashboard`:"/user/dashboard";setTimeout(()=>{t(re,{replace:!0})},150)}else((Ce=ee.user)==null?void 0:Ce.status)==="pending_verification"&&(L(ee.user.id),z(ee.user.otp||""),M("otp")),le(ee.message)},250)},je=be=>{if(be.preventDefault(),le(""),G(""),!H.trim()){le(v("অনুগ্রহ করে ৬ ডিজিটের ওটিপি কোডটি লিখুন।","Please enter the 6-digit OTP code."));return}te(!0),setTimeout(()=>{const ee=l(D,H);te(!1),ee.success&&ee.user?(G(ee.message),setTimeout(()=>{t("/user/dashboard")},700)):le(ee.message)},400)},ke=()=>{if(!D)return;const be=d(D);be.success&&be.otp&&(z(be.otp),G(be.message))},K=(f==null?void 0:f.loginMethodMode)||"both",ae=K==="both"||K==="google_only",ve=K==="both"||K==="credentials_only";return r.jsxs("div",{className:"min-h-screen flex flex-col bg-slate-900 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white",children:[r.jsx("header",{className:"w-full bg-slate-900/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 transition-all",children:r.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between",children:[r.jsxs("div",{className:"flex items-center gap-3 cursor-pointer group",onClick:()=>t("/"),children:[y.logoUrl?r.jsx("img",{src:y.logoUrl,alt:y.siteNameEn,className:"w-11 h-11 rounded-xl object-contain shadow-md p-1 bg-white border border-slate-200"}):r.jsx("div",{className:"w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-lg font-black text-xl tracking-wider group-hover:scale-105 transition-transform",style:{backgroundColor:y.primaryColor||"#4f46e5"},children:y.brandSymbol||"📈"}),r.jsxs("div",{children:[r.jsxs("div",{className:"flex items-center gap-1.5",children:[r.jsx("span",{className:"text-xl font-black text-white tracking-tight block",children:w==="bn"?y.siteNameBn||y.siteNameEn:y.siteNameEn||y.siteNameBn||"ForexAI Pro"}),r.jsx("span",{className:"text-[10px] font-extrabold text-indigo-400 bg-indigo-950/80 border border-indigo-700/60 px-1.5 py-0.5 rounded-md hidden sm:inline uppercase tracking-widest",children:"PRO"})]}),r.jsx("span",{className:"text-[11px] font-semibold text-slate-400 tracking-wide block -mt-0.5",children:w==="bn"?y.taglineBn||y.taglineEn:y.taglineEn||y.taglineBn||"Institutional Macro Trading Terminal"})]})]}),r.jsxs("div",{className:"flex items-center gap-3",children:[r.jsx(vF,{}),n?r.jsxs("div",{className:"flex items-center gap-2 sm:gap-3 bg-slate-800/80 p-1.5 pr-3 rounded-2xl border border-slate-700",children:[r.jsx("img",{src:n.avatar||"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",alt:n.name,className:"w-8 h-8 rounded-xl object-cover border border-slate-600"}),r.jsxs("div",{className:"text-left hidden sm:block",children:[r.jsx("span",{className:"text-xs font-bold text-white block leading-tight",children:n.name}),r.jsx("span",{className:"text-[10px] font-semibold text-indigo-400 uppercase tracking-wider block",children:n.role})]}),r.jsx("button",{onClick:()=>{n.role==="admin"?t(`/${u}/dashboard`):t("/user/dashboard")},className:"ml-1 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold shadow-md transition-colors cursor-pointer",children:v("ড্যাশবোর্ড","Dashboard")}),r.jsx("button",{onClick:p,title:v("লগআউট","Logout"),className:"p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition-colors cursor-pointer",children:r.jsx(Sm,{className:"w-4 h-4"})})]}):r.jsxs("button",{onClick:xe,className:"flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer border border-indigo-400/30",children:[r.jsx(Ms,{className:"w-4 h-4 text-indigo-200"}),r.jsx("span",{children:v("লগইন করুন","Login")})]})]})]})}),r.jsxs("main",{className:"flex-1 flex flex-col",children:[r.jsx(LandingLiveRatesTicker,{}),r.jsxs("section",{className:"relative overflow-hidden pt-16 pb-20 px-4 sm:px-6",children:[r.jsx("div",{className:"absolute inset-0 bg-radial from-indigo-900/20 via-transparent to-transparent pointer-events-none"}),r.jsxs("div",{className:"max-w-5xl mx-auto text-center space-y-6 relative z-10",children:[r.jsxs("div",{className:"inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-700/50 text-indigo-300 text-xs font-bold tracking-wide shadow-inner",children:[r.jsx(Sn,{className:"w-4 h-4 text-amber-400"}),r.jsx("span",{children:v("প্রাতিষ্ঠানিক ম্যাক্রো ডেভিয়েশন ও লিকুইডিটি টার্মিনাল","Institutional Macro Deviation & Liquidity Terminal")})]}),r.jsx("h1",{className:"text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight",children:w==="bn"?r.jsxs(r.Fragment,{children:["বাস্তব বাজার ডেভিয়েশন ও ",r.jsx("span",{className:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300",children:"হাই-ইমপ্যাক্ট নিউজ ট্রেডিং"})]}):r.jsxs(r.Fragment,{children:["Real Money, Zero Guesswork: ",r.jsx("span",{className:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-amber-300",children:"Macro Deviation Engine"})]})}),r.jsx("p",{className:"text-base sm:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed",children:w==="bn"?"NFP, CPI, PPI ও সুদের হারের মতো গুরুত্বপূর্ণ অর্থনৈতিক খবরের তাৎক্ষণিক কোয়ান্টিটেটিভ ডেভিয়েশন অ্যানালাইসিস এবং গোল্ড (XAU/USD) ও ডলারের বিপরীতধর্মী প্রাতিষ্ঠানিক লিকুইডিটি সিগন্যাল।":"Quantitative macro deviation analytics (Actual − Forecast) for high-impact macroeconomic releases. Real-time directional bias and precision pip targets for Gold (XAU/USD) and major FX pairs."}),r.jsxs("div",{className:"flex flex-col sm:flex-row items-center justify-center gap-4 pt-4",children:[r.jsxs("button",{onClick:xe,className:"w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white rounded-2xl text-sm font-extrabold shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 cursor-pointer",children:[r.jsx(Ms,{className:"w-5 h-5 text-indigo-200"}),r.jsx("span",{children:v("টার্মিনালে লগইন করুন","Access Trading Terminal")}),r.jsx(Kd,{className:"w-4 h-4 ml-1"})]}),r.jsxs("button",{onClick:()=>{const be=document.getElementById("macro-rules");be==null||be.scrollIntoView({behavior:"smooth"})},className:"w-full sm:w-auto px-6 py-4 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer",children:[r.jsx(Xd,{className:"w-4 h-4 text-slate-400"}),r.jsx("span",{children:v("ম্যাক্রো নিয়ম ও মডেল দেখুন","Explore Core Macro Law")})]})]})]})]}),r.jsx("section",{id:"macro-rules",className:"py-16 px-4 sm:px-6 bg-slate-950/60 border-y border-slate-800",children:r.jsxs("div",{className:"max-w-6xl mx-auto space-y-10",children:[r.jsxs("div",{className:"text-center space-y-2",children:[r.jsx("span",{className:"text-xs font-black uppercase tracking-widest text-indigo-400",children:"Quantitative Discipline"}),r.jsx("h2",{className:"text-2xl sm:text-4xl font-black text-white",children:w==="bn"?"ইউএস ডলার ও গোল্ড (XAU/USD) বিপরীতমুখী মূলনীতি":"USD & Gold (XAU/USD) Inverse Core Law"}),r.jsx("p",{className:"text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto",children:w==="bn"?"হাই-ইমপ্যাক্ট মার্কিন অর্থনৈতিক তথ্যের বিচ্যুতি (Actual − Forecast) অনুযায়ী বাজারে প্রাতিষ্ঠানিক গতিবিধি নির্ধারণ:":"Institutional market execution rules based on numerical macroeconomic deviation (Actual − Forecast):"})]}),r.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6",children:[r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-rose-500/30 p-6 space-y-4 hover:border-rose-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-rose-950 text-rose-300 border border-rose-700/50",children:"Case 1: Actual > Forecast"}),r.jsx(Ll,{className:"w-5 h-5 text-rose-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"পজিটিভ ইউএস ডেভিয়েশন":"Positive US Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"মার্কিন অর্থনীতি শক্তিশালী (মুদ্রাস্ফীতি/কর্মসংস্থান বেশি)"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD Index (DXY):"}),r.jsx("span",{className:"text-emerald-400 font-bold uppercase",children:"BULLISH (Rallies)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-rose-950/40 border border-rose-900/50",children:[r.jsx("span",{className:"text-amber-300 font-bold",children:"Gold (XAU/USD):"}),r.jsx("span",{className:"text-rose-400 font-black",children:"SELL (-80 to -150 pips)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"EUR/USD, GBP/USD:"}),r.jsx("span",{className:"text-rose-400 font-bold",children:"BEARISH (SELL)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD/JPY:"}),r.jsx("span",{className:"text-emerald-400 font-bold",children:"BULLISH (BUY)"})]})]})]}),r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-emerald-500/30 p-6 space-y-4 hover:border-emerald-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-emerald-950 text-emerald-300 border border-emerald-700/50",children:"Case 2: Actual < Forecast"}),r.jsx(Wn,{className:"w-5 h-5 text-emerald-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"নেগেটিভ ইউএস ডেভিয়েশন":"Negative US Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"মার্কিন অর্থনীতি দুর্বল (ডাটা আশানুরূপ নয়)"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD Index (DXY):"}),r.jsx("span",{className:"text-rose-400 font-bold uppercase",children:"BEARISH (Slumps)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-emerald-950/40 border border-emerald-900/50",children:[r.jsx("span",{className:"text-amber-300 font-bold",children:"Gold (XAU/USD):"}),r.jsx("span",{className:"text-emerald-400 font-black",children:"BUY (+80 to +160 pips)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"EUR/USD, GBP/USD:"}),r.jsx("span",{className:"text-emerald-400 font-bold",children:"BULLISH (BUY)"})]}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-300",children:"USD/JPY:"}),r.jsx("span",{className:"text-rose-400 font-bold",children:"BEARISH (SELL)"})]})]})]}),r.jsxs("div",{className:"bg-slate-900 rounded-2xl border-2 border-amber-500/30 p-6 space-y-4 hover:border-amber-500 transition-all shadow-lg",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("span",{className:"px-3 py-1 rounded-lg text-xs font-black bg-amber-950 text-amber-300 border border-amber-700/50",children:"Case 3: Actual ≈ Forecast"}),r.jsx(Dl,{className:"w-5 h-5 text-amber-400"})]}),r.jsxs("div",{children:[r.jsx("h3",{className:"text-lg font-bold text-white",children:w==="bn"?"ইন-লাইন / ন্যূনতম বিচ্যুতি":"Negligible Deviation"}),r.jsx("p",{className:"text-xs text-slate-400 mt-1",children:"লিকুইডিটি ট্র্যাপ ও হুইপস’র উচ্চ ঝুঁকি"})]}),r.jsxs("div",{className:"space-y-2.5 text-xs font-semibold pt-2 border-t border-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-amber-950/30 border border-amber-900/40",children:[r.jsx("span",{className:"text-amber-200",children:"Execution Bias:"}),r.jsx("span",{className:"text-amber-400 font-black",children:"NO-TRADE / CAUTION"})]}),r.jsx("div",{className:"p-3 rounded-xl bg-slate-800/60 text-slate-300 text-[11px] leading-relaxed",children:"প্রথম ৫ মিনিটে সরাসরি অর্ডার নিষেধ। রেঞ্জ বাউন্ড মুভমেন্ট বা স্টপ হান্ট পার হয়ে স্ট্রাকচারাল পুলব্যাকে ট্রেড করুন।"}),r.jsxs("div",{className:"flex items-center justify-between p-2 rounded-xl bg-slate-800/80",children:[r.jsx("span",{className:"text-slate-400",children:"Risk Profile:"}),r.jsx("span",{className:"text-amber-400 font-bold",children:"HIGH WHIPSAW RISK"})]})]})]})]})]})}),r.jsx("section",{className:"py-16 px-4 sm:px-6",children:r.jsxs("div",{className:"max-w-6xl mx-auto space-y-10",children:[r.jsxs("div",{className:"text-center space-y-2",children:[r.jsx("span",{className:"text-xs font-black uppercase tracking-widest text-indigo-400",children:"Institutional Modules"}),r.jsx("h2",{className:"text-2xl sm:text-3xl font-black text-white",children:w==="bn"?"টার্মিনালের মূল শক্তিশালী ফিচারসমূহ":"Trading Terminal Capabilities"})]}),r.jsxs("div",{className:"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",children:[r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-indigo-900/60 text-indigo-400 flex items-center justify-center",children:r.jsx(La,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"ম্যাক্রো ডেভিয়েশন ইঞ্জিন"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"লাইভ অর্থনৈতিক ক্যালেন্ডারের NFP, CPI ও সুদের হারের ডেভিয়েশন ক্যালকুলেশন।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-emerald-900/60 text-emerald-400 flex items-center justify-center",children:r.jsx(Tc,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"প্রিসিশন পিপ টার্গেট"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"লাইভ স্পট রেট সাপেক্ষে গাণিতিক টেক প্রফিট (TP) ও স্টপ লস (SL) নির্ধারণ।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-purple-900/60 text-purple-400 flex items-center justify-center",children:r.jsx(Oi,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"মাল্টি-মডেল এআই স্বচ্ছতা"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"DeepSeek R1, GPT-4o-mini ও Gemini Flash এআই অ্যালগরিদমের স্বচ্ছ প্রদর্শন।"})]}),r.jsxs("div",{className:"bg-slate-800/50 border border-slate-700/70 rounded-2xl p-6 space-y-3",children:[r.jsx("div",{className:"w-10 h-10 rounded-xl bg-amber-900/60 text-amber-400 flex items-center justify-center",children:r.jsx(xc,{className:"w-5 h-5"})}),r.jsx("h3",{className:"text-base font-bold text-white",children:"৯৪.৮% ব্যাকটেস্ট বেঞ্চমার্ক"}),r.jsx("p",{className:"text-xs text-slate-400 leading-relaxed",children:"বিগত ৫ বছরের উচ্চ প্রভাবশালী নিউজের ঐতিহাসিক ডাটাবেজ ভেরিফিকেশন।"})]})]})]})})]}),r.jsx("footer",{className:"w-full bg-slate-950 border-t border-slate-800 py-6 text-xs text-slate-400",children:r.jsxs("div",{className:"max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx(Ba,{className:"w-4 h-4 text-indigo-400"}),r.jsx("span",{children:y.copyrightText||`© ${new Date().getFullYear()} ${y.siteNameEn||"ForexAI Pro"}. All rights reserved.`}),y.footerBrandText&&r.jsxs("span",{className:"hidden sm:inline text-slate-500",children:["• ",y.footerBrandText]})]}),r.jsx("div",{className:"flex items-center gap-6",children:r.jsxs("span",{className:"flex items-center gap-1.5 text-emerald-400 font-bold",children:[r.jsx("span",{className:"w-2 h-2 rounded-full bg-emerald-500 animate-pulse"}),"All Systems Operational"]})})]})}),N&&r.jsx("div",{className:"fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in",children:r.jsxs("div",{className:"w-full max-w-md bg-white rounded-3xl border border-slate-200 shadow-2xl shadow-indigo-950/50 overflow-hidden relative text-slate-800",children:[r.jsxs("div",{className:"flex items-center justify-between px-6 pt-6 pb-2",children:[r.jsxs("div",{className:"flex items-center gap-2",children:[r.jsx("div",{className:"w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm",style:{backgroundColor:y.primaryColor||"#4f46e5"},children:y.brandSymbol||"📈"}),r.jsx("span",{className:"text-sm font-black text-slate-900",children:y.siteNameEn||"ForexAI Pro"})]}),r.jsx("button",{onClick:he,className:"w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer",title:v("বন্ধ করুন","Close"),children:r.jsx(zr,{className:"w-4 h-4"})})]}),r.jsxs("div",{className:"p-6 sm:p-8 text-left",children:[U&&r.jsxs("div",{className:"mb-5 p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-xs font-semibold text-rose-700 flex items-start gap-2.5",children:[r.jsx(Rr,{className:"w-4 h-4 shrink-0 mt-0.5"}),r.jsx("span",{children:U})]}),ue&&r.jsxs("div",{className:"mb-5 p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-800 flex items-start gap-2.5",children:[r.jsx(Pt,{className:"w-4 h-4 shrink-0 mt-0.5 text-emerald-600"}),r.jsx("span",{children:ue})]}),_==="login"&&r.jsxs("div",{className:"space-y-5",children:[r.jsxs("div",{children:[r.jsx("h2",{className:"text-2xl font-black text-slate-900 tracking-tight",children:v("টার্মিনালে প্রবেশ করুন","Sign In to Terminal")}),r.jsx("p",{className:"text-xs font-medium text-slate-500 mt-1",children:ae&&!ve?v("শুধুমাত্র অনুমোদিত গুগল অ্যাকাউন্ট দিয়ে এক-ক্লিকে সাইন-ইন করুন","Single sign-on via authorized Google Account"):v("আপনার অ্যাকাউন্ট তথ্য দিয়ে সাইন-ইন করুন","Access institutional quantitative macro intelligence")})]}),ae&&r.jsxs("button",{type:"button",onClick:Z,disabled:Q,className:"w-full py-3.5 px-4 bg-white border-2 border-slate-200 hover:border-indigo-500 hover:bg-slate-50/80 active:scale-[0.99] text-slate-800 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-3 cursor-pointer group",children:[r.jsxs("svg",{className:"w-5 h-5 shrink-0",viewBox:"0 0 24 24",children:[r.jsx("path",{fill:"#4285F4",d:"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"}),r.jsx("path",{fill:"#34A853",d:"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"}),r.jsx("path",{fill:"#FBBC05",d:"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"}),r.jsx("path",{fill:"#EA4335",d:"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"})]}),r.jsx("span",{children:Q?v("সাইন-ইন হচ্ছে...","Signing in..."):v("Google দিয়ে সাইন-ইন করুন","Continue with Google")})]}),ae&&ve&&r.jsxs("div",{className:"relative flex items-center justify-center my-2",children:[r.jsx("div",{className:"border-t border-slate-200 w-full"}),r.jsx("span",{className:"bg-white px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider absolute",children:v("অথবা ইমেইল/পাসওয়ার্ড","OR WITH EMAIL")})]}),ve&&r.jsxs("form",{onSubmit:ie,className:"space-y-4",children:[r.jsxs("div",{className:"space-y-1.5",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("ইমেইল বা মোবাইল নম্বর (Email / Mobile)","Email or Mobile Phone")}),r.jsxs("div",{className:"relative",children:[r.jsx("div",{className:"absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400",children:r.jsx(ti,{className:"w-4 h-4"})}),r.jsx("input",{type:"text",value:A,onChange:be=>E(be.target.value),placeholder:v("example@mail.com বা 01700000000","example@mail.com or +1234567890"),className:"w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all",required:!0})]})]}),r.jsxs("div",{className:"space-y-1.5",children:[r.jsxs("div",{className:"flex items-center justify-between",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("পাসওয়ার্ড (Password)","Password")}),r.jsx("button",{type:"button",className:"text-[11px] font-bold text-indigo-600 hover:underline",children:v("ভুলে গেছেন?","Forgot?")})]}),r.jsxs("div",{className:"relative",children:[r.jsx("div",{className:"absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400",children:r.jsx($r,{className:"w-4 h-4"})}),r.jsx("input",{type:"password",value:$,onChange:be=>T(be.target.value),placeholder:"••••••••",className:"w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all"})]})]}),r.jsxs("button",{type:"submit",disabled:Q,className:"w-full mt-2 py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer",children:[Q?v("যাচাই করা হচ্ছে...","Verifying..."):v("লগইন করুন","Login"),r.jsx(Kd,{className:"w-4 h-4"})]})]}),ae&&!ve&&r.jsx("div",{className:"p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-[11px] text-indigo-800 font-medium text-center",children:v("সিস্টেমে বর্তমানে শুধুমাত্র এক-ক্লিক গুগল লগইন পদ্ধতি চালু রয়েছে।","Google Single Sign-On is currently active.")}),ve&&!ae&&r.jsx("div",{className:"p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 font-medium text-center",children:v("সিস্টেমে সরাসরি ইমেইল/মোবাইল ও পাসওয়ার্ড দিয়ে সাইন-ইন পদ্ধতি সক্রিয় রয়েছে।","Email/Password login is currently active.")})]}),_==="otp"&&r.jsxs("form",{onSubmit:je,className:"space-y-4",children:[r.jsxs("div",{children:[r.jsx("div",{className:"w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mb-3",children:r.jsx(Ms,{className:"w-6 h-6"})}),r.jsx("h2",{className:"text-2xl font-black text-slate-900 tracking-tight",children:v("ওটিপি ভেরিফিকেশন","OTP Verification")}),r.jsx("p",{className:"text-xs font-medium text-slate-500 mt-1",children:v("আপনার ইমেইল ও হোয়াটসঅ্যাপ নম্বরে পাঠানো ৬-ডিজিটের কোডটি লিখুন","Enter the 6-digit code sent to your email and WhatsApp")})]}),V&&r.jsxs("div",{className:"p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center justify-between text-xs",children:[r.jsx("span",{className:"font-semibold text-indigo-900",children:v("টেস্ট ওটিপি কোড (Test OTP):","Test OTP Code:")}),r.jsx("span",{className:"font-mono font-black text-sm bg-indigo-600 text-white px-2 py-0.5 rounded-lg tracking-widest",children:V})]}),r.jsxs("div",{className:"space-y-1.5 pt-1",children:[r.jsx("label",{className:"text-xs font-bold text-slate-700",children:v("৬-ডিজিট ভেরিফিকেশন কোড (OTP Code)","6-Digit Verification Code")}),r.jsx("input",{type:"text",maxLength:6,value:H,onChange:be=>F(be.target.value.replace(/[^0-9]/g,"")),placeholder:"e.g. 738291",className:"w-full text-center tracking-[0.5em] text-2xl font-black py-3 bg-slate-50 border border-slate-200 rounded-xl text-indigo-900 outline-none focus:border-indigo-500 focus:bg-white transition-all font-mono",required:!0})]}),r.jsxs("button",{type:"submit",disabled:Q,className:"w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer",children:[Q?v("ভেরিফাই হচ্ছে...","Verifying..."):v("ভেরিফাই ও অ্যাক্টিভ করুন","Verify & Activate"),r.jsx(Pt,{className:"w-4 h-4"})]}),r.jsxs("div",{className:"flex items-center justify-between pt-2",children:[r.jsx("button",{type:"button",onClick:()=>M("login"),className:"text-xs font-bold text-slate-500 hover:text-slate-800 cursor-pointer",children:v("← ব্যাকে যান","← Back to Login")}),r.jsx("button",{type:"button",onClick:ke,className:"text-xs font-bold text-indigo-600 hover:underline cursor-pointer",children:v("পুনরায় কোড পাঠান","Resend Code")})]})]})]})]})})]})}function Bse(){const{slug:t}=rme(),{adminSlug:e,currentUser:n,isEmailAdmin:a}=Xo(),s=(t||"").toLowerCase().trim(),i=(e||localStorage.getItem("admin_url_slug")||"admin").toLowerCase().trim(),l=!!(n&&(n.role==="admin"||a(n.email)));return s===i?n&&!l?r.jsx(Ii,{to:"/user/dashboard",replace:!0}):r.jsx(z$,{portalType:"admin"}):s==="admin"&&i!=="admin"?r.jsx(Ii,{to:"/",replace:!0}):new Set(["user","dashboard","pnl","trading","journal","wallet","blockchain","forex","forex_ai_news","ai_news_whatsapp","ai_whatsapp","ai-whatsapp","live_tv","drawing","excalidraw"]).has(s)?n?l?r.jsx(Ii,{to:`/${i}/dashboard`,replace:!0}):r.jsx(z$,{portalType:"user"}):r.jsx(Ii,{to:"/login",replace:!0}):r.jsx(Ii,{to:"/",replace:!0})}function _pt(){const{adminSlug:t,currentUser:e,isEmailAdmin:n}=Xo(),a=(t||localStorage.getItem("admin_url_slug")||"admin").toLowerCase().trim(),s=!!(e&&(e.role==="admin"||n(e.email))),i=()=>e?s?r.jsx(Ii,{to:`/${a}/dashboard`,replace:!0}):r.jsx(z$,{portalType:"user"}):r.jsx(Ii,{to:"/login",replace:!0}),l=()=>a!=="admin"?r.jsx(Ii,{to:"/",replace:!0}):e&&!s?r.jsx(Ii,{to:"/user/dashboard",replace:!0}):r.jsx(z$,{portalType:"admin"});return r.jsxs(bme,{children:[r.jsx(Pn,{path:"/",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/login",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/signup",element:r.jsx(wU,{})}),r.jsx(Pn,{path:"/admin",element:l()}),r.jsx(Pn,{path:"/admin/*",element:l()}),r.jsx(Pn,{path:"/user",element:i()}),r.jsx(Pn,{path:"/user/*",element:i()}),r.jsx(Pn,{path:"/dashboard",element:i()}),r.jsx(Pn,{path:"/dashboard/*",element:i()}),r.jsx(Pn,{path:"/pnl",element:i()}),r.jsx(Pn,{path:"/pnl/*",element:i()}),r.jsx(Pn,{path:"/trading",element:i()}),r.jsx(Pn,{path:"/trading/*",element:i()}),r.jsx(Pn,{path:"/journal",element:i()}),r.jsx(Pn,{path:"/journal/*",element:i()}),r.jsx(Pn,{path:"/wallet",element:i()}),r.jsx(Pn,{path:"/wallet/*",element:i()}),r.jsx(Pn,{path:"/blockchain",element:i()}),r.jsx(Pn,{path:"/blockchain/*",element:i()}),r.jsx(Pn,{path:"/forex_ai_news",element:i()}),r.jsx(Pn,{path:"/forex_ai_news/*",element:i()}),r.jsx(Pn,{path:"/forex",element:i()}),r.jsx(Pn,{path:"/forex/*",element:i()}),r.jsx(Pn,{path:"/ai_news_whatsapp",element:i()}),r.jsx(Pn,{path:"/ai_news_whatsapp/*",element:i()}),r.jsx(Pn,{path:"/ai_whatsapp",element:i()}),r.jsx(Pn,{path:"/ai_whatsapp/*",element:i()}),r.jsx(Pn,{path:"/ai-whatsapp",element:i()}),r.jsx(Pn,{path:"/ai-whatsapp/*",element:i()}),r.jsx(Pn,{path:"/live_tv",element:i()}),r.jsx(Pn,{path:"/live_tv/*",element:i()}),r.jsx(Pn,{path:"/drawing",element:i()}),r.jsx(Pn,{path:"/drawing/*",element:i()}),r.jsx(Pn,{path:"/excalidraw",element:i()}),r.jsx(Pn,{path:"/excalidraw/*",element:i()}),r.jsx(Pn,{path:"/:slug/*",element:r.jsx(Bse,{})}),r.jsx(Pn,{path:"/:slug",element:r.jsx(Bse,{})}),r.jsx(Pn,{path:"*",element:r.jsx(Ii,{to:"/",replace:!0})})]})}function jpt(){return r.jsx(zme,{children:r.jsx(VWe,{children:r.jsx(UWe,{children:r.jsx(FWe,{children:r.jsx(XWe,{children:r.jsxs(r.Fragment,{children:[r.jsx(_pt,{}),r.jsx(TradingNotesQuickWidget,{})]})})})})})})}bfe.createRoot(document.getElementById("root")).render(r.jsx(b.StrictMode,{children:r.jsx(jpt,{})}));

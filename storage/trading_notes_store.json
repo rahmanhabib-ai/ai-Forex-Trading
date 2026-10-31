@@ -1,0 +1,170 @@
+{
+  "notes": [
+    {
+      "id": "note-monday-2026-10-26",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Monday",
+      "date": "2026-10-26",
+      "weekNumber": 1,
+      "goodThings": [
+        "লন্ডন সেশনে XAUUSD এর M15 অর্ডার ব্লকে পারফেক্ট ১:২ প্রফিট বুক করেছি",
+        "ট্রেড নেওয়ার আগে চেক-লিস্ট ১০০% পূরণ করেছি"
+      ],
+      "mistakes": [
+        "দেরিতে চার্টে এসে কিছুটা ফোমো (FOMO) অনুভব হয়েছিল"
+      ],
+      "tags": [
+        "#FOMO",
+        "#OrderBlock",
+        "#StopLoss",
+        "#Patience"
+      ],
+      "notes": "আজকের ট্রেডিং সেশনে শৃঙ্খলা ছিল ভালো। কিন্তু ফোমো এন্ট্রি থেকে সম্পূর্ণ মুক্ত হতে হবে।",
+      "mindsetRating": 8,
+      "tradesCount": 2,
+      "createdAt": "2026-10-26T13:57:17.123Z",
+      "updatedAt": "2026-10-26T13:57:17.123Z"
+    },
+    {
+      "id": "note-tuesday-2026-10-27",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Tuesday",
+      "date": "2026-10-27",
+      "weekNumber": 1,
+      "goodThings": [
+        "ঝুঁকি ঠিক রেখে ১.৫% এর বেশি রিস্ক নেইনি",
+        "স্টপ লস হিট করার পর মাথা ঠান্ডা রেখেছি"
+      ],
+      "mistakes": [
+        "প্রথম লসের পর সামান্য রিভেঞ্জ ট্রেড নেওয়ার প্রবণতা জেগেছিল"
+      ],
+      "tags": [
+        "#FOMO",
+        "#OrderBlock",
+        "#StopLoss",
+        "#Patience"
+      ],
+      "notes": "আজকের ট্রেডিং সেশনে শৃঙ্খলা ছিল ভালো। কিন্তু ফোমো এন্ট্রি থেকে সম্পূর্ণ মুক্ত হতে হবে।",
+      "mindsetRating": 7,
+      "tradesCount": 2,
+      "createdAt": "2026-10-27T13:57:17.123Z",
+      "updatedAt": "2026-10-27T13:57:17.123Z"
+    },
+    {
+      "id": "note-wednesday-2026-10-28",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Wednesday",
+      "date": "2026-10-28",
+      "weekNumber": 1,
+      "goodThings": [
+        "EURUSD ব্রেকআউট রিটেস্টে ধৈর্য ধরে অপেক্ষা করেছি",
+        "আজকে কোনো অপ্রয়োজনীয় ওভারট্রেডিং করিনি"
+      ],
+      "mistakes": [
+        "দেরিতে এন্ট্রি (FOMO) - ক্যান্ডেল ক্লোজিংয়ের আগেই অর্ডার প্লেস করেছিলাম"
+      ],
+      "tags": [
+        "#FOMO",
+        "#OrderBlock",
+        "#StopLoss",
+        "#Patience"
+      ],
+      "notes": "আজকের ট্রেডিং সেশনে শৃঙ্খলা ছিল ভালো। কিন্তু ফোমো এন্ট্রি থেকে সম্পূর্ণ মুক্ত হতে হবে।",
+      "mindsetRating": 8,
+      "tradesCount": 2,
+      "createdAt": "2026-10-28T13:57:17.123Z",
+      "updatedAt": "2026-10-28T13:57:17.123Z"
+    },
+    {
+      "id": "note-thursday-2026-10-29",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Thursday",
+      "date": "2026-10-29",
+      "weekNumber": 1,
+      "goodThings": [
+        "ইউএস সেশনে গোল্ডের প্রফিট টার্গেট পর্যন্ত অপেক্ষা করেছি"
+      ],
+      "mistakes": [
+        "দেরিতে এন্ট্রি (FOMO) - নিউজের পর স্পাইক দেখে লাফ দিয়ে ঢুকতে গিয়েছিলাম"
+      ],
+      "tags": [
+        "#FOMO",
+        "#OrderBlock",
+        "#StopLoss",
+        "#Patience"
+      ],
+      "notes": "আজকের ট্রেডিং সেশনে শৃঙ্খলা ছিল ভালো। কিন্তু ফোমো এন্ট্রি থেকে সম্পূর্ণ মুক্ত হতে হবে।",
+      "mindsetRating": 7,
+      "tradesCount": 2,
+      "createdAt": "2026-10-29T13:57:17.123Z",
+      "updatedAt": "2026-10-29T13:57:17.123Z"
+    },
+    {
+      "id": "note-friday-2026-10-30",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Friday",
+      "date": "2026-10-30",
+      "weekNumber": 1,
+      "goodThings": [
+        "শুক্রবার মার্কেট ক্লোজিংয়ের আগে সব ওপেন পজিশন নিরাপদ করেছি"
+      ],
+      "mistakes": [
+        "দেরিতে এন্ট্রি (FOMO) - শুক্রবার সন্ধ্যায় অপ্রয়োজনীয় স্কাল্পিং",
+        "FOMC নিউজের আগে ইমোশনাল স্কাল্পিং"
+      ],
+      "tags": [
+        "#FOMO",
+        "#OrderBlock",
+        "#StopLoss",
+        "#Patience"
+      ],
+      "notes": "আজকের ট্রেডিং সেশনে শৃঙ্খলা ছিল ভালো। কিন্তু ফোমো এন্ট্রি থেকে সম্পূর্ণ মুক্ত হতে হবে।",
+      "mindsetRating": 8,
+      "tradesCount": 2,
+      "createdAt": "2026-10-30T13:57:17.123Z",
+      "updatedAt": "2026-10-30T13:58:45.722Z"
+    }
+  ],
+  "tattooRules": [
+    {
+      "id": "tattoo-1",
+      "userId": "usr_admin_master",
+      "ruleText": "হাই-ইমপ্যাক্ট নিউজ (CPI / NFP / FOMC)-এর ১৫ মিনিট আগে কোনো ইমোশনাল বা ফোমো (FOMO) এন্ট্রি নেওয়া সম্পূর্ণ নিষিদ্ধ।",
+      "category": "FOMO",
+      "frequencyCount": 3,
+      "originWeek": "Week 1 Review",
+      "createdAt": "2026-10-16T13:57:17.123Z",
+      "isActive": true
+    },
+    {
+      "id": "tattoo-2",
+      "userId": "usr_admin_master",
+      "ruleText": "ট্রেডিং সেশনে পরপর ২টি স্টপ-লস হিট করলে সাথে সাথে টার্মিনাল বন্ধ করতে হবে—কোনো রিভেঞ্জ ট্রেড চলবে না।",
+      "category": "Psychology",
+      "frequencyCount": 4,
+      "originWeek": "Week 2 Review",
+      "createdAt": "2026-10-23T13:57:17.123Z",
+      "isActive": true
+    },
+    {
+      "id": "tattoo-3",
+      "userId": "usr_admin_master",
+      "ruleText": "রিস্ক-টু-রিওয়ার্ড ন্যূনতম ১:২ সেটআপ না পেলে কোনো ট্রেড ট্রিগার করা যাবে না এবং লট সাইজ ক্যাপিটালের ১.৫% এর বেশি হবে না।",
+      "category": "Risk Management",
+      "frequencyCount": 3,
+      "originWeek": "Week 3 Review",
+      "createdAt": "2026-10-28T13:57:17.123Z",
+      "isActive": true
+    },
+    {
+      "id": "tattoo-4",
+      "userId": "usr_admin_master",
+      "ruleText": "ট্রেড ওপেন করার পর স্টপ লস কখনো পেছনের দিকে সরানো চলবে না—মার্কেটের ডিসিশনকে সম্মান জানাতে হবে।",
+      "category": "Execution",
+      "frequencyCount": 2,
+      "originWeek": "Week 4 Review",
+      "createdAt": "2026-10-30T13:57:17.123Z",
+      "isActive": true
+    }
+  ]
+}

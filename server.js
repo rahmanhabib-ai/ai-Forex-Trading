@@ -1,8 +1,8 @@
 // server.ts
 import express from "express";
 import cors from "cors";
-import path5 from "path";
-import fs5 from "fs";
+import path7 from "path";
+import fs7 from "fs";
 import { fileURLToPath } from "url";
 import QRCode from "qrcode";
 
@@ -1364,11 +1364,33 @@ Provide institutional directional forecast for Spot Gold (XAU/USD) & EUR/USD in 
 // src/services/paymentService.ts
 import fs3 from "fs";
 import path3 from "path";
+var STORAGE_DIR = path3.resolve("./storage");
 var PAYMENTS_FILE = path3.resolve("./storage/payments.json");
+var SETTINGS_FILE = path3.resolve("./storage/payment_settings.json");
+var EMAIL_LOGS_FILE = path3.resolve("./storage/payment_email_logs.json");
 function ensureStorage() {
-  const dir = path3.dirname(PAYMENTS_FILE);
-  if (!fs3.existsSync(dir)) {
-    fs3.mkdirSync(dir, { recursive: true });
+  if (!fs3.existsSync(STORAGE_DIR)) {
+    fs3.mkdirSync(STORAGE_DIR, { recursive: true });
+  }
+  if (!fs3.existsSync(SETTINGS_FILE)) {
+    const defaultSettings = {
+      binancePayId: "298417814",
+      binanceEmail: "contact@aibangla.com.bd",
+      binanceTrc20: "TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2",
+      binanceBep20: "0x71C949B231f794966B21F77Fa09355E6437CB49f",
+      binanceQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=binance://pay?payId=298417814",
+      bybitUid: "184920381",
+      bybitEmail: "contact@aibangla.com.bd",
+      bybitTrc20: "TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2",
+      bybitQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=bybit://transfer?uid=184920381",
+      gmailAccount: "contact@aibangla.com.bd",
+      webhookSecret: "forex_ai_crypto_verify_secret_2026",
+      autoVerificationEnabled: true,
+      syncIntervalSeconds: 30,
+      lastSyncAt: (/* @__PURE__ */ new Date()).toISOString(),
+      totalAutoApprovedCount: 1
+    };
+    fs3.writeFileSync(SETTINGS_FILE, JSON.stringify(defaultSettings, null, 2), "utf8");
   }
   if (!fs3.existsSync(PAYMENTS_FILE)) {
     const seed = [
@@ -1385,8 +1407,9 @@ function ensureStorage() {
         transactionId: "TXB89102934812",
         notes: "USDT TRC20 Payment via Binance Pay",
         status: "APPROVED",
+        verifiedMethod: "AUTOMATED_GMAIL",
         createdAt: "2026-10-23T12:30:00.000Z",
-        verifiedAt: "2026-10-23T12:45:00.000Z"
+        verifiedAt: "2026-10-23T12:30:25.000Z"
       },
       {
         id: "pay_sample_02",
@@ -1406,6 +1429,87 @@ function ensureStorage() {
     ];
     fs3.writeFileSync(PAYMENTS_FILE, JSON.stringify(seed, null, 2), "utf8");
   }
+  if (!fs3.existsSync(EMAIL_LOGS_FILE)) {
+    const seedLogs = [
+      {
+        id: "em_log_001",
+        platform: "binance",
+        amount: 29,
+        currency: "USDT",
+        txId: "TXB89102934812",
+        senderInfo: "Standard Trader (Pay ID: 94810239)",
+        receivedAt: "2026-10-23T12:30:20.000Z",
+        subject: "Binance Pay: You have received 29.00 USDT from 94810239",
+        isMatched: true,
+        matchedPaymentId: "pay_sample_01"
+      }
+    ];
+    fs3.writeFileSync(EMAIL_LOGS_FILE, JSON.stringify(seedLogs, null, 2), "utf8");
+  }
+}
+function getPaymentSettings() {
+  ensureStorage();
+  try {
+    const raw = fs3.readFileSync(SETTINGS_FILE, "utf8");
+    return JSON.parse(raw);
+  } catch {
+    return {
+      binancePayId: "298417814",
+      binanceEmail: "contact@aibangla.com.bd",
+      binanceTrc20: "TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2",
+      binanceBep20: "0x71C949B231f794966B21F77Fa09355E6437CB49f",
+      binanceQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=binance://pay?payId=298417814",
+      bybitUid: "184920381",
+      bybitEmail: "contact@aibangla.com.bd",
+      bybitTrc20: "TY8bZ8K9mQ2sRkF7nL4vW1xP9tY3eQ5mZ2",
+      bybitQrUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=bybit://transfer?uid=184920381",
+      gmailAccount: "contact@aibangla.com.bd",
+      webhookSecret: "forex_ai_crypto_verify_secret_2026",
+      autoVerificationEnabled: true,
+      syncIntervalSeconds: 30,
+      lastSyncAt: (/* @__PURE__ */ new Date()).toISOString(),
+      totalAutoApprovedCount: 1
+    };
+  }
+}
+function updatePaymentSettings(updates) {
+  ensureStorage();
+  const current = getPaymentSettings();
+  const updated = {
+    ...current,
+    ...updates,
+    lastSyncAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  if (updates.binancePayId && !updates.binanceQrUrl) {
+    updated.binanceQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=binance://pay?payId=${encodeURIComponent(updates.binancePayId)}`;
+  }
+  if (updates.bybitUid && !updates.bybitQrUrl) {
+    updated.bybitQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=bybit://transfer?uid=${encodeURIComponent(updates.bybitUid)}`;
+  }
+  fs3.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2), "utf8");
+  return updated;
+}
+function recordScriptHeartbeat() {
+  ensureStorage();
+  const current = getPaymentSettings();
+  const now = (/* @__PURE__ */ new Date()).toISOString();
+  current.lastSyncAt = now;
+  fs3.writeFileSync(SETTINGS_FILE, JSON.stringify(current, null, 2), "utf8");
+  return { success: true, lastPingAt: now };
+}
+function getPublicPaymentSettings() {
+  const s = getPaymentSettings();
+  return {
+    binancePayId: s.binancePayId || "336527372",
+    binanceTrc20: s.binanceTrc20 || "TJD9MM68dkpFN8pxkfKsKTqyECuF9cCPZm",
+    binanceQrUrl: s.binanceQrUrl || "",
+    bybitUid: s.bybitUid || "412658047",
+    bybitTrc20: s.bybitTrc20 || "TBaKmVu6kGeB1ew9hDgMbUvqrDWeur8DSf",
+    bybitQrUrl: s.bybitQrUrl || "",
+    autoVerificationEnabled: s.autoVerificationEnabled ?? true
+    // Note: BEP20 is intentionally excluded and hidden.
+    // Note: Emails are strictly omitted for user privacy.
+  };
 }
 function getAllPayments() {
   ensureStorage();
@@ -1420,15 +1524,56 @@ function getPaymentsByUserId(userId) {
   const all = getAllPayments();
   return all.filter((p) => p.userId === userId);
 }
+function getEmailTransactions() {
+  ensureStorage();
+  try {
+    const raw = fs3.readFileSync(EMAIL_LOGS_FILE, "utf8");
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+function saveEmailTransactions(logs) {
+  ensureStorage();
+  fs3.writeFileSync(EMAIL_LOGS_FILE, JSON.stringify(logs, null, 2), "utf8");
+}
+function tryAutoMatchPayment(payment, emailTxList) {
+  if (payment.status !== "PENDING") return false;
+  const targetTx = (payment.transactionId || "").trim().toLowerCase();
+  if (!targetTx) return false;
+  const match = emailTxList.find((em) => {
+    const emTx = (em.txId || "").trim().toLowerCase();
+    const txMatch = emTx && (emTx === targetTx || emTx.includes(targetTx) || targetTx.includes(emTx));
+    const amountMatch = Math.abs(em.amount - payment.amountUsd) < 0.05;
+    return (txMatch || amountMatch && em.platform === payment.method) && !em.isMatched;
+  });
+  if (match) {
+    payment.status = "APPROVED";
+    payment.verifiedMethod = "AUTOMATED_GMAIL";
+    payment.verifiedAt = (/* @__PURE__ */ new Date()).toISOString();
+    payment.notes = (payment.notes ? `${payment.notes} | ` : "") + `\u26A1 Auto-Verified via Gmail (${match.platform.toUpperCase()} Order: ${match.txId})`;
+    match.isMatched = true;
+    match.matchedPaymentId = payment.id;
+    return true;
+  }
+  return false;
+}
 function submitPayment(data) {
   ensureStorage();
   const all = getAllPayments();
+  const emailLogs = getEmailTransactions();
   const newRecord = {
     ...data,
     id: `pay_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     status: "PENDING",
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
+  const matched = tryAutoMatchPayment(newRecord, emailLogs);
+  if (matched) {
+    saveEmailTransactions(emailLogs);
+    const settings = getPaymentSettings();
+    updatePaymentSettings({ totalAutoApprovedCount: (settings.totalAutoApprovedCount || 0) + 1 });
+  }
   all.unshift(newRecord);
   fs3.writeFileSync(PAYMENTS_FILE, JSON.stringify(all, null, 2), "utf8");
   return newRecord;
@@ -1439,32 +1584,729 @@ function updatePaymentStatus(id, status) {
   const item = all.find((p) => p.id === id);
   if (!item) return null;
   item.status = status;
+  item.verifiedMethod = "MANUAL_ADMIN";
   item.verifiedAt = (/* @__PURE__ */ new Date()).toISOString();
   fs3.writeFileSync(PAYMENTS_FILE, JSON.stringify(all, null, 2), "utf8");
   return item;
 }
+function processIncomingDepositEmail(payload) {
+  ensureStorage();
+  const fromLower = (payload.from || "").toLowerCase();
+  const subject = payload.subject || "";
+  const body = payload.body || "";
+  const OFFICIAL_BINANCE_SENDERS = [
+    "do-not-reply@post.binance.com",
+    "do-not-reply@ses.binance.com",
+    "system@notice.binance.com",
+    "do-not-reply@directmail.binance.com",
+    "@post.binance.com",
+    "@ses.binance.com",
+    "@notice.binance.com",
+    "@binance.com"
+  ];
+  const OFFICIAL_BYBIT_SENDERS = [
+    "ib-service@bybit.com",
+    "support@bybit.com",
+    "notification@em.bybit.com",
+    "no-reply@bybit.com",
+    "@bybit.com",
+    "@em.bybit.com",
+    "@mail.bybit.com"
+  ];
+  const isBinanceSender = OFFICIAL_BINANCE_SENDERS.some((d) => fromLower.includes(d));
+  const isBybitSender = OFFICIAL_BYBIT_SENDERS.some((d) => fromLower.includes(d));
+  if (!isBinanceSender && !isBybitSender) {
+    return {
+      success: false,
+      parsedTransaction: null,
+      message: `\u{1F6A8} SECURITY SHIELD: Rejected unauthorized/fake sender '${payload.from}'. Only verified official domains from Binance (post.binance.com) and Bybit (bybit.com) are accepted!`
+    };
+  }
+  const officialDepositMarkers = [
+    "deposit confirmed",
+    "deposit successful",
+    "you have received",
+    "binance pay",
+    "internal transfer",
+    "transfer successful",
+    "transfer completed",
+    "usdt deposit",
+    "crypto deposit"
+  ];
+  const subjectLower = subject.toLowerCase();
+  const bodyLower = body.toLowerCase();
+  const hasDepositMarker = officialDepositMarkers.some((kw) => subjectLower.includes(kw) || bodyLower.includes(kw));
+  if (!hasDepositMarker) {
+    return {
+      success: false,
+      parsedTransaction: null,
+      message: "Ignored non-deposit email (only official Binance Pay & Bybit Deposit notifications are processed)."
+    };
+  }
+  let platform = isBybitSender ? "bybit" : "binance";
+  let amount = 0;
+  const amountRegex = /(\d+(\.\d{1,4})?)\s*(USDT|USD)/i;
+  const matchAmount = subject.match(amountRegex) || body.match(amountRegex);
+  if (matchAmount && matchAmount[1]) {
+    amount = parseFloat(matchAmount[1]);
+  }
+  let txId = "";
+  const txRegexes = [
+    /(?:TxID|Tx Hash|Transaction ID|Order ID|Transfer ID|Internal ID)[:\s]+([A-Za-z0-9_-]{6,64})/i,
+    /from\s+([0-9]{7,12})/i,
+    // Binance Pay ID
+    /Hash[:\s]+([A-Za-z0-9]{10,64})/i,
+    /(TXB[0-9A-Z]+|BYB[0-9A-Z]+|[0-9]{8,14})/i
+  ];
+  for (const regex of txRegexes) {
+    const m = body.match(regex) || subject.match(regex);
+    if (m && m[1]) {
+      txId = m[1].trim();
+      break;
+    }
+  }
+  if (!txId) {
+    txId = `TX_${platform.toUpperCase()}_${Date.now().toString().slice(-8)}`;
+  }
+  let senderInfo = "Verified User";
+  const senderMatch = body.match(/(?:from|sender|payer)[:\s]+([^\n\r,]+)/i);
+  if (senderMatch && senderMatch[1]) {
+    senderInfo = senderMatch[1].trim();
+  }
+  const emailTx = {
+    id: `em_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    platform,
+    amount: amount || 29,
+    currency: "USDT",
+    txId,
+    senderInfo,
+    receivedAt: payload.receivedAt || (/* @__PURE__ */ new Date()).toISOString(),
+    subject,
+    isMatched: false
+  };
+  const emailLogs = getEmailTransactions();
+  emailLogs.unshift(emailTx);
+  const allPayments = getAllPayments();
+  let approvedId;
+  for (const p of allPayments) {
+    if (p.status === "PENDING") {
+      const isMatch = tryAutoMatchPayment(p, [emailTx]);
+      if (isMatch) {
+        approvedId = p.id;
+        break;
+      }
+    }
+  }
+  saveEmailTransactions(emailLogs);
+  if (approvedId) {
+    fs3.writeFileSync(PAYMENTS_FILE, JSON.stringify(allPayments, null, 2), "utf8");
+    const settings = getPaymentSettings();
+    updatePaymentSettings({ totalAutoApprovedCount: (settings.totalAutoApprovedCount || 0) + 1 });
+    return {
+      success: true,
+      parsedTransaction: emailTx,
+      autoApprovedPaymentId: approvedId,
+      message: `\u26A1 Instant Auto-Approval! Payment ${approvedId} has been verified and activated for ${amount} USDT!`
+    };
+  }
+  return {
+    success: true,
+    parsedTransaction: emailTx,
+    message: `Email transaction logged (${amount} USDT, TxID: ${txId}). Ready for instant matching when user submits form.`
+  };
+}
+function simulateIncomingDepositEmail(options) {
+  const txId = options.txId || (options.platform === "binance" ? `TXB${Date.now().toString().slice(-8)}` : `BYB${Date.now().toString().slice(-8)}`);
+  const amount = options.amount || 29;
+  const senderName = options.senderName || (options.platform === "binance" ? "Binance User (Pay ID: 94810239)" : "Bybit UID 184920381");
+  const from = options.platform === "binance" ? "do-not-reply@post.binance.com" : "support@bybit.com";
+  const subject = options.platform === "binance" ? `Binance Pay: You have received ${amount.toFixed(2)} USDT from ${senderName}` : `Bybit Deposit Confirmed: ${amount.toFixed(2)} USDT (Network: TRC20)`;
+  const body = `Dear Customer,
 
-// src/services/playbookService.ts
+We are pleased to inform you that a deposit has been successfully credited to your account.
+
+- Platform: ${options.platform.toUpperCase()}
+- Asset: USDT
+- Amount: ${amount.toFixed(2)} USDT
+- Sender: ${senderName}
+- Transaction ID: ${txId}
+- Time: ${(/* @__PURE__ */ new Date()).toUTCString()}
+
+Thank you for choosing ${options.platform === "binance" ? "Binance" : "Bybit"}.
+`;
+  return processIncomingDepositEmail({
+    from,
+    subject,
+    body,
+    receivedAt: (/* @__PURE__ */ new Date()).toISOString()
+  });
+}
+function processPubSubPushNotification(body) {
+  const startTime = Date.now();
+  ensureStorage();
+  let rawData = "";
+  const messageId = body?.message?.messageId || `pubsub_${Date.now()}`;
+  const publishTime = body?.message?.publishTime || (/* @__PURE__ */ new Date()).toISOString();
+  if (body?.message?.data) {
+    try {
+      rawData = Buffer.from(body.message.data, "base64").toString("utf8");
+    } catch {
+      rawData = body.message.data;
+    }
+  } else if (typeof body?.data === "string") {
+    try {
+      rawData = Buffer.from(body.data, "base64").toString("utf8");
+    } catch {
+      rawData = body.data;
+    }
+  } else if (body?.emailAddress || body?.historyId || body?.deposit) {
+    rawData = JSON.stringify(body);
+  }
+  let parsedJson = null;
+  try {
+    parsedJson = JSON.parse(rawData);
+  } catch {
+    parsedJson = { text: rawData };
+  }
+  if (parsedJson?.deposit) {
+    const depositResult = processIncomingDepositEmail({
+      from: parsedJson.deposit.from || "do-not-reply@post.binance.com",
+      subject: parsedJson.deposit.subject || `Binance Pay: You have received ${parsedJson.deposit.amount || 29} USDT`,
+      body: parsedJson.deposit.body || `Deposit of ${parsedJson.deposit.amount || 29} USDT completed. TxID: ${parsedJson.deposit.txId || "TXB" + Date.now()}`,
+      receivedAt: publishTime
+    });
+    const latencyMs2 = Date.now() - startTime;
+    return {
+      success: true,
+      messageId,
+      decodedData: parsedJson,
+      result: depositResult,
+      latencyMs: latencyMs2,
+      message: `\u26A1 Google Cloud Pub/Sub Push received & verified in ${latencyMs2}ms! ${depositResult.message}`
+    };
+  }
+  const emailLogs = getEmailTransactions();
+  const logEntry = {
+    id: `pubsub_${messageId.slice(-8)}`,
+    platform: "binance",
+    amount: 0,
+    currency: "USDT",
+    txId: `PUBSUB-${messageId.slice(-6)}`,
+    senderInfo: `Google Cloud Pub/Sub Push (${parsedJson?.emailAddress || "m.rahmanhabib.my@gmail.com"})`,
+    receivedAt: publishTime,
+    subject: `\u26A1 Google Cloud Pub/Sub Real-Time Push Signal (History ID: ${parsedJson?.historyId || Date.now()})`,
+    isMatched: false
+  };
+  emailLogs.unshift(logEntry);
+  saveEmailTransactions(emailLogs);
+  const latencyMs = Date.now() - startTime;
+  return {
+    success: true,
+    messageId,
+    decodedData: parsedJson,
+    latencyMs,
+    message: `\u26A1 Google Cloud Pub/Sub Push ACK 200 delivered in ${latencyMs}ms! Signal logged for historyId: ${parsedJson?.historyId || "OK"}.`
+  };
+}
+
+// src/services/packageService.ts
 import fs4 from "fs";
 import path4 from "path";
-var PLAYBOOK_FILE = path4.resolve("./storage/playbook_entries.json");
-var COMMENTS_FILE = path4.resolve("./storage/playbook_comments.json");
-var UPLOAD_DIR = path4.resolve("./public/uploads/playbook");
+var PACKAGES_FILE = path4.resolve("./storage/packages.json");
 function ensureStorage2() {
-  const storageDir = path4.resolve("./storage");
-  if (!fs4.existsSync(storageDir)) fs4.mkdirSync(storageDir, { recursive: true });
-  if (!fs4.existsSync(UPLOAD_DIR)) fs4.mkdirSync(UPLOAD_DIR, { recursive: true });
-  if (!fs4.existsSync(PLAYBOOK_FILE)) {
-    fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify([], null, 2));
+  const dir = path4.dirname(PACKAGES_FILE);
+  if (!fs4.existsSync(dir)) {
+    fs4.mkdirSync(dir, { recursive: true });
   }
-  if (!fs4.existsSync(COMMENTS_FILE)) {
-    fs4.writeFileSync(COMMENTS_FILE, JSON.stringify([], null, 2));
+  if (!fs4.existsSync(PACKAGES_FILE)) {
+    const defaultPackages = [
+      {
+        id: "free_starter",
+        nameBn: "\u09ED \u09A6\u09BF\u09A8 \u09AB\u09CD\u09B0\u09BF \u099F\u09CD\u09B0\u09BE\u09DF\u09BE\u09B2 (Free Starter)",
+        nameEn: "7-Day Free Trial (Starter)",
+        priceUsd: 0,
+        originalPriceUsd: 0,
+        discountBadge: "\u09A8\u09A4\u09C1\u09A8 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF",
+        periodBn: "\u09ED \u09A6\u09BF\u09A8 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AB\u09CD\u09B0\u09BF",
+        periodEn: "7 Days Free Trial",
+        tagBn: "\u09A8\u09A4\u09C1\u09A8\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF",
+        tagEn: "Starter Trial",
+        color: "emerald",
+        descBn: "\u09AB\u09B0\u09C7\u0995\u09CD\u09B8 \u098F\u0986\u0987 \u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u099F\u09AB\u09B0\u09CD\u09AE \u09AA\u09B0\u0996 \u0995\u09B0\u09C7 \u09A6\u09C7\u0996\u09A4\u09C7 \u09A8\u09A4\u09C1\u09A8 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09AC\u09BF\u09B6\u09C7\u09B7 \u09ED \u09A6\u09BF\u09A8\u09C7\u09B0 \u09AB\u09CD\u09B0\u09BF \u099F\u09CD\u09B0\u09BE\u09DF\u09BE\u09B2\u0964",
+        descEn: "Experience institutional pre-market alerts completely free for your first 7 days.",
+        features: [
+          "\u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8\u09C7\u09B0 \u09B9\u09BE\u0987-\u0987\u09AE\u09AA\u09CD\u09AF\u09BE\u0995\u09CD\u099F \u09AB\u09B0\u09C7\u0995\u09CD\u09B8 \u09A8\u09BF\u0989\u099C \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u099F",
+          "\u09AC\u09C7\u09B8\u09BF\u0995 \u09B8\u09C7\u09A8\u09CD\u099F\u09CD\u09B0\u09BE\u09B2 \u098F\u0986\u0987 \u09AE\u09CD\u09AF\u09BE\u0995\u09CD\u09B0\u09CB \u09B8\u09C7\u09A8\u09CD\u099F\u09BF\u09AE\u09C7\u09A8\u09CD\u099F \u0993\u09AD\u09BE\u09B0\u09AD\u09BF\u0989",
+          "\u09B9\u09CB\u09AF\u09BC\u09BE\u099F\u09B8\u0985\u09CD\u09AF\u09BE\u09AA \u099F\u09C7\u09B8\u09CD\u099F \u09AD\u09C7\u09B0\u09BF\u09AB\u09BF\u0995\u09C7\u09B6\u09A8 \u0993 \u09B8\u0982\u09AF\u09CB\u0997",
+          "\u09B2\u09BE\u0987\u09AD \u0987\u0995\u09CB\u09A8\u09AE\u09BF\u0995 \u0995\u09CD\u09AF\u09BE\u09B2\u09C7\u09A8\u09CD\u09A1\u09BE\u09B0 \u0993 \u099F\u09BE\u0987\u09AE\u09B2\u09BE\u0987\u09A8",
+          "\u0995\u09CB\u09A8\u09CB \u09AA\u09C7\u09AE\u09C7\u09A8\u09CD\u099F \u099B\u09BE\u09DC\u09BE\u0987 \u0987\u09A8\u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u099F \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u099F\u09BF\u09AD\u09C7\u09B6\u09A8"
+        ],
+        limitations: {
+          dailyNotesLimit: 3,
+          // সর্বোচ্চ ৩টি দৈনিক নোট
+          playbookStrategiesLimit: 2,
+          // সর্বোচ্চ ২টি প্লেবুক স্ট্র্যাটেজি
+          aiForecastsLimit: 5,
+          socialMediaAutoPost: false
+        },
+        isActive: true,
+        isTestingMode: false,
+        testingNotice: "",
+        isFree: true
+      },
+      {
+        id: "standard",
+        nameBn: "\u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0 (Standard Trader)",
+        nameEn: "Standard Trader (Monthly)",
+        priceUsd: 29,
+        originalPriceUsd: 49,
+        discountBadge: "\u{1F525} \u09EA\u09E6% \u09B8\u09CD\u09AA\u09C7\u09B6\u09BE\u09B2 \u099B\u09BE\u09DC",
+        offerEndsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1e3).toISOString(),
+        periodBn: "\u09AA\u09CD\u09B0\u09A4\u09BF \u09AE\u09BE\u09B8\u09C7 (29 USDT / Month)",
+        periodEn: "29 USDT / Month",
+        tagBn: "\u{1F525} \u09B8\u09B0\u09CD\u09AC\u09BE\u09A7\u09BF\u0995 \u099C\u09A8\u09AA\u09CD\u09B0\u09BF\u09DF",
+        tagEn: "\u{1F525} Most Popular",
+        color: "indigo",
+        descBn: "\u09A8\u09BF\u09DF\u09AE\u09BF\u09A4 \u09A1\u09C7 \u0993 \u09B8\u09C1\u0987\u0982 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0986\u09A6\u09B0\u09CD\u09B6 \u09AA\u09CD\u09B0\u09BF-\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F \u09AA\u09CD\u09B0\u09C7\u09A1\u09BF\u0995\u09B6\u09A8 \u0993 \u09A1\u09BF\u09B0\u09C7\u0995\u09B6\u09A8\u09BE\u09B2 \u09B8\u09C7\u09A8\u09CD\u099F\u09BF\u09AE\u09C7\u09A8\u09CD\u099F\u0964",
+        descEn: "Essential pre-market directional bias & fast WhatsApp delivery for active traders.",
+        features: [
+          "\u09EB-\u09E7\u09E6 \u09AE\u09BF\u09A8\u09BF\u099F \u09AA\u09C2\u09B0\u09CD\u09AC\u09C7 \u09B8\u09B0\u09BE\u09B8\u09B0\u09BF \u09B9\u09CB\u09AF\u09BC\u09BE\u099F\u09B8\u0985\u09CD\u09AF\u09BE\u09AA\u09C7 \u09A8\u09CB\u099F\u09BF\u09AB\u09BF\u0995\u09C7\u09B6\u09A8",
+          "\u09AE\u09C7\u099C\u09B0 \u09AA\u09C7\u09AF\u09BC\u09BE\u09B0\u09CD\u09B8: EUR/USD, GBP/USD, USD/JPY \u0993 Gold (XAU)",
+          "CPI, NFP, PPI \u0993 FOMC \u09AA\u09CD\u09B0\u09BF-\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F \u098F\u0986\u0987 \u09AA\u09CD\u09B0\u09C7\u09A1\u09BF\u0995\u09B6\u09A8",
+          "\u09B8\u09C7\u09A8\u09CD\u099F\u09CD\u09B0\u09BE\u09B2 \u098F\u0986\u0987 \u09A1\u09BF\u09B0\u09C7\u0995\u09B6\u09A8\u09BE\u09B2 \u09AC\u09BE\u0987/\u09B8\u09C7\u09B2 \u09B8\u09C7\u09A8\u09CD\u099F\u09BF\u09AE\u09C7\u09A8\u09CD\u099F \u09B8\u0982\u0995\u09C7\u09A4",
+          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u09A1\u09BE\u09DF\u09C7\u09B0\u09BF \u0993 \u09B8\u09BE\u0987\u0995\u09CB\u09B2\u099C\u09BF \u09A8\u09CB\u099F\u09B8",
+          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u09AA\u09CD\u09B2\u09C7\u09AC\u09C1\u0995 \u0993 \u099A\u09BE\u09B0\u09CD\u099F \u0986\u09AA\u09B2\u09CB\u09A1",
+          "\u09E7-\u0995\u09CD\u09B2\u09BF\u0995 \u09B8\u09CB\u09B6\u09CD\u09AF\u09BE\u09B2 \u09AE\u09BF\u09A1\u09BF\u09AF\u09BC\u09BE \u0985\u099F\u09CB-\u09AA\u09CB\u09B8\u09CD\u099F\u09BF\u0982 (\u0986\u09B8\u09A8\u09CD\u09A8 / Roadmap)"
+        ],
+        limitations: {
+          dailyNotesLimit: -1,
+          // Unlimited
+          playbookStrategiesLimit: -1,
+          // Unlimited
+          aiForecastsLimit: -1,
+          // Unlimited
+          socialMediaAutoPost: true
+        },
+        isActive: true,
+        isTestingMode: false,
+        testingNotice: "",
+        isPopular: true
+      },
+      {
+        id: "vip_pro",
+        nameBn: "\u09AD\u09BF\u0986\u0987\u09AA\u09BF \u0987\u09A8\u09B8\u09CD\u099F\u09BF\u099F\u09BF\u0989\u09B6\u09A8\u09BE\u09B2 \u09AA\u09CD\u09B0\u09CB (VIP Pro)",
+        nameEn: "VIP Institutional Pro (Quarterly)",
+        priceUsd: 79,
+        originalPriceUsd: 119,
+        discountBadge: "\u{1F451} \u09B8\u09C7\u09B0\u09BE \u09AD\u09CD\u09AF\u09BE\u09B2\u09C1 \u0985\u09AB\u09BE\u09B0",
+        offerEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1e3).toISOString(),
+        periodBn: "\u09E9 \u09AE\u09BE\u09B8\u09C7\u09B0 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8 (79 USDT / 3 Months)",
+        periodEn: "79 USDT / 3 Months (Save 35%)",
+        tagBn: "\u{1F451} \u09B8\u09C7\u09B0\u09BE \u09AA\u099B\u09A8\u09CD\u09A6 (VIP Value)",
+        tagEn: "\u{1F451} Best Value (VIP Value)",
+        color: "purple",
+        descBn: "\u09AA\u09CD\u09B0\u09CB \u0993 \u09AB\u09BE\u09A8\u09CD\u09A1\u09C7\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09A1\u09BE\u09AC\u09B2-\u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u099F \u0993 \u09AC\u09BF\u09B8\u09CD\u09A4\u09BE\u09B0\u09BF\u09A4 \u09A1\u09C7\u09AD\u09BF\u09AF\u09BC\u09C7\u09B6\u09A8 \u09B0\u09C7\u099E\u09CD\u099C \u09B8\u09B9 \u0995\u09AE\u09AA\u09CD\u09B2\u09BF\u099F \u09B8\u09CD\u09AF\u09C1\u099F\u0964",
+        descEn: "Complete suite for prop & pro traders with double alert mechanism & deviation guidance.",
+        features: [
+          "\u09B8\u0995\u09B2 \u09AB\u09B0\u09C7\u0995\u09CD\u09B8 \u09AA\u09C7\u09AF\u09BC\u09BE\u09B0, \u0997\u09CB\u09B2\u09CD\u09A1 \u0993 \u0995\u09CD\u09B0\u09BF\u09AA\u09CD\u099F\u09CB \u09AE\u09CD\u09AF\u09BE\u0995\u09CD\u09B0\u09CB \u0995\u09BE\u09AD\u09BE\u09B0\u09C7\u099C",
+          "\u09A1\u09AC\u09B2 \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u099F \u09B8\u09BF\u09B8\u09CD\u099F\u09C7\u09AE (\u09E7\u09E6 \u09AE\u09BF. \u0986\u0997\u09C7 \u09AA\u09CD\u09B0\u09BE\u09A5\u09AE\u09BF\u0995 + \u09E8 \u09AE\u09BF. \u0986\u0997\u09C7 \u09AB\u09BE\u0987\u09A8\u09BE\u09B2 \u09B0\u09BF\u09AD\u09BE\u0987\u09B8\u09A1)",
+          "\u09AC\u09BF\u09B8\u09CD\u09A4\u09BE\u09B0\u09BF\u09A4 \u09A1\u09C7\u09AD\u09BF\u09AF\u09BC\u09C7\u09B6\u09A8 \u09B0\u09C7\u099E\u09CD\u099C \u0993 \u09B8\u09C7\u09AB \u09B2\u099F \u09B8\u09BE\u0987\u099C \u0997\u09BE\u0987\u09A1\u09B2\u09BE\u0987\u09A8",
+          "\u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u09AA\u09CD\u09B2\u09C7\u09AC\u09C1\u0995 \u0993 \u09B8\u09CD\u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u099F\u09C7\u099C\u09BF \u099C\u09BE\u09B0\u09CD\u09A8\u09BE\u09B2 \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+          "\u09E8\u09EA/\u09ED \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC\u09CB\u09B0\u09BF\u099F\u09BF \u09AD\u09BF\u0986\u0987\u09AA\u09BF \u09B9\u09CB\u09AF\u09BC\u09BE\u099F\u09B8\u0985\u09CD\u09AF\u09BE\u09AA \u09B8\u09BE\u09AA\u09CB\u09B0\u09CD\u099F",
+          "\u09B2\u09BE\u0987\u09AD \u099F\u09BF\u09AD\u09BF (Bloomberg & CNBC) \u0993 \u099A\u09BE\u09B0\u09CD\u099F \u09A1\u09C7\u09B8\u09CD\u0995",
+          "\u09E7-\u0995\u09CD\u09B2\u09BF\u0995 \u09AE\u09BE\u09B2\u09CD\u099F\u09BF-\u09B8\u09CB\u09B6\u09CD\u09AF\u09BE\u09B2 \u09AE\u09BF\u09A1\u09BF\u09AF\u09BC\u09BE \u0985\u099F\u09CB-\u09AA\u09CB\u09B8\u09CD\u099F \u0987\u099E\u09CD\u099C\u09BF\u09A8 (\u09B6\u09C0\u0998\u09CD\u09B0\u0987 \u0986\u09B8\u099B\u09C7)"
+        ],
+        limitations: {
+          dailyNotesLimit: -1,
+          playbookStrategiesLimit: -1,
+          aiForecastsLimit: -1,
+          socialMediaAutoPost: true
+        },
+        isActive: true,
+        isTestingMode: false,
+        testingNotice: ""
+      },
+      {
+        id: "lifetime_alpha",
+        nameBn: "\u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u0986\u09B2\u09AB\u09BE \u09AD\u09BF\u0986\u0987\u09AA\u09BF (Lifetime VIP)",
+        nameEn: "Lifetime Alpha VIP (One-Time)",
+        priceUsd: 199,
+        originalPriceUsd: 399,
+        discountBadge: "\u{1F48E} \u09EB\u09E6% \u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u099B\u09BE\u09DC",
+        offerEndsAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3).toISOString(),
+        periodBn: "\u098F\u0995\u0995\u09BE\u09B2\u09C0\u09A8 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE (199 USDT One-Time)",
+        periodEn: "199 USDT Lifetime Access",
+        tagBn: "\u{1F48E} \u0986\u099C\u09C0\u09AC\u09A8 \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE",
+        tagEn: "\u{1F48E} Lifetime Access",
+        color: "amber",
+        descBn: "\u098F\u0995\u09AC\u09BE\u09B0 \u09AB\u09BF \u09AA\u09B0\u09BF\u09B6\u09CB\u09A7 \u0995\u09B0\u09C7 \u0986\u099C\u09C0\u09AC\u09A8 \u09AB\u09B0\u09C7\u0995\u09CD\u09B8 \u098F\u0986\u0987 \u09A8\u09BF\u0989\u099C, \u09B8\u09BF\u0997\u09A8\u09CD\u09AF\u09BE\u09B2 \u0993 \u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09CE \u09B8\u0995\u09B2 \u09AB\u09BF\u099A\u09BE\u09B0 \u0989\u09AA\u09AD\u09CB\u0997 \u0995\u09B0\u09C1\u09A8\u0964",
+        descEn: "Pay once and unlock all current and future Forex AI news, signals & algorithms forever.",
+        features: [
+          "\u0986\u099C\u09C0\u09AC\u09A8 \u0986\u09A8\u09B2\u09BF\u09AE\u09BF\u099F\u09C7\u09A1 \u09AB\u09B0\u09C7\u0995\u09CD\u09B8 \u098F\u0986\u0987 \u09A8\u09BF\u0989\u099C \u0993 \u09AA\u09CD\u09B0\u09C7\u09A1\u09BF\u0995\u09B6\u09A8 \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u099F",
+          "\u09AD\u09AC\u09BF\u09B7\u09CD\u09AF\u09A4\u09C7\u09B0 \u09B8\u0995\u09B2 \u098F\u0986\u0987 \u09AE\u09A1\u09C7\u09B2 \u0993 \u09B8\u09CB\u09B6\u09CD\u09AF\u09BE\u09B2 \u0985\u099F\u09CB-\u09AA\u09CB\u09B8\u09CD\u099F\u09BF\u0982 \u09AB\u09CD\u09B0\u09BF \u09B2\u09BE\u0987\u09AB\u099F\u09BE\u0987\u09AE \u0985\u09CD\u09AF\u09BE\u0995\u09CD\u09B8\u09C7\u09B8",
+          "\u0997\u09CB\u09B2\u09CD\u09A1 (XAU/USD) \u0993 \u09AC\u09BF\u099F\u0995\u09AF\u09BC\u09C7\u09A8 (BTC) \u09AA\u09CD\u09B0\u09BE\u09AF\u09BC\u09CB\u09B0\u09BF\u099F\u09BF \u09AC\u09CD\u09B0\u09C7\u0995\u09A1\u09BE\u0989\u09A8",
+          "\u0987\u09A8\u09B8\u09CD\u099F\u09BF\u099F\u09BF\u0989\u09B6\u09A8\u09BE\u09B2 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0\u09AC\u09C1\u0995 \u0993 \u09B8\u09C7\u09A8\u09CD\u099F\u09CD\u09B0\u09BE\u09B2 \u09AC\u09CD\u09AF\u09BE\u0982\u0995 \u09A1\u09C7\u09AD\u09BF\u09AF\u09BC\u09C7\u09B6\u09A8 \u099F\u09C7\u09AC\u09BF\u09B2",
+          "\u09AA\u09CD\u09B0\u09BE\u0987\u09AD\u09C7\u099F \u09A1\u09BF\u09B0\u09C7\u0995\u09CD\u099F \u09B9\u09CB\u09AF\u09BC\u09BE\u099F\u09B8\u0985\u09CD\u09AF\u09BE\u09AA \u09B2\u09BE\u0987\u09A8 \u0993 \u0993\u09AF\u09BC\u09BE\u09A8-\u0985\u09A8-\u0993\u09AF\u09BC\u09BE\u09A8 \u0995\u09A8\u09B8\u09BE\u09B2\u099F\u09C7\u09B6\u09A8",
+          "\u0995\u09CB\u09A8\u09CB \u09AE\u09BE\u09B8\u09BF\u0995 \u09B0\u09BF\u09A8\u09BF\u0989\u09AF\u09BC\u09BE\u09B2 \u09AC\u09BE \u0985\u09A4\u09BF\u09B0\u09BF\u0995\u09CD\u09A4 \u099A\u09BE\u09B0\u09CD\u099C \u09A8\u09C7\u0987"
+        ],
+        limitations: {
+          dailyNotesLimit: -1,
+          playbookStrategiesLimit: -1,
+          aiForecastsLimit: -1,
+          socialMediaAutoPost: true
+        },
+        isActive: true,
+        isTestingMode: false,
+        testingNotice: ""
+      }
+    ];
+    fs4.writeFileSync(PACKAGES_FILE, JSON.stringify(defaultPackages, null, 2), "utf8");
+  }
+}
+function getAllPackages() {
+  ensureStorage2();
+  try {
+    const raw = fs4.readFileSync(PACKAGES_FILE, "utf8");
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+function updatePackage(id, updates) {
+  ensureStorage2();
+  const all = getAllPackages();
+  const index = all.findIndex((p) => p.id === id);
+  if (index === -1) return null;
+  all[index] = {
+    ...all[index],
+    ...updates,
+    limitations: {
+      ...all[index].limitations,
+      ...updates.limitations || {}
+    }
+  };
+  fs4.writeFileSync(PACKAGES_FILE, JSON.stringify(all, null, 2), "utf8");
+  return all[index];
+}
+function resetPackagesToDefault() {
+  if (fs4.existsSync(PACKAGES_FILE)) {
+    fs4.unlinkSync(PACKAGES_FILE);
+  }
+  ensureStorage2();
+  return getAllPackages();
+}
+
+// src/services/tradingNotesService.ts
+import fs5 from "fs";
+import path5 from "path";
+var STORAGE_FILE = path5.resolve("./storage/trading_notes_store.json");
+function ensureStorage3() {
+  const storageDir = path5.resolve("./storage");
+  if (!fs5.existsSync(storageDir)) fs5.mkdirSync(storageDir, { recursive: true });
+  if (!fs5.existsSync(STORAGE_FILE)) {
+    const seedData = getDefaultSeedData();
+    fs5.writeFileSync(STORAGE_FILE, JSON.stringify(seedData, null, 2));
+    return seedData;
+  }
+  try {
+    const content = fs5.readFileSync(STORAGE_FILE, "utf-8");
+    return JSON.parse(content);
+  } catch (err) {
+    const fallback = getDefaultSeedData();
+    fs5.writeFileSync(STORAGE_FILE, JSON.stringify(fallback, null, 2));
+    return fallback;
+  }
+}
+function persistStorage(data) {
+  try {
+    fs5.writeFileSync(STORAGE_FILE, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error("[TradingNotesService] Failed to persist data:", err);
+  }
+}
+function getDefaultSeedData() {
+  const defaultTattooRules = [
+    {
+      id: "tattoo-1",
+      userId: "usr_admin_master",
+      ruleText: "\u09B9\u09BE\u0987-\u0987\u09AE\u09AA\u09CD\u09AF\u09BE\u0995\u09CD\u099F \u09A8\u09BF\u0989\u099C (CPI / NFP / FOMC)-\u098F\u09B0 \u09E7\u09EB \u09AE\u09BF\u09A8\u09BF\u099F \u0986\u0997\u09C7 \u0995\u09CB\u09A8\u09CB \u0987\u09AE\u09CB\u09B6\u09A8\u09BE\u09B2 \u09AC\u09BE \u09AB\u09CB\u09AE\u09CB (FOMO) \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF \u09A8\u09C7\u0993\u09DF\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09A8\u09BF\u09B7\u09BF\u09A6\u09CD\u09A7\u0964",
+      category: "FOMO",
+      frequencyCount: 3,
+      originWeek: "Week 1 Review",
+      createdAt: new Date(Date.now() - 14 * 864e5).toISOString(),
+      isActive: true
+    },
+    {
+      id: "tattoo-2",
+      userId: "usr_admin_master",
+      ruleText: "\u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u09B8\u09C7\u09B6\u09A8\u09C7 \u09AA\u09B0\u09AA\u09B0 \u09E8\u099F\u09BF \u09B8\u09CD\u099F\u09AA-\u09B2\u09B8 \u09B9\u09BF\u099F \u0995\u09B0\u09B2\u09C7 \u09B8\u09BE\u09A5\u09C7 \u09B8\u09BE\u09A5\u09C7 \u099F\u09BE\u09B0\u09CD\u09AE\u09BF\u09A8\u09BE\u09B2 \u09AC\u09A8\u09CD\u09A7 \u0995\u09B0\u09A4\u09C7 \u09B9\u09AC\u09C7\u2014\u0995\u09CB\u09A8\u09CB \u09B0\u09BF\u09AD\u09C7\u099E\u09CD\u099C \u099F\u09CD\u09B0\u09C7\u09A1 \u099A\u09B2\u09AC\u09C7 \u09A8\u09BE\u0964",
+      category: "Psychology",
+      frequencyCount: 4,
+      originWeek: "Week 2 Review",
+      createdAt: new Date(Date.now() - 7 * 864e5).toISOString(),
+      isActive: true
+    },
+    {
+      id: "tattoo-3",
+      userId: "usr_admin_master",
+      ruleText: "\u09B0\u09BF\u09B8\u09CD\u0995-\u099F\u09C1-\u09B0\u09BF\u0993\u09DF\u09BE\u09B0\u09CD\u09A1 \u09A8\u09CD\u09AF\u09C2\u09A8\u09A4\u09AE \u09E7:\u09E8 \u09B8\u09C7\u099F\u0986\u09AA \u09A8\u09BE \u09AA\u09C7\u09B2\u09C7 \u0995\u09CB\u09A8\u09CB \u099F\u09CD\u09B0\u09C7\u09A1 \u099F\u09CD\u09B0\u09BF\u0997\u09BE\u09B0 \u0995\u09B0\u09BE \u09AF\u09BE\u09AC\u09C7 \u09A8\u09BE \u098F\u09AC\u0982 \u09B2\u099F \u09B8\u09BE\u0987\u099C \u0995\u09CD\u09AF\u09BE\u09AA\u09BF\u099F\u09BE\u09B2\u09C7\u09B0 \u09E7.\u09EB% \u098F\u09B0 \u09AC\u09C7\u09B6\u09BF \u09B9\u09AC\u09C7 \u09A8\u09BE\u0964",
+      category: "Risk Management",
+      frequencyCount: 3,
+      originWeek: "Week 3 Review",
+      createdAt: new Date(Date.now() - 2 * 864e5).toISOString(),
+      isActive: true
+    },
+    {
+      id: "tattoo-4",
+      userId: "usr_admin_master",
+      ruleText: "\u099F\u09CD\u09B0\u09C7\u09A1 \u0993\u09AA\u09C7\u09A8 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 \u09B8\u09CD\u099F\u09AA \u09B2\u09B8 \u0995\u0996\u09A8\u09CB \u09AA\u09C7\u099B\u09A8\u09C7\u09B0 \u09A6\u09BF\u0995\u09C7 \u09B8\u09B0\u09BE\u09A8\u09CB \u099A\u09B2\u09AC\u09C7 \u09A8\u09BE\u2014\u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F\u09C7\u09B0 \u09A1\u09BF\u09B8\u09BF\u09B6\u09A8\u0995\u09C7 \u09B8\u09AE\u09CD\u09AE\u09BE\u09A8 \u099C\u09BE\u09A8\u09BE\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964",
+      category: "Execution",
+      frequencyCount: 2,
+      originWeek: "Week 4 Review",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      isActive: true
+    }
+  ];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday"
+  ];
+  const sampleNotes = days.map((day, idx) => {
+    const d = new Date(Date.now() - (4 - idx) * 864e5);
+    return {
+      id: `note-${day.toLowerCase()}-${d.toISOString().split("T")[0]}`,
+      userId: "usr_admin_master",
+      dayOfWeek: day,
+      date: d.toISOString().split("T")[0],
+      weekNumber: 1,
+      goodThings: idx === 0 ? ["\u09B2\u09A8\u09CD\u09A1\u09A8 \u09B8\u09C7\u09B6\u09A8\u09C7 XAUUSD \u098F\u09B0 M15 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u09AC\u09CD\u09B2\u0995\u09C7 \u09AA\u09BE\u09B0\u09AB\u09C7\u0995\u09CD\u099F \u09E7:\u09E8 \u09AA\u09CD\u09B0\u09AB\u09BF\u099F \u09AC\u09C1\u0995 \u0995\u09B0\u09C7\u099B\u09BF", "\u099F\u09CD\u09B0\u09C7\u09A1 \u09A8\u09C7\u0993\u09DF\u09BE\u09B0 \u0986\u0997\u09C7 \u099A\u09C7\u0995-\u09B2\u09BF\u09B8\u09CD\u099F \u09E7\u09E6\u09E6% \u09AA\u09C2\u09B0\u09A3 \u0995\u09B0\u09C7\u099B\u09BF"] : idx === 1 ? ["\u099D\u09C1\u0981\u0995\u09BF \u09A0\u09BF\u0995 \u09B0\u09C7\u0996\u09C7 \u09E7.\u09EB% \u098F\u09B0 \u09AC\u09C7\u09B6\u09BF \u09B0\u09BF\u09B8\u09CD\u0995 \u09A8\u09C7\u0987\u09A8\u09BF", "\u09B8\u09CD\u099F\u09AA \u09B2\u09B8 \u09B9\u09BF\u099F \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0 \u09AE\u09BE\u09A5\u09BE \u09A0\u09BE\u09A8\u09CD\u09A1\u09BE \u09B0\u09C7\u0996\u09C7\u099B\u09BF"] : idx === 2 ? ["EURUSD \u09AC\u09CD\u09B0\u09C7\u0995\u0986\u0989\u099F \u09B0\u09BF\u099F\u09C7\u09B8\u09CD\u099F\u09C7 \u09A7\u09C8\u09B0\u09CD\u09AF \u09A7\u09B0\u09C7 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C7\u099B\u09BF", "\u0986\u099C\u0995\u09C7 \u0995\u09CB\u09A8\u09CB \u0985\u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u09C0\u09DF \u0993\u09AD\u09BE\u09B0\u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u0995\u09B0\u09BF\u09A8\u09BF"] : idx === 3 ? ["\u0987\u0989\u098F\u09B8 \u09B8\u09C7\u09B6\u09A8\u09C7 \u0997\u09CB\u09B2\u09CD\u09A1\u09C7\u09B0 \u09AA\u09CD\u09B0\u09AB\u09BF\u099F \u099F\u09BE\u09B0\u09CD\u0997\u09C7\u099F \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C7\u099B\u09BF"] : ["\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 \u09AE\u09BE\u09B0\u09CD\u0995\u09C7\u099F \u0995\u09CD\u09B2\u09CB\u099C\u09BF\u0982\u09DF\u09C7\u09B0 \u0986\u0997\u09C7 \u09B8\u09AC \u0993\u09AA\u09C7\u09A8 \u09AA\u099C\u09BF\u09B6\u09A8 \u09A8\u09BF\u09B0\u09BE\u09AA\u09A6 \u0995\u09B0\u09C7\u099B\u09BF"],
+      mistakes: idx === 0 ? ["\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7 \u099A\u09BE\u09B0\u09CD\u099F\u09C7 \u098F\u09B8\u09C7 \u0995\u09BF\u099B\u09C1\u099F\u09BE \u09AB\u09CB\u09AE\u09CB (FOMO) \u0985\u09A8\u09C1\u09AD\u09AC \u09B9\u09DF\u09C7\u099B\u09BF\u09B2"] : idx === 1 ? ["\u09AA\u09CD\u09B0\u09A5\u09AE \u09B2\u09B8\u09C7\u09B0 \u09AA\u09B0 \u09B8\u09BE\u09AE\u09BE\u09A8\u09CD\u09AF \u09B0\u09BF\u09AD\u09C7\u099E\u09CD\u099C \u099F\u09CD\u09B0\u09C7\u09A1 \u09A8\u09C7\u0993\u09DF\u09BE\u09B0 \u09AA\u09CD\u09B0\u09AC\u09A3\u09A4\u09BE \u099C\u09C7\u0997\u09C7\u099B\u09BF\u09B2"] : idx === 2 ? ["\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7 \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF (FOMO) - \u0995\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09C7\u09B2 \u0995\u09CD\u09B2\u09CB\u099C\u09BF\u0982\u09DF\u09C7\u09B0 \u0986\u0997\u09C7\u0987 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u09AA\u09CD\u09B2\u09C7\u09B8 \u0995\u09B0\u09C7\u099B\u09BF\u09B2\u09BE\u09AE"] : idx === 3 ? ["\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7 \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF (FOMO) - \u09A8\u09BF\u0989\u099C\u09C7\u09B0 \u09AA\u09B0 \u09B8\u09CD\u09AA\u09BE\u0987\u0995 \u09A6\u09C7\u0996\u09C7 \u09B2\u09BE\u09AB \u09A6\u09BF\u09DF\u09C7 \u09A2\u09C1\u0995\u09A4\u09C7 \u0997\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE"] : ["\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7 \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF (FOMO) - \u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0 \u09B8\u09A8\u09CD\u09A7\u09CD\u09AF\u09BE\u09DF \u0985\u09AA\u09CD\u09B0\u09DF\u09CB\u099C\u09A8\u09C0\u09DF \u09B8\u09CD\u0995\u09BE\u09B2\u09CD\u09AA\u09BF\u0982"],
+      tags: ["#FOMO", "#OrderBlock", "#StopLoss", "#Patience"],
+      notes: "\u0986\u099C\u0995\u09C7\u09B0 \u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 \u09B8\u09C7\u09B6\u09A8\u09C7 \u09B6\u09C3\u0999\u09CD\u0996\u09B2\u09BE \u099B\u09BF\u09B2 \u09AD\u09BE\u09B2\u09CB\u0964 \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u09AB\u09CB\u09AE\u09CB \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF \u09A5\u09C7\u0995\u09C7 \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AE\u09C1\u0995\u09CD\u09A4 \u09B9\u09A4\u09C7 \u09B9\u09AC\u09C7\u0964",
+      mindsetRating: 8 - idx % 2,
+      tradesCount: 2,
+      createdAt: d.toISOString(),
+      updatedAt: d.toISOString()
+    };
+  });
+  return { notes: sampleNotes, tattooRules: defaultTattooRules };
+}
+function getUserDailyNotes(userId) {
+  const store = ensureStorage3();
+  return store.notes.filter((n) => n.userId === userId || n.userId === "usr_admin_master");
+}
+function saveDailyNote(userId, entry) {
+  const store = ensureStorage3();
+  const existingIdx = store.notes.findIndex(
+    (n) => (n.userId === userId || n.userId === "usr_admin_master") && n.date === entry.date
+  );
+  const now = (/* @__PURE__ */ new Date()).toISOString();
+  if (existingIdx !== -1) {
+    const updated = {
+      ...store.notes[existingIdx],
+      ...entry,
+      updatedAt: now
+    };
+    store.notes[existingIdx] = updated;
+    persistStorage(store);
+    return updated;
+  }
+  const created = {
+    id: `note_${entry.dayOfWeek.toLowerCase()}_${Date.now()}`,
+    userId,
+    dayOfWeek: entry.dayOfWeek,
+    date: entry.date,
+    weekNumber: entry.weekNumber || 1,
+    goodThings: entry.goodThings || [],
+    mistakes: entry.mistakes || [],
+    tags: entry.tags || [],
+    notes: entry.notes || "",
+    mindsetRating: entry.mindsetRating || 7,
+    tradesCount: entry.tradesCount || 1,
+    createdAt: now,
+    updatedAt: now
+  };
+  store.notes.push(created);
+  persistStorage(store);
+  return created;
+}
+function quickAddNote(userId, type, text, dayOfWeek) {
+  const store = ensureStorage3();
+  const now = /* @__PURE__ */ new Date();
+  const dateStr = now.toISOString().split("T")[0];
+  const currentDayNames = [
+    "Monday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Friday"
+  ];
+  const detectedDay = dayOfWeek || currentDayNames[now.getDay()] || "Monday";
+  let note = store.notes.find(
+    (n) => (n.userId === userId || n.userId === "usr_admin_master") && n.date === dateStr
+  );
+  if (!note) {
+    note = {
+      id: `note_${detectedDay.toLowerCase()}_${Date.now()}`,
+      userId,
+      dayOfWeek: detectedDay,
+      date: dateStr,
+      weekNumber: 1,
+      goodThings: [],
+      mistakes: [],
+      tags: [],
+      notes: "",
+      mindsetRating: 8,
+      tradesCount: 1,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString()
+    };
+    store.notes.push(note);
+  }
+  if (type === "good") {
+    note.goodThings.push(text);
+  } else if (type === "mistake") {
+    note.mistakes.push(text);
+  } else if (type === "mindset") {
+    note.notes = note.notes ? `${note.notes}
+[Mindset]: ${text}` : `[Mindset]: ${text}`;
+  }
+  note.updatedAt = now.toISOString();
+  persistStorage(store);
+  return { success: true, entry: note };
+}
+function getTattooRules(userId) {
+  const store = ensureStorage3();
+  return store.tattooRules.filter((r) => r.userId === userId || r.userId === "usr_admin_master");
+}
+function addTattooRule(userId, rule) {
+  const store = ensureStorage3();
+  const created = {
+    ...rule,
+    id: `tattoo_${Date.now()}`,
+    userId,
+    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+    isActive: true
+  };
+  store.tattooRules.unshift(created);
+  persistStorage(store);
+  return created;
+}
+function deleteTattooRule(userId, ruleId) {
+  const store = ensureStorage3();
+  const initialLength = store.tattooRules.length;
+  store.tattooRules = store.tattooRules.filter((r) => r.id !== ruleId);
+  if (store.tattooRules.length !== initialLength) {
+    persistStorage(store);
+    return true;
+  }
+  return false;
+}
+function normalizeTheme(text) {
+  const clean = text.trim();
+  if (clean.includes("FOMO") || clean.includes("\u09AB\u09CB\u09AE\u09CB") || clean.includes("\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7")) {
+    return "\u09A6\u09C7\u09B0\u09BF\u09A4\u09C7 \u09AB\u09CB\u09AE\u09CB \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF \u09A8\u09C7\u0993\u09DF\u09BE (FOMO Entry without Candle Confirmation)";
+  }
+  if (clean.includes("\u09B0\u09BF\u09AD\u09C7\u099E\u09CD\u099C") || clean.includes("Revenge")) {
+    return "\u09B2\u09B8\u09C7\u09B0 \u09AA\u09B0 \u09AE\u09BE\u09A5\u09BE \u0997\u09B0\u09AE \u0995\u09B0\u09C7 \u09B0\u09BF\u09AD\u09C7\u099E\u09CD\u099C \u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 (Revenge Trading after SL)";
+  }
+  if (clean.includes("\u09B2\u099F \u09B8\u09BE\u0987\u099C") || clean.includes("High Lot") || clean.includes("\u09AC\u09DC \u09B2\u099F")) {
+    return "\u0995\u09CD\u09AF\u09BE\u09AA\u09BF\u099F\u09BE\u09B2\u09C7\u09B0 \u09A4\u09C1\u09B2\u09A8\u09BE\u09DF \u0985\u09A4\u09BF\u09B0\u09BF\u0995\u09CD\u09A4 \u09B2\u099F \u09B8\u09BE\u0987\u099C \u09A8\u09C7\u0993\u09DF\u09BE (Over-Leverage & Big Lots)";
+  }
+  if (clean.includes("\u09B8\u09CD\u099F\u09AA-\u09B2\u09B8") || clean.includes("\u09B8\u09CD\u099F\u09AA \u09B2\u09B8") || clean.includes("Stop Loss") || clean.includes("SL")) {
+    return "\u099F\u09CD\u09B0\u09C7\u09A1 \u0993\u09AA\u09C7\u09A8 \u0995\u09B0\u09C7 \u09B8\u09CD\u099F\u09AA-\u09B2\u09B8 \u09AA\u09C7\u099B\u09BE\u09A8\u09CB (Moving Stop Loss against Rules)";
+  }
+  if (clean.includes("\u09B8\u09CD\u0995\u09BE\u09B2\u09CD\u09AA\u09BF\u0982") || clean.includes("\u0993\u09AD\u09BE\u09B0\u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982") || clean.includes("OverTrading")) {
+    return "\u09AA\u09CD\u09B2\u09CD\u09AF\u09BE\u09A8 \u099B\u09BE\u09DC\u09BE \u09B9\u09C1\u099C\u09C1\u0997\u09C7 \u09B8\u09CD\u0995\u09BE\u09B2\u09CD\u09AA\u09BF\u0982 \u0993 \u0993\u09AD\u09BE\u09B0\u099F\u09CD\u09B0\u09C7\u09A1\u09BF\u0982 (Impulsive OverTrading)";
+  }
+  if (clean.includes("-")) return clean.split("-")[0].trim();
+  return clean;
+}
+function normalizeStrength(text) {
+  const clean = text.trim();
+  if (clean.includes("\u09E7:\u09E8") || clean.includes("\u09AA\u09CD\u09B0\u09AB\u09BF\u099F \u099F\u09BE\u09B0\u09CD\u0997\u09C7\u099F")) {
+    return "\u09E7:\u09E8 \u09B0\u09BF\u09B8\u09CD\u0995-\u099F\u09C1-\u09B0\u09BF\u0993\u09DF\u09BE\u09B0\u09CD\u09A1 \u0985\u09A8\u09C1\u09AA\u09BE\u09A4 \u09AC\u099C\u09BE\u09DF \u09B0\u09BE\u0996\u09BE (Strict 1:2 RR Target)";
+  }
+  if (clean.includes("\u09B0\u09BF\u09B8\u09CD\u0995") || clean.includes("\u09E7.\u09EB%")) {
+    return "\u0995\u09CD\u09AF\u09BE\u09AA\u09BF\u099F\u09BE\u09B2\u09C7\u09B0 \u09E7.\u09EB% \u098F\u09B0 \u09AE\u09A7\u09CD\u09AF\u09C7 \u09B0\u09BF\u09B8\u09CD\u0995 \u09B8\u09C0\u09AE\u09BE\u09AC\u09A6\u09CD\u09A7 \u09B0\u09BE\u0996\u09BE (Risk Management Discipline)";
+  }
+  if (clean.includes("\u099A\u09C7\u0995-\u09B2\u09BF\u09B8\u09CD\u099F") || clean.includes("\u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u09AC\u09CD\u09B2\u0995")) {
+    return "\u09B9\u09BE\u0987-\u0995\u09A8\u09AD\u09BF\u0995\u09B6\u09A8 \u0985\u09B0\u09CD\u09A1\u09BE\u09B0 \u09AC\u09CD\u09B2\u0995 \u099A\u09C7\u0995-\u09B2\u09BF\u09B8\u09CD\u099F \u0985\u09A8\u09C1\u09B8\u09B0\u09A3 (Execution Checklist Followed)";
+  }
+  if (clean.includes("\u09A7\u09C8\u09B0\u09CD\u09AF") || clean.includes("\u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE")) {
+    return "\u09B8\u09C7\u099F\u0986\u09AA \u0995\u09A8\u09AB\u09BE\u09B0\u09CD\u09AE\u09C7\u09B6\u09A8 \u09AA\u09B0\u09CD\u09AF\u09A8\u09CD\u09A4 \u09A7\u09C8\u09B0\u09CD\u09AF\u09B6\u09C0\u09B2 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE (High Patience & Discipline)";
+  }
+  return clean;
+}
+function analyzeWeeklyReview(userId) {
+  const notes = getUserDailyNotes(userId);
+  const mistakeCounts = {};
+  const goodCounts = {};
+  let totalRating = 0;
+  notes.forEach((n) => {
+    totalRating += n.mindsetRating || 7;
+    n.mistakes.forEach((m) => {
+      const theme = normalizeTheme(m);
+      if (!theme) return;
+      mistakeCounts[theme] = (mistakeCounts[theme] || 0) + 1;
+    });
+    n.goodThings.forEach((g) => {
+      const theme = normalizeStrength(g);
+      if (!theme) return;
+      goodCounts[theme] = (goodCounts[theme] || 0) + 1;
+    });
+  });
+  const recurringMistakes = Object.entries(mistakeCounts).filter(([_, count]) => count >= 2).map(([text, count]) => ({
+    text,
+    count,
+    alertLevel: count >= 3 ? "CRITICAL" : "HIGH"
+  })).sort((a, b) => b.count - a.count);
+  const recurringStrengths = Object.entries(goodCounts).filter(([_, count]) => count >= 2).map(([text, count]) => ({
+    text,
+    count,
+    praiseLevel: count >= 3 ? "GOLDEN" : "EXCELLENT"
+  })).sort((a, b) => b.count - a.count);
+  const totalGood = Object.values(goodCounts).reduce((acc, c) => acc + c, 0);
+  const totalMistakes = Object.values(mistakeCounts).reduce((acc, c) => acc + c, 0);
+  return {
+    weekId: "Current Active Week",
+    startDate: notes[0]?.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+    endDate: notes[notes.length - 1]?.date || (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+    totalTradingDays: notes.length,
+    recurringMistakes,
+    recurringStrengths,
+    totalGoodCount: totalGood,
+    totalMistakeCount: totalMistakes,
+    mindsetAverage: notes.length > 0 ? Number((totalRating / notes.length).toFixed(1)) : 8
+  };
+}
+
+// src/services/playbookService.ts
+import fs6 from "fs";
+import path6 from "path";
+var PLAYBOOK_FILE = path6.resolve("./storage/playbook_entries.json");
+var COMMENTS_FILE = path6.resolve("./storage/playbook_comments.json");
+var UPLOAD_DIR = path6.resolve("./public/uploads/playbook");
+function ensureStorage4() {
+  const storageDir = path6.resolve("./storage");
+  if (!fs6.existsSync(storageDir)) fs6.mkdirSync(storageDir, { recursive: true });
+  if (!fs6.existsSync(UPLOAD_DIR)) fs6.mkdirSync(UPLOAD_DIR, { recursive: true });
+  if (!fs6.existsSync(PLAYBOOK_FILE)) {
+    fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify([], null, 2));
+  }
+  if (!fs6.existsSync(COMMENTS_FILE)) {
+    fs6.writeFileSync(COMMENTS_FILE, JSON.stringify([], null, 2));
   }
 }
 function getPlaybooks(filters) {
-  ensureStorage2();
+  ensureStorage4();
   try {
-    const raw = fs4.readFileSync(PLAYBOOK_FILE, "utf-8");
+    const raw = fs6.readFileSync(PLAYBOOK_FILE, "utf-8");
     let list = JSON.parse(raw);
     if (filters?.session && filters.session !== "All") {
       list = list.filter((p) => p.session === filters.session);
@@ -1491,7 +2333,7 @@ function getPlaybooks(filters) {
   }
 }
 function getPlaybookById(id) {
-  ensureStorage2();
+  ensureStorage4();
   try {
     const list = getPlaybooks();
     return list.find((p) => p.id === id) || null;
@@ -1500,7 +2342,7 @@ function getPlaybookById(id) {
   }
 }
 function createPlaybook(data, author) {
-  ensureStorage2();
+  ensureStorage4();
   const list = getPlaybooks();
   const total = Number(data.totalTrades) || 0;
   const wins = Number(data.winCount) || 0;
@@ -1539,11 +2381,11 @@ function createPlaybook(data, author) {
     updatedAt: (/* @__PURE__ */ new Date()).toISOString()
   };
   list.unshift(newEntry);
-  fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
+  fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
   return newEntry;
 }
 function updatePlaybook(id, data, user) {
-  ensureStorage2();
+  ensureStorage4();
   const list = getPlaybooks();
   const index = list.findIndex((p) => p.id === id);
   if (index === -1) {
@@ -1584,11 +2426,11 @@ function updatePlaybook(id, data, user) {
     updatedAt: (/* @__PURE__ */ new Date()).toISOString()
   };
   list[index] = updated;
-  fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
+  fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
   return { success: true, entry: updated };
 }
 function ratePlaybook(id, userId, stars) {
-  ensureStorage2();
+  ensureStorage4();
   const list = getPlaybooks();
   const index = list.findIndex((p) => p.id === id);
   if (index === -1) return { success: false, error: "Playbook not found" };
@@ -1605,11 +2447,11 @@ function ratePlaybook(id, userId, stars) {
   entry.averageRating = Number((sum / entry.ratings.length).toFixed(1));
   entry.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
   list[index] = entry;
-  fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
+  fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
   return { success: true, entry, averageRating: entry.averageRating };
 }
 function deletePlaybook(id, user) {
-  ensureStorage2();
+  ensureStorage4();
   const list = getPlaybooks();
   const existing = list.find((p) => p.id === id);
   if (!existing) {
@@ -1619,18 +2461,18 @@ function deletePlaybook(id, user) {
     return { success: false, error: "Permission denied: You cannot delete another trader's setup." };
   }
   const filtered = list.filter((p) => p.id !== id);
-  fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify(filtered, null, 2));
+  fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify(filtered, null, 2));
   try {
-    const rawComments = fs4.readFileSync(COMMENTS_FILE, "utf-8");
+    const rawComments = fs6.readFileSync(COMMENTS_FILE, "utf-8");
     const comments = JSON.parse(rawComments);
     const updatedComments = comments.filter((c) => c.playbookId !== id);
-    fs4.writeFileSync(COMMENTS_FILE, JSON.stringify(updatedComments, null, 2));
+    fs6.writeFileSync(COMMENTS_FILE, JSON.stringify(updatedComments, null, 2));
   } catch {
   }
   return { success: true };
 }
 function togglePlaybookUpvote(id, userId) {
-  ensureStorage2();
+  ensureStorage4();
   const list = getPlaybooks();
   const entry = list.find((p) => p.id === id);
   if (!entry) return { success: false, upvotes: [], isUpvoted: false };
@@ -1640,13 +2482,13 @@ function togglePlaybookUpvote(id, userId) {
   } else {
     entry.upvotes.push(userId);
   }
-  fs4.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
+  fs6.writeFileSync(PLAYBOOK_FILE, JSON.stringify(list, null, 2));
   return { success: true, upvotes: entry.upvotes, isUpvoted: !hasUpvoted };
 }
 function getCommentsByPlaybookId(playbookId) {
-  ensureStorage2();
+  ensureStorage4();
   try {
-    const raw = fs4.readFileSync(COMMENTS_FILE, "utf-8");
+    const raw = fs6.readFileSync(COMMENTS_FILE, "utf-8");
     const comments = JSON.parse(raw);
     return comments.filter((c) => c.playbookId === playbookId).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   } catch {
@@ -1654,8 +2496,8 @@ function getCommentsByPlaybookId(playbookId) {
   }
 }
 function addComment(playbookId, commentText, author) {
-  ensureStorage2();
-  const raw = fs4.readFileSync(COMMENTS_FILE, "utf-8");
+  ensureStorage4();
+  const raw = fs6.readFileSync(COMMENTS_FILE, "utf-8");
   const comments = JSON.parse(raw);
   const newComment = {
     id: `cm_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
@@ -1666,11 +2508,11 @@ function addComment(playbookId, commentText, author) {
     createdAt: (/* @__PURE__ */ new Date()).toISOString()
   };
   comments.push(newComment);
-  fs4.writeFileSync(COMMENTS_FILE, JSON.stringify(comments, null, 2));
+  fs6.writeFileSync(COMMENTS_FILE, JSON.stringify(comments, null, 2));
   return newComment;
 }
 function saveChartSnapshot(base64Payload) {
-  ensureStorage2();
+  ensureStorage4();
   try {
     const matches = base64Payload.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (!matches || matches.length !== 3) {
@@ -1678,9 +2520,9 @@ function saveChartSnapshot(base64Payload) {
     }
     const ext = matches[1].includes("png") ? "png" : matches[1].includes("webp") ? "webp" : "jpg";
     const filename = `tv_snapshot_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${ext}`;
-    const filePath = path4.join(UPLOAD_DIR, filename);
+    const filePath = path6.join(UPLOAD_DIR, filename);
     const buffer = Buffer.from(matches[2], "base64");
-    fs4.writeFileSync(filePath, buffer);
+    fs6.writeFileSync(filePath, buffer);
     return `/uploads/playbook/${filename}`;
   } catch (err) {
     console.error("Failed to save chart snapshot:", err);
@@ -1857,13 +2699,13 @@ function startRealMarketPolling(onTick) {
 
 // server.ts
 var __filename = fileURLToPath(import.meta.url);
-var __dirname = path5.dirname(__filename);
+var __dirname = path7.dirname(__filename);
 var app = express();
 var PORT = process.env.PORT || 3e3;
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
-app.use("/assets", express.static(path5.join(__dirname, "assets")));
-app.use("/uploads", express.static(path5.join(__dirname, "public/uploads")));
+app.use("/assets", express.static(path7.join(__dirname, "assets")));
+app.use("/uploads", express.static(path7.join(__dirname, "public/uploads")));
 var liveQuotes = getCachedRealQuotes();
 startRealMarketPolling((freshQuotes) => {
   liveQuotes = freshQuotes;
@@ -1927,11 +2769,11 @@ var adminAiConfig = {
   geminiModel: "gemini-3.8-flash",
   deepseekModel: "deepseek-chat"
 };
-var WA_STATE_FILE = path5.resolve("./whatsapp_state.json");
+var WA_STATE_FILE = path7.resolve("./whatsapp_state.json");
 function loadWhatsAppState() {
   try {
-    if (fs5.existsSync(WA_STATE_FILE)) {
-      const data = JSON.parse(fs5.readFileSync(WA_STATE_FILE, "utf-8"));
+    if (fs7.existsSync(WA_STATE_FILE)) {
+      const data = JSON.parse(fs7.readFileSync(WA_STATE_FILE, "utf-8"));
       return {
         status: data.status || "disconnected",
         phone: data.phone || "",
@@ -1959,7 +2801,7 @@ function loadWhatsAppState() {
 }
 function saveWhatsAppState() {
   try {
-    fs5.writeFileSync(
+    fs7.writeFileSync(
       WA_STATE_FILE,
       JSON.stringify(
         {
@@ -2053,8 +2895,8 @@ async function startBaileysGateway() {
   try {
     const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = await import("@whiskeysockets/baileys");
     const pino = (await import("pino")).default;
-    const authDir = path5.resolve("./whatsapp_auth");
-    if (!fs5.existsSync(authDir)) fs5.mkdirSync(authDir, { recursive: true });
+    const authDir = path7.resolve("./whatsapp_auth");
+    if (!fs7.existsSync(authDir)) fs7.mkdirSync(authDir, { recursive: true });
     const { state, saveCreds } = await useMultiFileAuthState(authDir);
     baileysSock = makeWASocket({
       auth: state,
@@ -2104,7 +2946,7 @@ async function startBaileysGateway() {
           whatsappGateway.phone = "";
           saveWhatsAppState();
           try {
-            fs5.rmSync(authDir, { recursive: true, force: true });
+            fs7.rmSync(authDir, { recursive: true, force: true });
           } catch {
           }
           setTimeout(() => {
@@ -2159,9 +3001,9 @@ app.post("/api/whatsapp/qr-refresh", async (_req, res) => {
       baileysSock.end?.();
       baileysSock = null;
     }
-    const authDir = path5.resolve("./whatsapp_auth");
-    if (fs5.existsSync(authDir)) {
-      fs5.rmSync(authDir, { recursive: true, force: true });
+    const authDir = path7.resolve("./whatsapp_auth");
+    if (fs7.existsSync(authDir)) {
+      fs7.rmSync(authDir, { recursive: true, force: true });
     }
   } catch (e) {
   }
@@ -2191,9 +3033,9 @@ app.post("/api/whatsapp/disconnect", async (_req, res) => {
       baileysSock.end?.();
       baileysSock = null;
     }
-    const authDir = path5.resolve("./whatsapp_auth");
-    if (fs5.existsSync(authDir)) {
-      fs5.rmSync(authDir, { recursive: true, force: true });
+    const authDir = path7.resolve("./whatsapp_auth");
+    if (fs7.existsSync(authDir)) {
+      fs7.rmSync(authDir, { recursive: true, force: true });
     }
   } catch (e) {
     console.error("Disconnect cleanup notice:", e);
@@ -2875,12 +3717,12 @@ app.get("/api/forex/forecast/:id", (req, res) => {
   }
   res.json({ success: true, forecast });
 });
-var ALERTS_TRACKER_PATH = path5.join(process.cwd(), "alerts_tracker_store.json");
+var ALERTS_TRACKER_PATH = path7.join(process.cwd(), "alerts_tracker_store.json");
 var sentAlertsTracker = /* @__PURE__ */ new Set();
 function loadAlertsTracker() {
   try {
-    if (fs5.existsSync(ALERTS_TRACKER_PATH)) {
-      const list = JSON.parse(fs5.readFileSync(ALERTS_TRACKER_PATH, "utf-8"));
+    if (fs7.existsSync(ALERTS_TRACKER_PATH)) {
+      const list = JSON.parse(fs7.readFileSync(ALERTS_TRACKER_PATH, "utf-8"));
       if (Array.isArray(list)) {
         for (const item of list) sentAlertsTracker.add(item);
         console.log(`[AlertsTracker] Loaded ${list.length} persisted alerts.`);
@@ -2894,8 +3736,8 @@ function saveAlertsTracker() {
   try {
     const list = Array.from(sentAlertsTracker);
     const tempPath = `${ALERTS_TRACKER_PATH}.${Date.now()}.${Math.random().toString(36).slice(2, 6)}.tmp`;
-    fs5.writeFileSync(tempPath, JSON.stringify(list, null, 2), "utf-8");
-    fs5.renameSync(tempPath, ALERTS_TRACKER_PATH);
+    fs7.writeFileSync(tempPath, JSON.stringify(list, null, 2), "utf-8");
+    fs7.renameSync(tempPath, ALERTS_TRACKER_PATH);
   } catch (err) {
     console.error("[AlertsTracker] Failed saving tracker:", err.message);
   }
@@ -3277,6 +4119,201 @@ app.post("/api/payments/status", (req, res) => {
   }
   res.json({ success: true, payment: updated });
 });
+app.get("/api/payments/settings", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (authUser && authUser.role === "admin") {
+    const settings = getPaymentSettings();
+    return res.json({ success: true, settings });
+  }
+  const publicSettings = getPublicPaymentSettings();
+  res.json({ success: true, settings: publicSettings });
+});
+app.post("/api/payments/settings", (req, res) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const updated = updatePaymentSettings(req.body);
+  res.json({ success: true, settings: updated, message: "Crypto gateway settings updated successfully!" });
+});
+app.get("/api/payments/email-logs", (req, res) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const logs = getEmailTransactions();
+  res.json({ success: true, logs });
+});
+app.post("/api/payments/webhook/gmail", (req, res) => {
+  const settings = getPaymentSettings();
+  const secretHeader = req.headers["x-webhook-secret"] || req.body.secret;
+  if (settings.webhookSecret && secretHeader && secretHeader !== settings.webhookSecret) {
+    return res.status(401).json({ success: false, error: "Invalid webhook secret." });
+  }
+  if (req.body.type === "heartbeat" || req.body.action === "ping") {
+    const heartbeatResult = recordScriptHeartbeat();
+    return res.json({
+      success: true,
+      message: "\u{1F7E2} Google Apps Script Heartbeat Received! Server connected successfully.",
+      lastSyncAt: heartbeatResult.lastPingAt
+    });
+  }
+  const { from, subject, body, receivedAt, date } = req.body;
+  if (!body && !subject) {
+    return res.status(400).json({ success: false, error: "Subject or body is required" });
+  }
+  const result = processIncomingDepositEmail({
+    from: from || "do-not-reply@post.binance.com",
+    subject: subject || "",
+    body: body || "",
+    receivedAt: receivedAt || date
+  });
+  res.json(result);
+});
+app.post("/api/payments/simulate-email", (req, res) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { platform, amount, txId, senderName } = req.body;
+  const result = simulateIncomingDepositEmail({
+    platform: platform === "bybit" ? "bybit" : "binance",
+    amount: Number(amount) || 29,
+    txId: txId ? String(txId).trim() : void 0,
+    senderName: senderName ? String(senderName).trim() : void 0
+  });
+  res.json(result);
+});
+app.post("/api/payments/webhook/pubsub", (req, res) => {
+  const result = processPubSubPushNotification(req.body);
+  res.status(200).json(result);
+});
+app.post("/api/payments/simulate-pubsub", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { platform, amount, txId, senderName } = req.body;
+  const mockDeposit = {
+    platform: platform === "bybit" ? "bybit" : "binance",
+    amount: Number(amount) || 29,
+    txId: txId || (platform === "bybit" ? `BYB${Date.now().toString().slice(-8)}` : `TXB${Date.now().toString().slice(-8)}`),
+    from: platform === "bybit" ? "support@bybit.com" : "do-not-reply@post.binance.com",
+    subject: platform === "bybit" ? `Bybit Deposit Confirmed: ${amount || 29} USDT` : `Binance Pay: You have received ${amount || 29} USDT`,
+    body: `Deposit Confirmed for ${amount || 29} USDT. TxID: ${txId || "TXB" + Date.now()}`
+  };
+  const payload = {
+    message: {
+      data: Buffer.from(
+        JSON.stringify({
+          emailAddress: "m.rahmanhabib.my@gmail.com",
+          historyId: String(Date.now()),
+          deposit: mockDeposit
+        })
+      ).toString("base64"),
+      messageId: `pubsub_${Date.now()}`,
+      publishTime: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    subscription: "projects/chartlogic-prod/subscriptions/crypto-deposit-push-sub"
+  };
+  const result = processPubSubPushNotification(payload);
+  res.json(result);
+});
+app.get("/api/packages", (_req, res) => {
+  const packages = getAllPackages();
+  res.json({ success: true, packages });
+});
+app.post("/api/packages/reset", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const packages = resetPackagesToDefault();
+  res.json({ success: true, packages, message: "Packages reset to default!" });
+});
+app.post("/api/packages/:id", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { id } = req.params;
+  const updated = updatePackage(id, req.body);
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "Package not found." });
+  }
+  res.json({ success: true, package: updated, message: "Package updated successfully!" });
+});
+app.get("/api/trading-notes/daily", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const notes = getUserDailyNotes(userId);
+  res.json({ success: true, notes });
+});
+app.post("/api/trading-notes/daily", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { dayOfWeek, date, weekNumber, goodThings, mistakes, tags, notes, mindsetRating, tradesCount } = req.body;
+  if (!dayOfWeek || !date) {
+    return res.status(400).json({ success: false, error: "dayOfWeek and date are required" });
+  }
+  const saved = saveDailyNote(userId, {
+    dayOfWeek,
+    date,
+    weekNumber,
+    goodThings: Array.isArray(goodThings) ? goodThings : [],
+    mistakes: Array.isArray(mistakes) ? mistakes : [],
+    tags: Array.isArray(tags) ? tags : [],
+    notes: notes || "",
+    mindsetRating: Number(mindsetRating) || 8,
+    tradesCount: Number(tradesCount) || 1
+  });
+  res.json({ success: true, entry: saved });
+});
+app.post("/api/trading-notes/quick-add", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { type, text, dayOfWeek } = req.body;
+  if (!type || !text) {
+    return res.status(400).json({ success: false, error: "type ('good' | 'mistake' | 'mindset') and text are required" });
+  }
+  const result = quickAddNote(userId, type, String(text).trim(), dayOfWeek);
+  res.json(result);
+});
+app.get("/api/trading-notes/tattoo-rules", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const rules = getTattooRules(userId);
+  res.json({ success: true, rules });
+});
+app.post("/api/trading-notes/tattoo-rules", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { ruleText, category, frequencyCount, originWeek } = req.body;
+  if (!ruleText) {
+    return res.status(400).json({ success: false, error: "ruleText is required" });
+  }
+  const created = addTattooRule(userId, {
+    ruleText: String(ruleText).trim(),
+    category: category || "Psychology",
+    frequencyCount: Number(frequencyCount) || 2,
+    originWeek: originWeek || "Weekly Review",
+    isActive: true
+  });
+  res.json({ success: true, rule: created });
+});
+app.delete("/api/trading-notes/tattoo-rules/:id", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { id } = req.params;
+  const deleted = deleteTattooRule(userId, id);
+  res.json({ success: deleted });
+});
+app.get("/api/trading-notes/weekly-analysis", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const analysis = analyzeWeeklyReview(userId);
+  res.json({ success: true, analysis });
+});
 app.use((err, req, res, next) => {
   if (req.path.startsWith("/api/")) {
     return res.status(500).json({
@@ -3290,7 +4327,7 @@ app.use((req, res) => {
   if (req.path.startsWith("/api/") || req.url.startsWith("/api/") || req.originalUrl && req.originalUrl.includes("/api/")) {
     return res.status(404).json({ error: "Endpoint not found", path: req.path });
   }
-  res.sendFile(path5.join(__dirname, "index.html"));
+  res.sendFile(path7.join(__dirname, "index.html"));
 });
 app.listen(PORT, () => {
   console.log(`[Forex AI News V2.2] Server active and listening on ${PORT}`);

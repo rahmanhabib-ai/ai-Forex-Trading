@@ -1,0 +1,19 @@
+{
+  "binancePayId": "336527372",
+  "binanceEmail": "m.rahmanhabib.my@gmail.com",
+  "binanceTrc20": "TJD9MM68dkpFN8pxkfKsKTqyECuF9cCPZm",
+  "binanceBep20": "",
+  "binanceQrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=binance://pay?payId=336527372",
+  "bybitUid": "412658047",
+  "bybitEmail": "m.rahmanhabib.my@gmail.com",
+  "bybitTrc20": "TBaKmVu6kGeB1ew9hDgMbUvqrDWeur8DSf",
+  "bybitQrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=bybit://transfer?uid=412658047",
+  "gmailAccount": "m.rahmanhabib.my@gmail.com",
+  "webhookSecret": "forex_ai_crypto_verify_secret_2026",
+  "autoVerificationEnabled": true,
+  "syncIntervalSeconds": 60,
+  "lastSyncAt": "2026-10-31T08:47:22.197Z",
+  "totalAutoApprovedCount": 2,
+  "hideBep20": true,
+  "hideEmailFromUsers": true
+}

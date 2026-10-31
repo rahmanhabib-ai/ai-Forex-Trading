@@ -38,7 +38,30 @@ import {
   getPaymentsByUserId,
   submitPayment,
   updatePaymentStatus,
+  getPaymentSettings,
+  getPublicPaymentSettings,
+  updatePaymentSettings,
+  getEmailTransactions,
+  processIncomingDepositEmail,
+  simulateIncomingDepositEmail,
+  recordScriptHeartbeat,
+  processPubSubPushNotification,
 } from "./src/services/paymentService.ts";
+import {
+  getAllPackages,
+  getPackageById,
+  updatePackage,
+  resetPackagesToDefault,
+} from "./src/services/packageService.ts";
+import {
+  getUserDailyNotes,
+  saveDailyNote,
+  quickAddNote,
+  getTattooRules,
+  addTattooRule,
+  deleteTattooRule,
+  analyzeWeeklyReview,
+} from "./src/services/tradingNotesService.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1685,6 +1708,238 @@ app.post("/api/payments/status", (req: Request, res: Response) => {
     return res.status(404).json({ success: false, error: "Payment record not found." });
   }
   res.json({ success: true, payment: updated });
+});
+
+// Crypto Gateway Settings (Binance Pay ID, Bybit UID, TRC20 Addresses, Gmail Config)
+// Clients receive public info ONLY (NO admin email or BEP20 exposed!)
+app.get("/api/payments/settings", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, false);
+  if (authUser && authUser.role === "admin") {
+    const settings = getPaymentSettings();
+    return res.json({ success: true, settings });
+  }
+  const publicSettings = getPublicPaymentSettings();
+  res.json({ success: true, settings: publicSettings });
+});
+
+app.post("/api/payments/settings", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const updated = updatePaymentSettings(req.body);
+  res.json({ success: true, settings: updated, message: "Crypto gateway settings updated successfully!" });
+});
+
+// Incoming Email Logs (Parsed Binance / Bybit Deposit Notifications)
+app.get("/api/payments/email-logs", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const logs = getEmailTransactions();
+  res.json({ success: true, logs });
+});
+
+// Gmail Webhook Endpoint (Receives raw or parsed email payloads from Google Apps Script / PubSub)
+app.post("/api/payments/webhook/gmail", (req: Request, res: Response) => {
+  const settings = getPaymentSettings();
+  const secretHeader = (req.headers["x-webhook-secret"] as string) || req.body.secret;
+
+  if (settings.webhookSecret && secretHeader && secretHeader !== settings.webhookSecret) {
+    return res.status(401).json({ success: false, error: "Invalid webhook secret." });
+  }
+
+  // Handle Heartbeat / Ping from Google Apps Script
+  if (req.body.type === "heartbeat" || req.body.action === "ping") {
+    const heartbeatResult = recordScriptHeartbeat();
+    return res.json({
+      success: true,
+      message: "🟢 Google Apps Script Heartbeat Received! Server connected successfully.",
+      lastSyncAt: heartbeatResult.lastPingAt,
+    });
+  }
+
+  const { from, subject, body, receivedAt, date } = req.body;
+  if (!body && !subject) {
+    return res.status(400).json({ success: false, error: "Subject or body is required" });
+  }
+  const result = processIncomingDepositEmail({
+    from: from || "do-not-reply@post.binance.com",
+    subject: subject || "",
+    body: body || "",
+    receivedAt: receivedAt || date,
+  });
+  res.json(result);
+});
+
+// Simulate Deposit Email (Allows instant testing of Binance / Bybit email auto-verification)
+app.post("/api/payments/simulate-email", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { platform, amount, txId, senderName } = req.body;
+  const result = simulateIncomingDepositEmail({
+    platform: platform === "bybit" ? "bybit" : "binance",
+    amount: Number(amount) || 29,
+    txId: txId ? String(txId).trim() : undefined,
+    senderName: senderName ? String(senderName).trim() : undefined,
+  });
+  res.json(result);
+});
+
+// Google Cloud Pub/Sub Push Webhook (1-Second Real-Time Push Notification from Gmail)
+app.post("/api/payments/webhook/pubsub", (req: Request, res: Response) => {
+  const result = processPubSubPushNotification(req.body);
+  // Pub/Sub push endpoints must return HTTP 200 or 204 to acknowledge receipt
+  res.status(200).json(result);
+});
+
+// Simulate Pub/Sub Real-Time Push (Allows Admin to test 1-second real-time push latency)
+app.post("/api/payments/simulate-pubsub", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { platform, amount, txId, senderName } = req.body;
+  const mockDeposit = {
+    platform: platform === "bybit" ? "bybit" : "binance",
+    amount: Number(amount) || 29,
+    txId: txId || (platform === "bybit" ? `BYB${Date.now().toString().slice(-8)}` : `TXB${Date.now().toString().slice(-8)}`),
+    from: platform === "bybit" ? "support@bybit.com" : "do-not-reply@post.binance.com",
+    subject: platform === "bybit" ? `Bybit Deposit Confirmed: ${amount || 29} USDT` : `Binance Pay: You have received ${amount || 29} USDT`,
+    body: `Deposit Confirmed for ${amount || 29} USDT. TxID: ${txId || "TXB" + Date.now()}`,
+  };
+
+  const payload = {
+    message: {
+      data: Buffer.from(
+        JSON.stringify({
+          emailAddress: "m.rahmanhabib.my@gmail.com",
+          historyId: String(Date.now()),
+          deposit: mockDeposit,
+        })
+      ).toString("base64"),
+      messageId: `pubsub_${Date.now()}`,
+      publishTime: new Date().toISOString(),
+    },
+    subscription: "projects/chartlogic-prod/subscriptions/crypto-deposit-push-sub",
+  };
+
+  const result = processPubSubPushNotification(payload);
+  res.json(result);
+});
+
+// -----------------------------------------------------------------------------
+// Dynamic Packages & Pricing Management Endpoints
+// -----------------------------------------------------------------------------
+app.get("/api/packages", (_req: Request, res: Response) => {
+  const packages = getAllPackages();
+  res.json({ success: true, packages });
+});
+
+app.post("/api/packages/reset", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const packages = resetPackagesToDefault();
+  res.json({ success: true, packages, message: "Packages reset to default!" });
+});
+
+app.post("/api/packages/:id", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({ success: false, error: "Admin access required." });
+  }
+  const { id } = req.params;
+  const updated = updatePackage(id, req.body);
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "Package not found." });
+  }
+  res.json({ success: true, package: updated, message: "Package updated successfully!" });
+});
+
+// -----------------------------------------------------------------------------
+// Trader's Diary, Psychology Journal & Tattoo Rules Endpoints (chartlogic.pro)
+// -----------------------------------------------------------------------------
+app.get("/api/trading-notes/daily", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const notes = getUserDailyNotes(userId);
+  res.json({ success: true, notes });
+});
+
+app.post("/api/trading-notes/daily", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { dayOfWeek, date, weekNumber, goodThings, mistakes, tags, notes, mindsetRating, tradesCount } = req.body;
+  if (!dayOfWeek || !date) {
+    return res.status(400).json({ success: false, error: "dayOfWeek and date are required" });
+  }
+  const saved = saveDailyNote(userId, {
+    dayOfWeek,
+    date,
+    weekNumber,
+    goodThings: Array.isArray(goodThings) ? goodThings : [],
+    mistakes: Array.isArray(mistakes) ? mistakes : [],
+    tags: Array.isArray(tags) ? tags : [],
+    notes: notes || "",
+    mindsetRating: Number(mindsetRating) || 8,
+    tradesCount: Number(tradesCount) || 1,
+  });
+  res.json({ success: true, entry: saved });
+});
+
+app.post("/api/trading-notes/quick-add", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { type, text, dayOfWeek } = req.body;
+  if (!type || !text) {
+    return res.status(400).json({ success: false, error: "type ('good' | 'mistake' | 'mindset') and text are required" });
+  }
+  const result = quickAddNote(userId, type, String(text).trim(), dayOfWeek);
+  res.json(result);
+});
+
+app.get("/api/trading-notes/tattoo-rules", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const rules = getTattooRules(userId);
+  res.json({ success: true, rules });
+});
+
+app.post("/api/trading-notes/tattoo-rules", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { ruleText, category, frequencyCount, originWeek } = req.body;
+  if (!ruleText) {
+    return res.status(400).json({ success: false, error: "ruleText is required" });
+  }
+  const created = addTattooRule(userId, {
+    ruleText: String(ruleText).trim(),
+    category: category || "Psychology",
+    frequencyCount: Number(frequencyCount) || 2,
+    originWeek: originWeek || "Weekly Review",
+    isActive: true,
+  });
+  res.json({ success: true, rule: created });
+});
+
+app.delete("/api/trading-notes/tattoo-rules/:id", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { id } = req.params;
+  const deleted = deleteTattooRule(userId, id);
+  res.json({ success: deleted });
+});
+
+app.get("/api/trading-notes/weekly-analysis", (req: Request, res: Response) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const analysis = analyzeWeeklyReview(userId);
+  res.json({ success: true, analysis });
 });
 
 // -----------------------------------------------------------------------------
