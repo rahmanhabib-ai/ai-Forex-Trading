@@ -7,8 +7,14 @@ function TradingNotesPage({ page, section, portalType }) {
   const isBn = lang === "bn";
   const s = (bn, en) => (isBn ? bn : en);
 
-  // Active Tab: "daily" | "weekend" | "tattoo" | "monthly"
-  const [activeTab, setActiveTab] = b.useState("daily");
+  // Active Tab: "daily" | "weekend" | "tattoo" | "monthly" | "playbook"
+  const [activeTab, setActiveTab] = b.useState(() => {
+    try {
+      return sessionStorage.getItem("trading_notes_active_tab") || "daily";
+    } catch (e) {
+      return "daily";
+    }
+  });
 
   // Selected Day in Monday-Friday Log
   const [selectedDay, setSelectedDay] = b.useState("Monday");
@@ -17,6 +23,13 @@ function TradingNotesPage({ page, section, portalType }) {
   const [dailyNotes, setDailyNotes] = b.useState([]);
   const [tattooRules, setTattooRules] = b.useState([]);
   const [weeklyAnalysis, setWeeklyAnalysis] = b.useState(null);
+  const [strategiesData, setStrategiesData] = b.useState({ myStrategies: [], templates: [] });
+  const [playbookSubTab, setPlaybookSubTab] = b.useState("my"); // "my" | "templates"
+  const [isStrategyModalOpen, setIsStrategyModalOpen] = b.useState(false);
+  const [modalMode, setModalMode] = b.useState("create"); // "create" | "edit" | "clone"
+  const [editingStrategy, setEditingStrategy] = b.useState(null);
+  const [newChecklistText, setNewChecklistText] = b.useState("");
+  const [savingStrategy, setSavingStrategy] = b.useState(false);
   const [loading, setLoading] = b.useState(true);
   const [statusMessage, setStatusMessage] = b.useState("");
 
@@ -36,21 +49,28 @@ function TradingNotesPage({ page, section, portalType }) {
     setTimeout(() => setStatusMessage(""), 4000);
   };
 
-  // Fetch initial notes & analysis
+  // Fetch initial notes, rules, and strategy playbook
   const loadData = b.useCallback(async () => {
     setLoading(true);
     try {
-      const [resDaily, resTattoo, resAnalysis] = await Promise.all([
+      const [resDaily, resTattoo, resAnalysis, resStrategies] = await Promise.all([
         fetch("/api/trading-notes/daily").then((r) => r.json()).catch(() => ({ notes: [] })),
         fetch("/api/trading-notes/tattoo-rules").then((r) => r.json()).catch(() => ({ rules: [] })),
         fetch("/api/trading-notes/weekly-analysis").then((r) => r.json()).catch(() => ({ analysis: null })),
+        fetch("/api/trading-notes/strategies").then((r) => r.json()).catch(() => ({ myStrategies: [], templates: [] })),
       ]);
 
       if (resDaily?.notes) setDailyNotes(resDaily.notes);
       if (resTattoo?.rules) setTattooRules(resTattoo.rules);
       if (resAnalysis?.analysis) setWeeklyAnalysis(resAnalysis.analysis);
+      if (resStrategies?.success) {
+        setStrategiesData({
+          myStrategies: resStrategies.myStrategies || [],
+          templates: resStrategies.templates || [],
+        });
+      }
     } catch (e) {
-      console.warn("Failed to load trading notes:", e);
+      console.warn("Failed to load trading notes & strategies:", e);
     } finally {
       setLoading(false);
     }
@@ -218,6 +238,154 @@ function TradingNotesPage({ page, section, portalType }) {
     } catch (e) {}
   };
 
+  // Strategy Playbook Handlers
+  const handleOpenCreateStrategy = () => {
+    setModalMode("create");
+    setEditingStrategy({
+      name: "",
+      category: "Smart Money / ICT",
+      timeframe: "15m / 5m",
+      session: "London & New York",
+      minRiskReward: "1:2.5",
+      riskRule: "Max 1% risk per trade, stop after 2 consecutive losses",
+      rulesChecklist: [
+        "Higher Timeframe (1H) Key Level & Liquidity Sweep",
+        "Market Structure Shift (MSS) on execution timeframe",
+        "Fair Value Gap (FVG) or Order Block confirmation entry"
+      ],
+      description: "My custom rule-based execution system designed to maintain strict edge and eliminate emotional entries.",
+      notes: ""
+    });
+    setNewChecklistText("");
+    setIsStrategyModalOpen(true);
+  };
+
+  const handleOpenCloneStrategy = (template) => {
+    setModalMode("clone");
+    setEditingStrategy({
+      ...template,
+      id: undefined,
+      clonedFrom: template.name,
+      name: `${template.name} (My Custom Upgrade)`,
+      rulesChecklist: [...(template.rulesChecklist || [])],
+    });
+    setNewChecklistText("");
+    setIsStrategyModalOpen(true);
+  };
+
+  const handleOpenEditStrategy = (strat) => {
+    setModalMode("edit");
+    setEditingStrategy({
+      ...strat,
+      rulesChecklist: [...(strat.rulesChecklist || [])],
+    });
+    setNewChecklistText("");
+    setIsStrategyModalOpen(true);
+  };
+
+  const handleAddChecklistItem = () => {
+    if (!newChecklistText.trim() || !editingStrategy) return;
+    const currentList = editingStrategy.rulesChecklist || [];
+    setEditingStrategy({
+      ...editingStrategy,
+      rulesChecklist: [...currentList, newChecklistText.trim()]
+    });
+    setNewChecklistText("");
+  };
+
+  const handleRemoveChecklistItem = (index) => {
+    if (!editingStrategy) return;
+    const currentList = [...(editingStrategy.rulesChecklist || [])];
+    currentList.splice(index, 1);
+    setEditingStrategy({
+      ...editingStrategy,
+      rulesChecklist: currentList
+    });
+  };
+
+  const handleSaveStrategy = async (e) => {
+    e && e.preventDefault();
+    if (!editingStrategy || !editingStrategy.name.trim()) {
+      showToast(s("দয়া করে স্ট্র্যাটেজির নাম দিন", "Please enter a strategy name"));
+      return;
+    }
+    setSavingStrategy(true);
+    try {
+      if (modalMode === "clone") {
+        const res = await fetch("/api/trading-notes/strategies/clone", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            templateId: editingStrategy.id || editingStrategy.clonedFrom,
+            customUpgrades: {
+              name: editingStrategy.name,
+              category: editingStrategy.category,
+              timeframe: editingStrategy.timeframe,
+              session: editingStrategy.session,
+              minRiskReward: editingStrategy.minRiskReward,
+              riskRule: editingStrategy.riskRule,
+              rulesChecklist: editingStrategy.rulesChecklist,
+              description: editingStrategy.description,
+              notes: editingStrategy.notes
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.strategy) {
+          setStrategiesData(prev => ({
+            ...prev,
+            myStrategies: [data.strategy, ...(prev.myStrategies || [])]
+          }));
+          setIsStrategyModalOpen(false);
+          setPlaybookSubTab("my");
+          showToast(s("🎉 স্ট্র্যাটেজি সফলভাবে ক্লোন ও কাস্টমাইজ হয়েছে!", "🎉 Strategy cloned and customized successfully!"));
+        }
+      } else {
+        const res = await fetch("/api/trading-notes/strategies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editingStrategy)
+        });
+        const data = await res.json();
+        if (data.success && data.strategy) {
+          setStrategiesData(prev => {
+            const list = [...(prev.myStrategies || [])];
+            const idx = list.findIndex(s => s.id === data.strategy.id);
+            if (idx !== -1) {
+              list[idx] = data.strategy;
+            } else {
+              list.unshift(data.strategy);
+            }
+            return { ...prev, myStrategies: list };
+          });
+          setIsStrategyModalOpen(false);
+          setPlaybookSubTab("my");
+          showToast(s("✅ স্ট্র্যাটেজি প্লেবুকে সংরক্ষিত হয়েছে!", "✅ Strategy saved to Playbook!"));
+        }
+      }
+    } catch (err) {
+      showToast("Error saving strategy");
+    } finally {
+      setSavingStrategy(false);
+    }
+  };
+
+  const handleDeleteStrategy = async (id) => {
+    try {
+      const res = await fetch(`/api/trading-notes/strategies/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setStrategiesData(prev => ({
+          ...prev,
+          myStrategies: (prev.myStrategies || []).filter(s => s.id !== id)
+        }));
+        showToast(s("🗑️ স্ট্র্যাটেজি মুছে ফেলা হয়েছে", "🗑️ Strategy deleted"));
+      }
+    } catch (err) {
+      showToast("Failed to delete strategy");
+    }
+  };
+
   const daysList = [
     { key: "Monday", bn: "সোমবার", en: "Monday", tag: "Session Open" },
     { key: "Tuesday", bn: "মঙ্গলবার", en: "Tuesday", tag: "Trend Day" },
@@ -352,7 +520,7 @@ function TradingNotesPage({ page, section, portalType }) {
         ],
       }),
 
-      // 4 Main Module Tabs Navigation
+      // 5 Main Module Tabs Navigation
       r.jsxs("div", {
         className: "flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 overflow-x-auto",
         children: [
@@ -381,6 +549,13 @@ function TradingNotesPage({ page, section, portalType }) {
             label: s("৪. ২১-দিনের মাসিক অডিট", "4. 21-Day Monthly Audit"),
             icon: "TrendingUp",
             color: "emerald",
+          },
+          {
+            key: "playbook",
+            label: s("৫. 🎯 স্ট্র্যাটেজি প্লেবুক ও কাস্টমাইজেশন", "5. 🎯 Strategy Playbook"),
+            icon: "Crosshair",
+            badge: `${strategiesData?.myStrategies?.length || 0} Saved`,
+            color: "cyan",
           },
         ].map((tab) => {
           const isActive = activeTab === tab.key;
@@ -1099,6 +1274,727 @@ function TradingNotesPage({ page, section, portalType }) {
                 )
               ),
             }),
+          ],
+        }),
+
+      // TAB 5: STRATEGY PLAYBOOK & PERSONALIZATION SYSTEM (স্ট্র্যাটেজি প্লেবুক ও কাস্টমাইজেশন)
+      activeTab === "playbook" &&
+        r.jsxs("div", {
+          className: "space-y-6",
+          children: [
+            // Header Hero Banner
+            r.jsxs("div", {
+              className: "bg-slate-900/90 border border-cyan-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6",
+              children: [
+                r.jsxs("div", {
+                  className: "space-y-2",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2 flex-wrap",
+                      children: [
+                        r.jsx("span", {
+                          className: "px-3 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1.5",
+                          children: [
+                            r.jsx("span", { className: "w-2 h-2 rounded-full bg-cyan-400 animate-pulse" }),
+                            "STRATEGY PLAYBOOK & PERSONALIZATION VAULT",
+                          ],
+                        }),
+                        r.jsx("span", {
+                          className: "text-xs text-slate-400 font-mono",
+                          children: "Rule-Based Execution Protocol",
+                        }),
+                      ],
+                    }),
+                    r.jsx("h2", {
+                      className: "text-xl sm:text-2xl font-black text-white flex items-center gap-2",
+                      children: s("স্ট্র্যাটেজি প্লেবুক ও কাস্টমাইজেশন সিস্টেম", "Strategy Playbook & Rules Personalization"),
+                    }),
+                    r.jsx("p", {
+                      className: "text-xs text-slate-300 max-w-3xl leading-relaxed",
+                      children: s(
+                        "আপনার নিজের কোনো স্ট্র্যাটেজি থাকলে তা এখানে সাজিয়ে রাখুন, অথবা লাইব্রেরি থেকে মেন্টর বা কমিউনিটির স্ট্র্যাটেজি ‘Clone’ করে নিজের টাইমফ্রেম, সেশন ও এক্সিকিউশন চেকলিস্ট দিয়ে সম্পূর্ণ নিজের মত কাস্টমাইজ করে নিন। আপনার ট্রেডিং জার্নাল ও এন্ট্রি ট্যাগে এগুলো সরাসরি যুক্ত হবে।",
+                        "Create your own strategy or clone community/mentor systems. Fully customize the rules, timeframe, session filter, and execution checklist to build your own personal edge. Directly synced to your Trading Journal."
+                      ),
+                    }),
+                  ],
+                }),
+                r.jsxs("button", {
+                  type: "button",
+                  onClick: handleOpenCreateStrategy,
+                  className: "px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-black text-xs shadow-lg shadow-cyan-600/30 flex items-center gap-2 shrink-0 cursor-pointer transition-all",
+                  children: [
+                    r.jsx(iu("Plus"), { className: "w-4 h-4" }),
+                    s("নতুন স্ট্র্যাটেজি তৈরি করুন", "Create New Strategy"),
+                  ],
+                }),
+              ],
+            }),
+
+            // Playbook Sub-tabs Switcher
+            r.jsxs("div", {
+              className: "flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800",
+              children: [
+                r.jsxs("button", {
+                  type: "button",
+                  onClick: () => setPlaybookSubTab("my"),
+                  className: `flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    playbookSubTab === "my"
+                      ? "bg-cyan-600/20 text-cyan-300 border border-cyan-500/40 shadow-sm"
+                      : "text-slate-400 hover:text-white"
+                  }`,
+                  children: [
+                    r.jsx(iu("Crosshair"), { className: "w-4 h-4" }),
+                    s("আমার সক্রিয় স্ট্র্যাটেজি", "My Active Playbook"),
+                    r.jsxs("span", {
+                      className: "px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono",
+                      children: [strategiesData.myStrategies?.length || 0],
+                    }),
+                  ],
+                }),
+                r.jsxs("button", {
+                  type: "button",
+                  onClick: () => setPlaybookSubTab("templates"),
+                  className: `flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    playbookSubTab === "templates"
+                      ? "bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm"
+                      : "text-slate-400 hover:text-white"
+                  }`,
+                  children: [
+                    r.jsx(iu("BookOpen"), { className: "w-4 h-4" }),
+                    s("স্ট্র্যাটেজি লাইব্রেরি ও রেডিমেড টেমপ্লেট (ক্লোন করুন)", "Strategy Templates Library (Clone & Upgrade)"),
+                    r.jsxs("span", {
+                      className: "px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono",
+                      children: [strategiesData.templates?.length || 0],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            // SUB-TAB 1: MY ACTIVE STRATEGIES
+            playbookSubTab === "my" &&
+              r.jsxs("div", {
+                className: "space-y-4",
+                children: [
+                  (!strategiesData.myStrategies || strategiesData.myStrategies.length === 0) ? (
+                    r.jsxs("div", {
+                      className: "p-12 text-center rounded-3xl bg-slate-900 border border-slate-800 space-y-4",
+                      children: [
+                        r.jsx("div", {
+                          className: "w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mx-auto flex items-center justify-center",
+                          children: r.jsx(iu("Crosshair"), { className: "w-8 h-8" }),
+                        }),
+                        r.jsx("h3", {
+                          className: "text-lg font-bold text-white",
+                          children: s("এখনও কোনো সক্রিয় স্ট্র্যাটেজি যুক্ত করা হয়নি", "No Active Strategies in Your Playbook"),
+                        }),
+                        r.jsx("p", {
+                          className: "text-xs text-slate-400 max-w-md mx-auto leading-relaxed",
+                          children: s(
+                            "আপনি নিজের কোনো স্ট্র্যাটেজি যোগ করতে পারেন অথবা লাইব্রেরি থেকে রেডিমেড টেমপ্লেট ক্লোন করে নিজের মতো কাস্টমাইজ করতে পারেন।",
+                            "Create your own setup from scratch or clone an institutional template from our library to get started."
+                          ),
+                        }),
+                        r.jsxs("div", {
+                          className: "flex items-center justify-center gap-3 pt-2",
+                          children: [
+                            r.jsxs("button", {
+                              type: "button",
+                              onClick: handleOpenCreateStrategy,
+                              className: "px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black text-xs cursor-pointer flex items-center gap-1.5",
+                              children: [r.jsx(iu("Plus"), { className: "w-4 h-4" }), s("নতুন তৈরি করুন", "Create New")],
+                            }),
+                            r.jsxs("button", {
+                              type: "button",
+                              onClick: () => setPlaybookSubTab("templates"),
+                              className: "px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs cursor-pointer flex items-center gap-1.5",
+                              children: [r.jsx(iu("Copy"), { className: "w-4 h-4" }), s("লাইব্রেরি থেকে ক্লোন করুন", "Clone from Library")],
+                            }),
+                          ],
+                        }),
+                      ],
+                    })
+                  ) : (
+                    r.jsx("div", {
+                      className: "grid grid-cols-1 lg:grid-cols-2 gap-4",
+                      children: strategiesData.myStrategies.map((strat) =>
+                        r.jsxs(
+                          "div",
+                          {
+                            key: strat.id,
+                            className: "p-5 rounded-3xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 transition-all space-y-4 shadow-xl relative",
+                            children: [
+                              // Top Bar
+                              r.jsxs("div", {
+                                className: "flex items-start justify-between gap-3",
+                                children: [
+                                  r.jsxs("div", {
+                                    className: "space-y-1.5",
+                                    children: [
+                                      r.jsxs("div", {
+                                        className: "flex items-center gap-2 flex-wrap",
+                                        children: [
+                                          r.jsx("span", {
+                                            className: "px-2.5 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-bold uppercase",
+                                            children: strat.category || "General",
+                                          }),
+                                          strat.clonedFrom &&
+                                            r.jsxs("span", {
+                                              className: "px-2 py-0.5 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-[10px] font-mono flex items-center gap-1",
+                                              children: [
+                                                r.jsx(iu("GitFork"), { className: "w-3 h-3" }),
+                                                s("ক্লোনকৃত: ", "Cloned from: "),
+                                                strat.clonedFrom,
+                                              ],
+                                            }),
+                                        ],
+                                      }),
+                                      r.jsx("h3", {
+                                        className: "text-base font-black text-white leading-tight",
+                                        children: strat.name,
+                                      }),
+                                    ],
+                                  }),
+                                  r.jsxs("div", {
+                                    className: "flex items-center gap-1.5 shrink-0",
+                                    children: [
+                                      r.jsx("button", {
+                                        type: "button",
+                                        onClick: () => handleOpenEditStrategy(strat),
+                                        className: "p-2 rounded-xl bg-slate-800 hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-300 border border-slate-700 transition-colors cursor-pointer",
+                                        title: s("এডিট ও কাস্টমাইজ করুন", "Edit & Customize"),
+                                        children: r.jsx(iu("Edit3"), { className: "w-4 h-4" }),
+                                      }),
+                                      r.jsx("button", {
+                                        type: "button",
+                                        onClick: () => handleDeleteStrategy(strat.id),
+                                        className: "p-2 rounded-xl bg-slate-800 hover:bg-rose-950/60 hover:text-rose-400 text-slate-300 border border-slate-700 transition-colors cursor-pointer",
+                                        title: s("মুছে ফেলুন", "Delete"),
+                                        children: r.jsx(iu("Trash2"), { className: "w-4 h-4" }),
+                                      }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+
+                              // Parameters Pills Grid
+                              r.jsxs("div", {
+                                className: "grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono",
+                                children: [
+                                  r.jsxs("div", {
+                                    className: "p-2 rounded-xl bg-slate-950 border border-slate-800/80 space-y-0.5",
+                                    children: [
+                                      r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: s("টাইমফ্রেম", "Timeframe") }),
+                                      r.jsx("p", { className: "font-bold text-amber-300 truncate", children: strat.timeframe || "15m / 5m" }),
+                                    ],
+                                  }),
+                                  r.jsxs("div", {
+                                    className: "p-2 rounded-xl bg-slate-950 border border-slate-800/80 space-y-0.5",
+                                    children: [
+                                      r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: s("সেশন", "Session") }),
+                                      r.jsx("p", { className: "font-bold text-cyan-300 truncate", children: strat.session || "All Sessions" }),
+                                    ],
+                                  }),
+                                  r.jsxs("div", {
+                                    className: "p-2 rounded-xl bg-slate-950 border border-slate-800/80 space-y-0.5",
+                                    children: [
+                                      r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: s("টার্গেট R:R", "Target R:R") }),
+                                      r.jsx("p", { className: "font-bold text-emerald-400 truncate", children: strat.minRiskReward || "1:2.5" }),
+                                    ],
+                                  }),
+                                  r.jsxs("div", {
+                                    className: "p-2 rounded-xl bg-slate-950 border border-slate-800/80 space-y-0.5",
+                                    children: [
+                                      r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: s("চেকলিস্ট", "Checklist") }),
+                                      r.jsxs("p", { className: "font-bold text-indigo-300 truncate", children: [(strat.rulesChecklist || []).length, " ", s("টি রুল", "Rules")] }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+
+                              // Execution Checklist
+                              strat.rulesChecklist && strat.rulesChecklist.length > 0 &&
+                                r.jsxs("div", {
+                                  className: "space-y-1.5 p-3 rounded-2xl bg-slate-950/60 border border-slate-800/60",
+                                  children: [
+                                    r.jsx("h4", {
+                                      className: "text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5",
+                                      children: [
+                                        r.jsx(iu("CheckSquare"), { className: "w-3.5 h-3.5 text-emerald-400" }),
+                                        s("ট্রেড নেওয়ার আগে চেকলিস্ট (Execution Rules):", "Execution Checklist:"),
+                                      ],
+                                    }),
+                                    r.jsx("div", {
+                                      className: "space-y-1",
+                                      children: strat.rulesChecklist.map((rule, rIdx) =>
+                                        r.jsxs("div", {
+                                          key: rIdx,
+                                          className: "flex items-start gap-2 text-xs text-slate-300 leading-snug",
+                                          children: [
+                                            r.jsx("span", { className: "text-emerald-400 font-bold shrink-0 mt-0.5", children: "✓" }),
+                                            r.jsx("span", { children: rule }),
+                                          ],
+                                        })
+                                      ),
+                                    }),
+                                  ],
+                                }),
+
+                              // Risk Management Rule Box
+                              strat.riskRule &&
+                                r.jsxs("div", {
+                                  className: "p-2.5 rounded-xl bg-rose-950/20 border border-rose-500/30 flex items-center gap-2 text-xs text-rose-300",
+                                  children: [
+                                    r.jsx(iu("ShieldAlert"), { className: "w-4 h-4 text-rose-400 shrink-0" }),
+                                    r.jsxs("div", {
+                                      children: [
+                                        r.jsx("span", { className: "font-bold text-rose-200", children: s("রিস্ক রুল: ", "Risk Rule: ") }),
+                                        strat.riskRule,
+                                      ],
+                                    }),
+                                  ],
+                                }),
+
+                              // Description / Notes
+                              strat.description &&
+                                r.jsx("p", {
+                                  className: "text-xs text-slate-400 italic line-clamp-2",
+                                  children: strat.description,
+                                }),
+                            ],
+                          }
+                        )
+                      ),
+                    })
+                  ),
+                ],
+              }),
+
+            // SUB-TAB 2: TEMPLATES & COMMUNITY LIBRARY
+            playbookSubTab === "templates" &&
+              r.jsxs("div", {
+                className: "space-y-4",
+                children: [
+                  // Clone Banner
+                  r.jsxs("div", {
+                    className: "p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-start gap-3 text-xs text-indigo-200",
+                    children: [
+                      r.jsx(iu("HelpCircle"), { className: "w-5 h-5 text-indigo-400 shrink-0 mt-0.5" }),
+                      r.jsxs("div", {
+                        className: "space-y-1",
+                        children: [
+                          r.jsx("h4", {
+                            className: "font-black text-indigo-100",
+                            children: s(
+                              "অন্যদের বা মেন্টরদের স্ট্র্যাটেজি নিজের মতো করে ব্যবহার করার নিয়ম:",
+                              "How to clone & personalize other strategies for your own edge:"
+                            ),
+                          }),
+                          r.jsx("p", {
+                            className: "text-indigo-300 leading-relaxed",
+                            children: s(
+                              "নিচের যেকোনো রেডিমেড টেমপ্লেট থেকে ‘Clone to My Playbook’ বাটনে ক্লিক করুন। আপনার ট্রেডিং স্টাইল অনুযায়ী সেশন (লন্ডন/নিউ ইয়র্ক), এন্ট্রি টাইমফ্রেম এবং এক্সিকিউশন চেকলিস্ট এডিট করে সম্পূর্ণ নিজের রুলস বানিয়ে নিন।",
+                              "Click 'Clone to My Playbook & Customize' on any template below. Then tweak the timeframe, session timing, and execution rules checklist to match your own personal trading plan."
+                            ),
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+
+                  // Templates Grid
+                  r.jsx("div", {
+                    className: "grid grid-cols-1 lg:grid-cols-2 gap-4",
+                    children: (strategiesData.templates || []).map((tpl) =>
+                      r.jsxs(
+                        "div",
+                        {
+                          key: tpl.id,
+                          className: "p-5 rounded-3xl bg-slate-900 border border-slate-800 hover:border-indigo-500/40 transition-all space-y-4 shadow-xl flex flex-col justify-between",
+                          children: [
+                            r.jsxs("div", {
+                              className: "space-y-3",
+                              children: [
+                                r.jsxs("div", {
+                                  className: "flex items-start justify-between gap-3",
+                                  children: [
+                                    r.jsxs("div", {
+                                      className: "space-y-1",
+                                      children: [
+                                        r.jsx("span", {
+                                          className: "px-2.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-[10px] font-mono font-bold uppercase",
+                                          children: tpl.category,
+                                        }),
+                                        r.jsx("h3", {
+                                          className: "text-base font-black text-white leading-tight",
+                                          children: tpl.name,
+                                        }),
+                                      ],
+                                    }),
+                                    r.jsx("span", {
+                                      className: "px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono text-slate-400 shrink-0",
+                                      children: "Institutional Template",
+                                    }),
+                                  ],
+                                }),
+
+                                r.jsx("p", {
+                                  className: "text-xs text-slate-300 leading-relaxed",
+                                  children: tpl.description,
+                                }),
+
+                                // Details Grid
+                                r.jsxs("div", {
+                                  className: "grid grid-cols-3 gap-2 text-[11px] font-mono",
+                                  children: [
+                                    r.jsxs("div", {
+                                      className: "p-2 rounded-xl bg-slate-950 border border-slate-800 space-y-0.5",
+                                      children: [
+                                        r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: "TF" }),
+                                        r.jsx("p", { className: "font-bold text-amber-300", children: tpl.timeframe }),
+                                      ],
+                                    }),
+                                    r.jsxs("div", {
+                                      className: "p-2 rounded-xl bg-slate-950 border border-slate-800 space-y-0.5",
+                                      children: [
+                                        r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: "Session" }),
+                                        r.jsx("p", { className: "font-bold text-cyan-300", children: tpl.session }),
+                                      ],
+                                    }),
+                                    r.jsxs("div", {
+                                      className: "p-2 rounded-xl bg-slate-950 border border-slate-800 space-y-0.5",
+                                      children: [
+                                        r.jsx("span", { className: "text-[9px] text-slate-400 uppercase", children: "Target R:R" }),
+                                        r.jsx("p", { className: "font-bold text-emerald-400", children: tpl.minRiskReward }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+
+                                // Checklist Preview
+                                tpl.rulesChecklist && (
+                                  r.jsxs("div", {
+                                    className: "p-3 rounded-2xl bg-slate-950/60 border border-slate-800/60 space-y-1",
+                                    children: [
+                                      r.jsx("span", { className: "text-[10px] font-mono font-bold text-slate-400 uppercase", children: "Default Execution Checklist:" }),
+                                      tpl.rulesChecklist.map((rule, idx) =>
+                                        r.jsxs("div", {
+                                          key: idx,
+                                          className: "flex items-start gap-1.5 text-xs text-slate-300",
+                                          children: [
+                                            r.jsx("span", { className: "text-indigo-400 font-bold", children: "•" }),
+                                            r.jsx("span", { children: rule }),
+                                          ],
+                                        })
+                                      ),
+                                    ],
+                                  })
+                                ),
+                              ],
+                            }),
+
+                            // Prominent Clone Action Button
+                            r.jsxs("button", {
+                              type: "button",
+                              onClick: () => handleOpenCloneStrategy(tpl),
+                              className: "w-full py-2.5 px-4 mt-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all",
+                              children: [
+                                r.jsx(iu("Copy"), { className: "w-4 h-4" }),
+                                s("⎘ নিজের প্লেবুকে ক্লোন ও কাস্টমাইজ করুন", "⎘ Clone to My Playbook & Customize"),
+                              ],
+                            }),
+                          ],
+                        }
+                      )
+                    ),
+                  }),
+                ],
+              }),
+
+            // STRATEGY CREATE / EDIT / CLONE MODAL
+            isStrategyModalOpen &&
+              editingStrategy &&
+              r.jsx("div", {
+                className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in",
+                children: r.jsxs("div", {
+                  className: "bg-slate-900 border border-cyan-500/40 rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-5 text-left",
+                  children: [
+                    // Modal Header
+                    r.jsxs("div", {
+                      className: "flex items-start justify-between gap-4 border-b border-slate-800 pb-4",
+                      children: [
+                        r.jsxs("div", {
+                          className: "space-y-1",
+                          children: [
+                            r.jsxs("div", {
+                              className: "flex items-center gap-2",
+                              children: [
+                                r.jsx("span", {
+                                  className: "px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold uppercase",
+                                  children: modalMode === "clone" ? "Clone & Upgrade" : modalMode === "edit" ? "Edit Strategy" : "New Strategy",
+                                }),
+                                editingStrategy.clonedFrom &&
+                                  r.jsxs("span", {
+                                    className: "text-xs text-indigo-300 font-mono",
+                                    children: [s("মূল ভিত্তি: ", "Source: "), editingStrategy.clonedFrom],
+                                  }),
+                              ],
+                            }),
+                            r.jsx("h3", {
+                              className: "text-lg font-black text-white",
+                              children:
+                                modalMode === "clone"
+                                  ? s("স্ট্র্যাটেজি ক্লোন ও নিজের মতো কাস্টমাইজ করুন", "Clone & Customize Strategy for Yourself")
+                                  : modalMode === "edit"
+                                  ? s("স্ট্র্যাটেজি এডিট ও আপগ্রেড করুন", "Edit & Upgrade Strategy")
+                                  : s("নতুন নিজস্ব স্ট্র্যাটেজি তৈরি করুন", "Create New Custom Strategy"),
+                            }),
+                          ],
+                        }),
+                        r.jsx("button", {
+                          type: "button",
+                          onClick: () => setIsStrategyModalOpen(false),
+                          className: "p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer",
+                          children: r.jsx(iu("X"), { className: "w-5 h-5" }),
+                        }),
+                      ],
+                    }),
+
+                    // Modal Form Fields
+                    r.jsxs("form", {
+                      onSubmit: handleSaveStrategy,
+                      className: "space-y-4",
+                      children: [
+                        // Name
+                        r.jsxs("div", {
+                          className: "space-y-1.5",
+                          children: [
+                            r.jsx("label", {
+                              className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                              children: s("স্ট্র্যাটেজির নাম *", "Strategy Name *"),
+                            }),
+                            r.jsx("input", {
+                              type: "text",
+                              value: editingStrategy.name || "",
+                              onChange: (e) => setEditingStrategy({ ...editingStrategy, name: e.target.value }),
+                              placeholder: "e.g., ICT London Breaker + SFP Setup (My Version)",
+                              className: "w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 focus:border-cyan-400 text-sm text-white font-bold outline-none",
+                              required: true,
+                            }),
+                          ],
+                        }),
+
+                        // Category & Timeframe & Session Row
+                        r.jsxs("div", {
+                          className: "grid grid-cols-1 sm:grid-cols-3 gap-3",
+                          children: [
+                            r.jsxs("div", {
+                              className: "space-y-1.5",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                                  children: s("ক্যাটাগরি", "Category"),
+                                }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: editingStrategy.category || "",
+                                  onChange: (e) => setEditingStrategy({ ...editingStrategy, category: e.target.value }),
+                                  placeholder: "Smart Money / ICT, Breakout, etc.",
+                                  className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                              ],
+                            }),
+                            r.jsxs("div", {
+                              className: "space-y-1.5",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                                  children: s("টাইমফ্রেম", "Timeframe"),
+                                }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: editingStrategy.timeframe || "",
+                                  onChange: (e) => setEditingStrategy({ ...editingStrategy, timeframe: e.target.value }),
+                                  placeholder: "e.g., 15m / 5m, 1H / 15m",
+                                  className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                              ],
+                            }),
+                            r.jsxs("div", {
+                              className: "space-y-1.5",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                                  children: s("ট্রেডিং সেশন", "Session"),
+                                }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: editingStrategy.session || "",
+                                  onChange: (e) => setEditingStrategy({ ...editingStrategy, session: e.target.value }),
+                                  placeholder: "e.g., London Only, NY Killzone",
+                                  className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+
+                        // Target R:R and Risk Rule
+                        r.jsxs("div", {
+                          className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
+                          children: [
+                            r.jsxs("div", {
+                              className: "space-y-1.5",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                                  children: s("টার্গেট Risk:Reward", "Min Target R:R"),
+                                }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: editingStrategy.minRiskReward || "",
+                                  onChange: (e) => setEditingStrategy({ ...editingStrategy, minRiskReward: e.target.value }),
+                                  placeholder: "e.g., 1:2.5 or 1:3",
+                                  className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                              ],
+                            }),
+                            r.jsxs("div", {
+                              className: "space-y-1.5",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                                  children: s("রিস্ক ম্যানেজমেন্ট রুল", "Risk Management Rule"),
+                                }),
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: editingStrategy.riskRule || "",
+                                  onChange: (e) => setEditingStrategy({ ...editingStrategy, riskRule: e.target.value }),
+                                  placeholder: "e.g., Max 1% risk per trade, stop after 2 losses",
+                                  className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+
+                        // Execution Rules Checklist
+                        r.jsxs("div", {
+                          className: "space-y-2 p-4 rounded-2xl bg-slate-950/70 border border-slate-800",
+                          children: [
+                            r.jsxs("div", {
+                              className: "flex items-center justify-between",
+                              children: [
+                                r.jsx("label", {
+                                  className: "text-xs font-bold text-emerald-400 uppercase font-mono flex items-center gap-1.5",
+                                  children: [
+                                    r.jsx(iu("CheckSquare"), { className: "w-3.5 h-3.5" }),
+                                    s("এক্সিকিউশন চেকলিস্ট রুলস (Execution Checklist)", "Execution Rules Checklist"),
+                                  ],
+                                }),
+                                r.jsxs("span", {
+                                  className: "text-[10px] text-slate-400 font-mono",
+                                  children: [(editingStrategy.rulesChecklist || []).length, " ", s("টি রুল", "Items")],
+                                }),
+                              ],
+                            }),
+                            // Current Items
+                            r.jsx("div", {
+                              className: "space-y-1.5 max-h-40 overflow-y-auto",
+                              children: (editingStrategy.rulesChecklist || []).map((rule, idx) =>
+                                r.jsxs("div", {
+                                  key: idx,
+                                  className: "flex items-center justify-between gap-2 p-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200",
+                                  children: [
+                                    r.jsxs("div", {
+                                      className: "flex items-center gap-2",
+                                      children: [
+                                        r.jsx("span", { className: "text-emerald-400 font-bold", children: `${idx + 1}.` }),
+                                        r.jsx("span", { children: rule }),
+                                      ],
+                                    }),
+                                    r.jsx("button", {
+                                      type: "button",
+                                      onClick: () => handleRemoveChecklistItem(idx),
+                                      className: "text-slate-400 hover:text-rose-400 p-1 cursor-pointer transition-colors",
+                                      children: r.jsx(iu("Trash2"), { className: "w-3.5 h-3.5" }),
+                                    }),
+                                  ],
+                                })
+                              ),
+                            }),
+                            // Add Checklist Item Input
+                            r.jsxs("div", {
+                              className: "flex items-center gap-2 pt-1",
+                              children: [
+                                r.jsx("input", {
+                                  type: "text",
+                                  value: newChecklistText,
+                                  onChange: (e) => setNewChecklistText(e.target.value),
+                                  onKeyDown: (e) => {
+                                    if (e.key === "Enter") {
+                                      e.preventDefault();
+                                      handleAddChecklistItem();
+                                    }
+                                  },
+                                  placeholder: s("নতুন চেকলিস্ট রুল লিখুন (যেমন: 1H Liquidity Sweep)", "Type new rule (e.g., 1H Liquidity Sweep confirmed)..."),
+                                  className: "flex-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                                }),
+                                r.jsxs("button", {
+                                  type: "button",
+                                  onClick: handleAddChecklistItem,
+                                  className: "px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1 cursor-pointer",
+                                  children: [r.jsx(iu("Plus"), { className: "w-3.5 h-3.5" }), s("যোগ করুন", "Add")],
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+
+                        // Description / Notes
+                        r.jsxs("div", {
+                          className: "space-y-1.5",
+                          children: [
+                            r.jsx("label", {
+                              className: "text-xs font-bold text-slate-300 uppercase font-mono",
+                              children: s("স্ট্র্যাটেজির বিবরণ ও এন্ট্রি নির্দেশনা", "Strategy Description & Edge Notes"),
+                            }),
+                            r.jsx("textarea", {
+                              rows: 2,
+                              value: editingStrategy.description || "",
+                              onChange: (e) => setEditingStrategy({ ...editingStrategy, description: e.target.value }),
+                              placeholder: "Describe how to confirm entries, how to manage stops, and invalidate setups...",
+                              className: "w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white outline-none focus:border-cyan-400",
+                            }),
+                          ],
+                        }),
+
+                        // Action Buttons
+                        r.jsxs("div", {
+                          className: "flex items-center justify-end gap-3 pt-3 border-t border-slate-800",
+                          children: [
+                            r.jsx("button", {
+                              type: "button",
+                              onClick: () => setIsStrategyModalOpen(false),
+                              className: "px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer",
+                              children: s("বাতিল", "Cancel"),
+                            }),
+                            r.jsxs("button", {
+                              type: "submit",
+                              disabled: savingStrategy,
+                              className: "px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-black text-xs shadow-lg shadow-cyan-600/30 flex items-center gap-2 cursor-pointer disabled:opacity-50",
+                              children: [
+                                savingStrategy ? r.jsx(iu("RotateCw"), { className: "w-4 h-4 animate-spin" }) : r.jsx(iu("Save"), { className: "w-4 h-4" }),
+                                s("প্লেবুকে সংরক্ষণ করুন", "Save to Playbook"),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              }),
           ],
         }),
     ],

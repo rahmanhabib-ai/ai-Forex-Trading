@@ -4,6 +4,7 @@
 function PackagesPage({ page: t, section: e, portalType: n, onOpenCodeStudio: a }) {
   const { currentUser: user, language: lang } = Xo();
   const isAdmin = user && (user.role === "admin" || user.id === "usr_admin_master");
+  const userPlanId = (user && user.plan) || "free_starter";
   const s = (bn, en) => (lang === "bn" ? bn : en);
 
   const [selectedPlan, setSelectedPlan] = b.useState("standard");
@@ -247,14 +248,13 @@ function PackagesPage({ page: t, section: e, portalType: n, onOpenCodeStudio: a 
               }),
               r.jsx("h1", {
                 className: "text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight",
-                children: s("সাবস্ক্রিপশন প্যাকেজ ও মেম্বারশিপ প্ল্যান", "Subscription Packages & Membership Plans"),
+                children: isAdmin ? s("প্যাকেজ ও প্রাইসিং ম্যানেজমেন্ট (Admin)", "Packages & Pricing Management") : s("My Package Plan (প্যাকেজ ও মেম্বারশিপ)", "My Package Plan"),
               }),
               r.jsx("p", {
                 className: "text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl",
-                children: s(
-                  "আপনার ট্রেডিং ক্যারিয়ারের জন্য সঠিক প্ল্যান বেছে নিন। প্রতিটি প্যাকেজের সাথে রয়েছে রিয়েল-টাইম এআই অ্যানালাইসিস, ডায়েরি ও অটো-ভেরিফিকেশন।",
-                  "Choose the right institutional plan for your trading desk with real-time AI news forecasting and instant crypto activation."
-                ),
+                children: isAdmin 
+                  ? s("ইউজারদের সাবস্ক্রিপশন প্যাকেজের মূল্য, অফার ও ফিচার নিয়ন্ত্রণ করুন।", "Manage package prices, discounts, and tier limitations.")
+                  : s("আপনার বর্তমান ট্রেডিং মেম্বারশিপ এবং সাবস্ক্রিপশন প্ল্যান। এখান থেকে যে কোনো সময় উচ্চতর প্যাকেজে আপগ্রেড করতে পারবেন।", "Your active trading plan and subscription status. Upgrade anytime for institutional access."),
               }),
             ],
           }),
@@ -273,6 +273,62 @@ function PackagesPage({ page: t, section: e, portalType: n, onOpenCodeStudio: a 
             }),
         ],
       }),
+
+      // Current Active Plan Status Banner for User
+      !isAdmin &&
+        r.jsxs("div", {
+          className: "p-5 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm",
+          children: [
+            r.jsxs("div", {
+              className: "flex items-center gap-3.5",
+              children: [
+                r.jsx("div", {
+                  className: "w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold",
+                  children: r.jsx(iu("ShieldCheck"), { className: "w-6 h-6" }),
+                }),
+                r.jsxs("div", {
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("span", {
+                          className: "text-[10px] font-black uppercase tracking-wider text-emerald-400 block",
+                          children: s("আপনার বর্তমান সক্রিয় প্ল্যান", "Your Current Active Plan"),
+                        }),
+                        r.jsx("span", {
+                          className: "px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold",
+                          children: "ACTIVE PLAN",
+                        }),
+                      ],
+                    }),
+                    r.jsx("h3", {
+                      className: "text-base sm:text-lg font-black text-white",
+                      children: userPlanId === "vip_pro"
+                        ? s("ভিআইপি ইনস্টিটিউশনাল প্রো", "VIP Institutional Pro")
+                        : userPlanId === "lifetime_alpha"
+                        ? s("লাইফটাইম আলফা", "Lifetime Alpha")
+                        : userPlanId === "standard"
+                        ? s("স্ট্যান্ডার্ড ট্রেডার", "Standard Trader")
+                        : s("৭ দিন ফ্রি ট্রায়াল (Starter Free)", "7-Day Free Trial (Starter)"),
+                    }),
+                    r.jsx("p", {
+                      className: "text-xs text-slate-400",
+                      children: s("স্ট্যাটাস: মেয়াদ সক্রিয় রয়েছে • কোনো অটো-কাট বা হিডেন ফি নেই", "Status: Active & Valid • No recurring hidden fees"),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            r.jsx("button", {
+              onClick: () => {
+                setSelectedPlan("standard");
+                setShowCheckout(true);
+              },
+              className: "px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer",
+              children: [r.jsx(iu("Zap"), { className: "w-4 h-4" }), s("⚡ নতুন প্ল্যানে আপগ্রেড করুন", "⚡ Upgrade Plan")],
+            }),
+          ],
+        }),
 
       // 4 Dynamic Package Cards Grid
       r.jsx("div", {
@@ -463,11 +519,13 @@ function PackagesPage({ page: t, section: e, portalType: n, onOpenCodeStudio: a 
                           ? "bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600 hover:from-amber-600 text-slate-950 font-black"
                           : "bg-purple-600 hover:bg-purple-500 text-white shadow-purple-600/30"
                       }`,
-                      children: plan.isTestingMode
+                      children: (!isAdmin && (userPlanId === plan.id || (isFree && userPlanId === "free_starter")))
+                        ? s("✅ বর্তমান সক্রিয় প্ল্যান", "✅ Current Active Plan")
+                        : plan.isTestingMode
                         ? s("🧪 টেস্টিং পার্পাস (সাময়িক বন্ধ)", "Testing Purpose (Closed)")
                         : isFree
-                        ? s("৭ দিনের ফ্রি ট্রায়াল শুরু করুন", "Start 7-Day Free Trial")
-                        : s(`প্যাকেজটি বেছে নিন (${plan.priceUsd} USDT)`, `Select Plan (${plan.priceUsd} USDT)`),
+                        ? s("৭ দিনের ফ্রি ট্রায়াল", "7-Day Free Trial")
+                        : s(`আপগ্রেড করুন (${plan.priceUsd} USDT)`, `Upgrade (${plan.priceUsd} USDT)`),
                     }),
 
                     // Admin Edit trigger for this plan

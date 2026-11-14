@@ -9,7 +9,7 @@
     "whatsappPhone": "8801819123456",
     "isPhoneVerified": true,
     "createdAt": "2026-10-17T09:41:23.977Z",
-    "lastLoginAt": "2026-10-17T10:05:58.975Z",
+    "lastLoginAt": "2026-11-02T13:25:15.535Z",
     "aiConfig": {
       "hasApiKey": false,
       "encryptedApiKey": "",
@@ -61,7 +61,7 @@
     "whatsappPhone": "8801711223344",
     "isPhoneVerified": true,
     "createdAt": "2026-10-17T09:41:23.986Z",
-    "lastLoginAt": "2026-10-26T16:57:57.694Z",
+    "lastLoginAt": "2026-11-07T15:02:27.276Z",
     "aiConfig": {
       "hasApiKey": false,
       "encryptedApiKey": "",
@@ -143,7 +143,7 @@
     "whatsappPhone": "8801911998877",
     "isPhoneVerified": true,
     "createdAt": "2026-10-17T09:41:23.992Z",
-    "lastLoginAt": "2026-10-26T16:57:57.765Z",
+    "lastLoginAt": "2026-11-07T15:02:27.370Z",
     "aiConfig": {
       "hasApiKey": false,
       "encryptedApiKey": "",

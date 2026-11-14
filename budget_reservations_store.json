@@ -1,20 +1,8 @@
 [
   {
-    "id": "res_1793033877753_4607f728",
+    "id": "res_1794063747352_4092ffc4",
     "userId": "usr_demo_user_a",
     "amountUsd": 0.003,
-    "timestamp": 1793033877753
-  },
-  {
-    "id": "res_1793033877753_ad01c8d4",
-    "userId": "usr_demo_user_a",
-    "amountUsd": 0.003,
-    "timestamp": 1793033877753
-  },
-  {
-    "id": "res_1793033877753_560a5998",
-    "userId": "usr_demo_user_a",
-    "amountUsd": 0.003,
-    "timestamp": 1793033877753
+    "timestamp": 1794063747352
   }
 ]

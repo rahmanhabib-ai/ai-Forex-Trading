@@ -123,6 +123,49 @@
       "tradesCount": 2,
       "createdAt": "2026-10-30T13:57:17.123Z",
       "updatedAt": "2026-10-30T13:58:45.722Z"
+    },
+    {
+      "id": "note_friday_1794064859996",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Friday",
+      "date": "2026-11-07",
+      "weekNumber": 1,
+      "goodThings": [
+        "সফল ট্রেড: XAUUSD (Liquidity Sweep & FVG)"
+      ],
+      "mistakes": [],
+      "tags": [
+        "XAUUSD",
+        "15m",
+        "Liquidity Sweep & FVG"
+      ],
+      "notes": "📊 [BUY XAUUSD • 15m] @ $4064.5\n• স্ট্র্যাটেজি: Liquidity Sweep & FVG | আউটকাম: PASS\n\nLondon Session breakout test",
+      "mindsetRating": 9,
+      "tradesCount": 1,
+      "createdAt": "2026-11-07T15:20:59.996Z",
+      "updatedAt": "2026-11-07T15:20:59.996Z"
+    },
+    {
+      "id": "note_thursday_1794477952845",
+      "userId": "usr_admin_master",
+      "dayOfWeek": "Thursday",
+      "date": "2026-11-12",
+      "weekNumber": 1,
+      "goodThings": [
+        "সফল ট্রেড: XAUUSD (London Killzone Breakout)"
+      ],
+      "mistakes": [],
+      "tags": [
+        "XAUUSD",
+        "LondonKillzone",
+        "Breakout",
+        "Disciplined"
+      ],
+      "notes": "📊 [BUY XAUUSD • 15m] @ $2655.2\n• স্ট্র্যাটেজি: London Killzone Breakout | আউটকাম: WIN\n\nলন্ডন ওপেনে 0.618 ফিব রিট্রেসমেন্ট এবং বুলিশ অর্ডার ব্লকে রিজেকশন ক্যান্ডেল কনফার্মেশন পাওয়ার পর 0.1 লটে পারফেক্ট লং এন্ট্রি।",
+      "mindsetRating": 9,
+      "tradesCount": 1,
+      "createdAt": "2026-11-12T10:05:52.845Z",
+      "updatedAt": "2026-11-12T10:05:52.845Z"
     }
   ],
   "tattooRules": [
@@ -165,6 +208,70 @@
       "originWeek": "Week 4 Review",
       "createdAt": "2026-10-30T13:57:17.123Z",
       "isActive": true
+    }
+  ],
+  "strategies": [
+    {
+      "id": "strat-1793987976381",
+      "userId": "usr_admin_master",
+      "name": "ICT Order Block + London Retest (My Version)",
+      "clonedFrom": "ICT 2022 Mentorship Model",
+      "category": "Smart Money / ICT",
+      "timeframe": "15m / 5m",
+      "session": "London Only",
+      "minRiskReward": "1:2.5",
+      "rulesChecklist": [
+        "Higher Timeframe (1H) Liquidity Sweep confirmed",
+        "Market Structure Shift (MSS) on 5m timeframe",
+        "Order Block & FVG overlap entry",
+        "London Session Killzone timing (07:00 - 10:00 UTC)"
+      ],
+      "riskRule": "Max 1.0% capital risk. Strict break-even at 1:1 R.",
+      "description": "My personal customized version of the ICT model adapted specifically for London session Gold (XAUUSD) & EURUSD.",
+      "createdAt": "2026-11-06T17:59:36.381Z",
+      "updatedAt": "2026-11-06T17:59:36.381Z"
+    },
+    {
+      "id": "strat-1793988671400-hlnq",
+      "userId": "usr_admin_master",
+      "name": "ICT 2022 Mentorship Model (My Version)",
+      "isTemplate": false,
+      "clonedFrom": "ICT 2022 Mentorship Model",
+      "category": "Smart Money / ICT",
+      "timeframe": "15m / 5m",
+      "session": "London & NY",
+      "minRiskReward": "1:2.5",
+      "rulesChecklist": [
+        "Higher Timeframe (1H/15m) Key Liquidity Sweep",
+        "Market Structure Shift (MSS) with impulsive displacement",
+        "Fair Value Gap (FVG) retracement limit / market entry"
+      ],
+      "riskRule": "Max 1.0% risk per trade. Move to Break-Even at 1:1 R.",
+      "description": "Customized upgrade based on ICT 2022 Mentorship Model. Fine-tuned for personal execution rules.",
+      "notes": "",
+      "createdAt": "2026-11-06T18:11:11.400Z",
+      "updatedAt": "2026-11-06T18:11:11.400Z"
+    },
+    {
+      "id": "strat-1793988676452-8yyi",
+      "userId": "usr_admin_master",
+      "name": "ICT 2022 Mentorship Model (My Version)",
+      "isTemplate": false,
+      "clonedFrom": "ICT 2022 Mentorship Model",
+      "category": "Smart Money / ICT",
+      "timeframe": "15m / 5m",
+      "session": "London & NY",
+      "minRiskReward": "1:2.5",
+      "rulesChecklist": [
+        "Higher Timeframe (1H/15m) Key Liquidity Sweep",
+        "Market Structure Shift (MSS) with impulsive displacement",
+        "Fair Value Gap (FVG) retracement limit / market entry"
+      ],
+      "riskRule": "Max 1.0% risk per trade. Move to Break-Even at 1:1 R.",
+      "description": "Customized upgrade based on ICT 2022 Mentorship Model. Fine-tuned for personal execution rules.",
+      "notes": "",
+      "createdAt": "2026-11-06T18:11:16.452Z",
+      "updatedAt": "2026-11-06T18:11:16.452Z"
     }
   ]
 }

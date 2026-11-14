@@ -44,9 +44,27 @@ export interface WeeklyAnalysis {
   mindsetAverage: number;
 }
 
+export interface TradingStrategy {
+  id: string;
+  userId: string;
+  name: string;
+  isTemplate?: boolean;
+  clonedFrom?: string;
+  category: "Smart Money / ICT" | "Price Action" | "Breakout" | "Trend Following" | "Scalping" | "Custom";
+  timeframe: string;
+  session: "London & NY" | "London Only" | "NY Open Only" | "Asian Session" | "All Sessions";
+  minRiskReward: string;
+  rulesChecklist: string[];
+  riskRule: string;
+  description: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const STORAGE_FILE = path.resolve("./storage/trading_notes_store.json");
 
-function ensureStorage(): { notes: DailyNoteEntry[]; tattooRules: TattooRule[] } {
+function ensureStorage(): { notes: DailyNoteEntry[]; tattooRules: TattooRule[]; strategies?: TradingStrategy[] } {
   const storageDir = path.resolve("./storage");
   if (!fs.existsSync(storageDir)) fs.mkdirSync(storageDir, { recursive: true });
 
@@ -58,7 +76,9 @@ function ensureStorage(): { notes: DailyNoteEntry[]; tattooRules: TattooRule[] }
 
   try {
     const content = fs.readFileSync(STORAGE_FILE, "utf-8");
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+    if (!parsed.strategies) parsed.strategies = [];
+    return parsed;
   } catch (err) {
     const fallback = getDefaultSeedData();
     fs.writeFileSync(STORAGE_FILE, JSON.stringify(fallback, null, 2));
@@ -66,7 +86,7 @@ function ensureStorage(): { notes: DailyNoteEntry[]; tattooRules: TattooRule[] }
   }
 }
 
-function persistStorage(data: { notes: DailyNoteEntry[]; tattooRules: TattooRule[] }) {
+function persistStorage(data: { notes: DailyNoteEntry[]; tattooRules: TattooRule[]; strategies?: TradingStrategy[] }) {
   try {
     fs.writeFileSync(STORAGE_FILE, JSON.stringify(data, null, 2));
   } catch (err) {
@@ -392,3 +412,214 @@ export function analyzeWeeklyReview(userId: string): WeeklyAnalysis {
     mindsetAverage: notes.length > 0 ? Number((totalRating / notes.length).toFixed(1)) : 8,
   };
 }
+
+export function getDefaultStrategyTemplates(): TradingStrategy[] {
+  return [
+    {
+      id: "template-ict-2022",
+      userId: "system",
+      name: "ICT 2022 Mentorship Model",
+      isTemplate: true,
+      category: "Smart Money / ICT",
+      timeframe: "15m / 5m",
+      session: "London & NY",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Higher Timeframe (1H/15m) Key Liquidity Sweep",
+        "Market Structure Shift (MSS) with impulsive displacement",
+        "Fair Value Gap (FVG) retracement limit / market entry"
+      ],
+      riskRule: "Max 1.0% risk per trade. Move to Break-Even at 1:1 R.",
+      description: "Algorithmic displacement, imbalance filling, and institutional delivery model.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "template-london-breakout",
+      userId: "system",
+      name: "London Session Range Breakout",
+      isTemplate: true,
+      category: "Breakout",
+      timeframe: "15m / 5m",
+      session: "London Only",
+      minRiskReward: "1:2.0",
+      rulesChecklist: [
+        "Mark Asian Session High & Low range (00:00 - 06:00 UTC)",
+        "Wait for clean liquidity sweep or aggressive breakout candle",
+        "Enter on 5m retest with stop beyond impulse candle"
+      ],
+      riskRule: "Max 1.5% capital risk. Strict session cutoff by 12:00 UTC.",
+      description: "Exploiting high-velocity institutional capital injection at Frankfurt & London open.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "template-liquidity-sweep",
+      userId: "system",
+      name: "Daily Liquidity Sweep & SFP",
+      isTemplate: true,
+      category: "Price Action",
+      timeframe: "1H / 15m",
+      session: "All Sessions",
+      minRiskReward: "1:3.0",
+      rulesChecklist: [
+        "Previous Day High (PDH) or Low (PDL) sweep confirmed",
+        "Swing Failure Pattern (SFP) long wick candle rejection",
+        "Momentum / volume divergence confirmation on LTF"
+      ],
+      riskRule: "Stop loss placed strictly beyond the sweep wick peak.",
+      description: "Capturing retail stop-loss runs and smart-money trap reversals.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "template-supply-demand-flip",
+      userId: "system",
+      name: "Supply & Demand Zone Flip",
+      isTemplate: true,
+      category: "Price Action",
+      timeframe: "4H / 1H / 15m",
+      session: "London & NY",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Identify fresh unmitigated Drop-Base-Rally or Rally-Base-Drop",
+        "Strong imbalance candle departure leaving clean imbalance",
+        "Enter on first touch limit order with protective SL beyond base"
+      ],
+      riskRule: "1% risk per setup. Target opposing HTF liquidity pool.",
+      description: "Trading with large institutional footprint orders at supply/demand inflection levels.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "template-trend-50ema",
+      userId: "system",
+      name: "Trend Continuation & 50 EMA Retest",
+      isTemplate: true,
+      category: "Trend Following",
+      timeframe: "1H / 15m",
+      session: "All Sessions",
+      minRiskReward: "1:2.0",
+      rulesChecklist: [
+        "Higher Highs & Higher Lows market structure confirmed on 1H",
+        "Price retraces cleanly into 50 EMA dynamic support zone",
+        "Reversal candlestick (pinbar or engulfing) confirmation"
+      ],
+      riskRule: "Stop placed below most recent swing low.",
+      description: "High-probability pullback continuation in established forex & gold trends.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
+}
+
+export function getUserStrategies(userId: string): { myStrategies: TradingStrategy[]; templates: TradingStrategy[] } {
+  const store = ensureStorage();
+  const templates = getDefaultStrategyTemplates();
+  const myStrategies = (store.strategies || []).filter(s => s.userId === userId && !s.isTemplate);
+  if (myStrategies.length === 0) {
+    const starterStrategy: TradingStrategy = {
+      id: `strat-${Date.now()}`,
+      userId,
+      name: "ICT Order Block + London Retest (My Version)",
+      clonedFrom: "ICT 2022 Mentorship Model",
+      category: "Smart Money / ICT",
+      timeframe: "15m / 5m",
+      session: "London Only",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Higher Timeframe (1H) Liquidity Sweep confirmed",
+        "Market Structure Shift (MSS) on 5m timeframe",
+        "Order Block & FVG overlap entry",
+        "London Session Killzone timing (07:00 - 10:00 UTC)"
+      ],
+      riskRule: "Max 1.0% capital risk. Strict break-even at 1:1 R.",
+      description: "My personal customized version of the ICT model adapted specifically for London session Gold (XAUUSD) & EURUSD.",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    store.strategies = [starterStrategy];
+    persistStorage(store);
+    return { myStrategies: [starterStrategy], templates };
+  }
+  return { myStrategies, templates };
+}
+
+export function saveUserStrategy(userId: string, strategy: Partial<TradingStrategy>): TradingStrategy {
+  const store = ensureStorage();
+  if (!store.strategies) store.strategies = [];
+
+  if (strategy.id) {
+    const idx = store.strategies.findIndex(s => s.id === strategy.id && s.userId === userId);
+    if (idx !== -1) {
+      store.strategies[idx] = {
+        ...store.strategies[idx],
+        ...strategy,
+        updatedAt: new Date().toISOString()
+      };
+      persistStorage(store);
+      return store.strategies[idx];
+    }
+  }
+
+  const created: TradingStrategy = {
+    id: strategy.id || `strat-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    userId,
+    name: strategy.name || "Custom Strategy",
+    isTemplate: false,
+    clonedFrom: strategy.clonedFrom,
+    category: strategy.category || "Custom",
+    timeframe: strategy.timeframe || "15m / 5m",
+    session: strategy.session || "All Sessions",
+    minRiskReward: strategy.minRiskReward || "1:2.0",
+    rulesChecklist: Array.isArray(strategy.rulesChecklist) ? strategy.rulesChecklist : ["Plan followed strictly"],
+    riskRule: strategy.riskRule || "Max 1.0% risk per trade",
+    description: strategy.description || "",
+    notes: strategy.notes || "",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  store.strategies.push(created);
+  persistStorage(store);
+  return created;
+}
+
+export function cloneStrategyTemplate(userId: string, templateId: string, customUpgrades?: Partial<TradingStrategy>): TradingStrategy {
+  const templates = getDefaultStrategyTemplates();
+  const tpl = templates.find(t => t.id === templateId) || templates[0];
+
+  return saveUserStrategy(userId, {
+    name: customUpgrades?.name || `${tpl.name} (My Version)`,
+    clonedFrom: tpl.name,
+    category: customUpgrades?.category || tpl.category,
+    timeframe: customUpgrades?.timeframe || tpl.timeframe,
+    session: customUpgrades?.session || tpl.session,
+    minRiskReward: customUpgrades?.minRiskReward || tpl.minRiskReward,
+    rulesChecklist: customUpgrades?.rulesChecklist || [...tpl.rulesChecklist],
+    riskRule: customUpgrades?.riskRule || tpl.riskRule,
+    description: customUpgrades?.description || `Customized upgrade based on ${tpl.name}. Fine-tuned for personal execution rules.`
+  });
+}
+
+export function deleteUserStrategy(userId: string, strategyId: string, isAdmin?: boolean): boolean {
+  const store = ensureStorage();
+  let changed = false;
+  if (store.strategies && store.strategies.length > 0) {
+    const initialLen = store.strategies.length;
+    store.strategies = store.strategies.filter(s => {
+      if (s.id === strategyId || (isAdmin && s.name.toLowerCase() === strategyId.toLowerCase())) {
+        if (isAdmin || s.userId === userId) {
+          changed = true;
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+  if (changed) {
+    persistStorage(store);
+    return true;
+  }
+  return false;
+}
+

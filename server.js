@@ -1539,19 +1539,42 @@ function saveEmailTransactions(logs) {
 }
 function tryAutoMatchPayment(payment, emailTxList) {
   if (payment.status !== "PENDING") return false;
-  const targetTx = (payment.transactionId || "").trim().toLowerCase();
-  if (!targetTx) return false;
+  const orderTime = new Date(payment.createdAt).getTime();
+  const THIRTY_MINUTES_BUFFER_MS = 35 * 60 * 1e3;
+  const targetTx = (payment.transactionId || "").trim();
+  const senderAcc = (payment.senderAccount || "").trim();
+  const clean = (s) => s.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+  const normTargetTx = clean(targetTx);
+  const normSenderAcc = clean(senderAcc);
   const match = emailTxList.find((em) => {
-    const emTx = (em.txId || "").trim().toLowerCase();
-    const txMatch = emTx && (emTx === targetTx || emTx.includes(targetTx) || targetTx.includes(emTx));
+    if (em.isMatched) return false;
+    if (em.platform !== payment.method) return false;
+    const emailTime = new Date(em.receivedAt).getTime();
+    const timeDiffMs = Math.abs(emailTime - orderTime);
+    if (timeDiffMs > THIRTY_MINUTES_BUFFER_MS) {
+      return false;
+    }
     const amountMatch = Math.abs(em.amount - payment.amountUsd) < 0.05;
-    return (txMatch || amountMatch && em.platform === payment.method) && !em.isMatched;
+    if (!amountMatch) return false;
+    const emTx = (em.txId || "").trim();
+    const emSender = (em.senderInfo || "").trim();
+    const normEmTx = clean(emTx);
+    const normEmSender = clean(emSender);
+    const profileMatch = Boolean(
+      normSenderAcc && normEmSender && (normEmSender.includes(normSenderAcc) || normSenderAcc.includes(normEmSender)) || normTargetTx && normEmSender && (normEmSender.includes(normTargetTx) || normTargetTx.includes(normEmSender))
+    );
+    const txMatch = Boolean(
+      normTargetTx && normEmTx && (normEmTx === normTargetTx || normEmTx.includes(normTargetTx) || normTargetTx.includes(normEmTx))
+    );
+    const windowMatch = !normTargetTx && !normSenderAcc;
+    return profileMatch || txMatch || windowMatch;
   });
   if (match) {
     payment.status = "APPROVED";
     payment.verifiedMethod = "AUTOMATED_GMAIL";
     payment.verifiedAt = (/* @__PURE__ */ new Date()).toISOString();
-    payment.notes = (payment.notes ? `${payment.notes} | ` : "") + `\u26A1 Auto-Verified via Gmail (${match.platform.toUpperCase()} Order: ${match.txId})`;
+    const profileLabel = match.senderInfo ? `Profile: ${match.senderInfo}` : `TxID: ${match.txId}`;
+    payment.notes = (payment.notes ? `${payment.notes} | ` : "") + `\u26A1 Auto-Verified via Gmail (${match.platform.toUpperCase()} ${profileLabel} within 30m window)`;
     match.isMatched = true;
     match.matchedPaymentId = payment.id;
     return true;
@@ -1562,11 +1585,14 @@ function submitPayment(data) {
   ensureStorage();
   const all = getAllPayments();
   const emailLogs = getEmailTransactions();
+  const now = /* @__PURE__ */ new Date();
+  const expiresAt = new Date(now.getTime() + 30 * 60 * 1e3).toISOString();
   const newRecord = {
     ...data,
     id: `pay_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     status: "PENDING",
-    createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    createdAt: now.toISOString(),
+    expiresAt
   };
   const matched = tryAutoMatchPayment(newRecord, emailLogs);
   if (matched) {
@@ -1623,6 +1649,11 @@ function processIncomingDepositEmail(payload) {
     };
   }
   const officialDepositMarkers = [
+    "payment receive successful",
+    "payment receive",
+    "payment received",
+    "incoming transfer",
+    "you received an incoming transfer",
     "deposit confirmed",
     "deposit successful",
     "you have received",
@@ -1645,16 +1676,19 @@ function processIncomingDepositEmail(payload) {
   }
   let platform = isBybitSender ? "bybit" : "binance";
   let amount = 0;
-  const amountRegex = /(\d+(\.\d{1,4})?)\s*(USDT|USD)/i;
-  const matchAmount = subject.match(amountRegex) || body.match(amountRegex);
+  const amountRegex = /(?:Amount:\s*)?(\d+(?:\.\d{1,4})?)\s*(USDT|USD)/i;
+  const matchAmount = body.match(amountRegex) || subject.match(amountRegex);
   if (matchAmount && matchAmount[1]) {
     amount = parseFloat(matchAmount[1]);
+  }
+  let senderInfo = "";
+  const senderMatch = body.match(/(?:From|Sender|Payer)[:\s]+([A-Za-z0-9_-]{3,32})/i);
+  if (senderMatch && senderMatch[1]) {
+    senderInfo = senderMatch[1].trim();
   }
   let txId = "";
   const txRegexes = [
     /(?:TxID|Tx Hash|Transaction ID|Order ID|Transfer ID|Internal ID)[:\s]+([A-Za-z0-9_-]{6,64})/i,
-    /from\s+([0-9]{7,12})/i,
-    // Binance Pay ID
     /Hash[:\s]+([A-Za-z0-9]{10,64})/i,
     /(TXB[0-9A-Z]+|BYB[0-9A-Z]+|[0-9]{8,14})/i
   ];
@@ -1666,12 +1700,7 @@ function processIncomingDepositEmail(payload) {
     }
   }
   if (!txId) {
-    txId = `TX_${platform.toUpperCase()}_${Date.now().toString().slice(-8)}`;
-  }
-  let senderInfo = "Verified User";
-  const senderMatch = body.match(/(?:from|sender|payer)[:\s]+([^\n\r,]+)/i);
-  if (senderMatch && senderMatch[1]) {
-    senderInfo = senderMatch[1].trim();
+    txId = senderInfo ? `BPAY_${senderInfo}` : `TX_${platform.toUpperCase()}_${Date.now().toString().slice(-8)}`;
   }
   const emailTx = {
     id: `em_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -1679,7 +1708,7 @@ function processIncomingDepositEmail(payload) {
     amount: amount || 29,
     currency: "USDT",
     txId,
-    senderInfo,
+    senderInfo: senderInfo || "Verified User",
     receivedAt: payload.receivedAt || (/* @__PURE__ */ new Date()).toISOString(),
     subject,
     isMatched: false
@@ -2010,7 +2039,9 @@ function ensureStorage3() {
   }
   try {
     const content = fs5.readFileSync(STORAGE_FILE, "utf-8");
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+    if (!parsed.strategies) parsed.strategies = [];
+    return parsed;
   } catch (err) {
     const fallback = getDefaultSeedData();
     fs5.writeFileSync(STORAGE_FILE, JSON.stringify(fallback, null, 2));
@@ -2284,6 +2315,508 @@ function analyzeWeeklyReview(userId) {
     totalMistakeCount: totalMistakes,
     mindsetAverage: notes.length > 0 ? Number((totalRating / notes.length).toFixed(1)) : 8
   };
+}
+function getDefaultStrategyTemplates() {
+  return [
+    {
+      id: "template-ict-2022",
+      userId: "system",
+      name: "ICT 2022 Mentorship Model",
+      isTemplate: true,
+      category: "Smart Money / ICT",
+      timeframe: "15m / 5m",
+      session: "London & NY",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Higher Timeframe (1H/15m) Key Liquidity Sweep",
+        "Market Structure Shift (MSS) with impulsive displacement",
+        "Fair Value Gap (FVG) retracement limit / market entry"
+      ],
+      riskRule: "Max 1.0% risk per trade. Move to Break-Even at 1:1 R.",
+      description: "Algorithmic displacement, imbalance filling, and institutional delivery model.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "template-london-breakout",
+      userId: "system",
+      name: "London Session Range Breakout",
+      isTemplate: true,
+      category: "Breakout",
+      timeframe: "15m / 5m",
+      session: "London Only",
+      minRiskReward: "1:2.0",
+      rulesChecklist: [
+        "Mark Asian Session High & Low range (00:00 - 06:00 UTC)",
+        "Wait for clean liquidity sweep or aggressive breakout candle",
+        "Enter on 5m retest with stop beyond impulse candle"
+      ],
+      riskRule: "Max 1.5% capital risk. Strict session cutoff by 12:00 UTC.",
+      description: "Exploiting high-velocity institutional capital injection at Frankfurt & London open.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "template-liquidity-sweep",
+      userId: "system",
+      name: "Daily Liquidity Sweep & SFP",
+      isTemplate: true,
+      category: "Price Action",
+      timeframe: "1H / 15m",
+      session: "All Sessions",
+      minRiskReward: "1:3.0",
+      rulesChecklist: [
+        "Previous Day High (PDH) or Low (PDL) sweep confirmed",
+        "Swing Failure Pattern (SFP) long wick candle rejection",
+        "Momentum / volume divergence confirmation on LTF"
+      ],
+      riskRule: "Stop loss placed strictly beyond the sweep wick peak.",
+      description: "Capturing retail stop-loss runs and smart-money trap reversals.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "template-supply-demand-flip",
+      userId: "system",
+      name: "Supply & Demand Zone Flip",
+      isTemplate: true,
+      category: "Price Action",
+      timeframe: "4H / 1H / 15m",
+      session: "London & NY",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Identify fresh unmitigated Drop-Base-Rally or Rally-Base-Drop",
+        "Strong imbalance candle departure leaving clean imbalance",
+        "Enter on first touch limit order with protective SL beyond base"
+      ],
+      riskRule: "1% risk per setup. Target opposing HTF liquidity pool.",
+      description: "Trading with large institutional footprint orders at supply/demand inflection levels.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    },
+    {
+      id: "template-trend-50ema",
+      userId: "system",
+      name: "Trend Continuation & 50 EMA Retest",
+      isTemplate: true,
+      category: "Trend Following",
+      timeframe: "1H / 15m",
+      session: "All Sessions",
+      minRiskReward: "1:2.0",
+      rulesChecklist: [
+        "Higher Highs & Higher Lows market structure confirmed on 1H",
+        "Price retraces cleanly into 50 EMA dynamic support zone",
+        "Reversal candlestick (pinbar or engulfing) confirmation"
+      ],
+      riskRule: "Stop placed below most recent swing low.",
+      description: "High-probability pullback continuation in established forex & gold trends.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    }
+  ];
+}
+function getUserStrategies(userId) {
+  const store = ensureStorage3();
+  const templates = getDefaultStrategyTemplates();
+  const myStrategies = (store.strategies || []).filter((s) => s.userId === userId && !s.isTemplate);
+  if (myStrategies.length === 0) {
+    const starterStrategy = {
+      id: `strat-${Date.now()}`,
+      userId,
+      name: "ICT Order Block + London Retest (My Version)",
+      clonedFrom: "ICT 2022 Mentorship Model",
+      category: "Smart Money / ICT",
+      timeframe: "15m / 5m",
+      session: "London Only",
+      minRiskReward: "1:2.5",
+      rulesChecklist: [
+        "Higher Timeframe (1H) Liquidity Sweep confirmed",
+        "Market Structure Shift (MSS) on 5m timeframe",
+        "Order Block & FVG overlap entry",
+        "London Session Killzone timing (07:00 - 10:00 UTC)"
+      ],
+      riskRule: "Max 1.0% capital risk. Strict break-even at 1:1 R.",
+      description: "My personal customized version of the ICT model adapted specifically for London session Gold (XAUUSD) & EURUSD.",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    store.strategies = [starterStrategy];
+    persistStorage(store);
+    return { myStrategies: [starterStrategy], templates };
+  }
+  return { myStrategies, templates };
+}
+function saveUserStrategy(userId, strategy) {
+  const store = ensureStorage3();
+  if (!store.strategies) store.strategies = [];
+  if (strategy.id) {
+    const idx = store.strategies.findIndex((s) => s.id === strategy.id && s.userId === userId);
+    if (idx !== -1) {
+      store.strategies[idx] = {
+        ...store.strategies[idx],
+        ...strategy,
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      persistStorage(store);
+      return store.strategies[idx];
+    }
+  }
+  const created = {
+    id: strategy.id || `strat-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    userId,
+    name: strategy.name || "Custom Strategy",
+    isTemplate: false,
+    clonedFrom: strategy.clonedFrom,
+    category: strategy.category || "Custom",
+    timeframe: strategy.timeframe || "15m / 5m",
+    session: strategy.session || "All Sessions",
+    minRiskReward: strategy.minRiskReward || "1:2.0",
+    rulesChecklist: Array.isArray(strategy.rulesChecklist) ? strategy.rulesChecklist : ["Plan followed strictly"],
+    riskRule: strategy.riskRule || "Max 1.0% risk per trade",
+    description: strategy.description || "",
+    notes: strategy.notes || "",
+    createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+    updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+  };
+  store.strategies.push(created);
+  persistStorage(store);
+  return created;
+}
+function cloneStrategyTemplate(userId, templateId, customUpgrades) {
+  const templates = getDefaultStrategyTemplates();
+  const tpl = templates.find((t) => t.id === templateId) || templates[0];
+  return saveUserStrategy(userId, {
+    name: customUpgrades?.name || `${tpl.name} (My Version)`,
+    clonedFrom: tpl.name,
+    category: customUpgrades?.category || tpl.category,
+    timeframe: customUpgrades?.timeframe || tpl.timeframe,
+    session: customUpgrades?.session || tpl.session,
+    minRiskReward: customUpgrades?.minRiskReward || tpl.minRiskReward,
+    rulesChecklist: customUpgrades?.rulesChecklist || [...tpl.rulesChecklist],
+    riskRule: customUpgrades?.riskRule || tpl.riskRule,
+    description: customUpgrades?.description || `Customized upgrade based on ${tpl.name}. Fine-tuned for personal execution rules.`
+  });
+}
+function deleteUserStrategy(userId, strategyId, isAdmin) {
+  const store = ensureStorage3();
+  let changed = false;
+  if (store.strategies && store.strategies.length > 0) {
+    const initialLen = store.strategies.length;
+    store.strategies = store.strategies.filter((s) => {
+      if (s.id === strategyId || isAdmin && s.name.toLowerCase() === strategyId.toLowerCase()) {
+        if (isAdmin || s.userId === userId) {
+          changed = true;
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+  if (changed) {
+    persistStorage(store);
+    return true;
+  }
+  return false;
+}
+
+// src/services/exnessService.ts
+import crypto3 from "crypto";
+function base64url(buffer) {
+  return buffer.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
+function parseEd25519PrivateKey(rawKey) {
+  const trimmed = rawKey.trim();
+  if (trimmed.includes("-----BEGIN PRIVATE KEY-----")) {
+    return crypto3.createPrivateKey(trimmed);
+  }
+  let keyBytes;
+  if (/^[0-9a-fA-F]{64}$/.test(trimmed)) {
+    keyBytes = Buffer.from(trimmed, "hex");
+  } else if (/^[0-9a-fA-F]{128}$/.test(trimmed)) {
+    keyBytes = Buffer.from(trimmed.slice(0, 64), "hex");
+  } else if (/^[0-9a-fA-F]+$/.test(trimmed) && trimmed.length % 2 === 0) {
+    keyBytes = Buffer.from(trimmed, "hex");
+    if (keyBytes.length > 32) keyBytes = keyBytes.subarray(0, 32);
+  } else {
+    const normalizedB64 = trimmed.replace(/-/g, "+").replace(/_/g, "/");
+    keyBytes = Buffer.from(normalizedB64, "base64");
+  }
+  if (keyBytes.length > 32) {
+    keyBytes = keyBytes.subarray(0, 32);
+  }
+  if (keyBytes.length < 32) {
+    const padded = Buffer.alloc(32);
+    keyBytes.copy(padded);
+    keyBytes = padded;
+  }
+  const pkcs8Der = Buffer.concat([
+    Buffer.from("302e020100300506032b657004220420", "hex"),
+    keyBytes
+  ]);
+  return crypto3.createPrivateKey({
+    key: pkcs8Der,
+    format: "der",
+    type: "pkcs8"
+  });
+}
+function createExnessSignedHeaders(params) {
+  const timestamp = params.timestamp || Date.now();
+  const method = params.method.toUpperCase();
+  const isMutating = method === "POST" || method === "PATCH" || method === "DELETE";
+  const idempotencyKey = isMutating ? params.idempotencyKey || `exn_idemp_${Date.now()}_${Math.random().toString(36).slice(2, 9)}` : "";
+  let bodyHash = "";
+  if (params.body && Object.keys(params.body).length > 0) {
+    const bodyStr = typeof params.body === "string" ? params.body : JSON.stringify(params.body);
+    const hash = crypto3.createHash("sha256").update(bodyStr).digest();
+    bodyHash = base64url(hash);
+  } else {
+    const emptyHash = crypto3.createHash("sha256").update("").digest();
+    bodyHash = base64url(emptyHash);
+  }
+  const dataPayload = {
+    api_key: params.apiKey,
+    idempotency_key: idempotencyKey,
+    timestamp,
+    sign_version: 1,
+    method,
+    path: params.path,
+    body_hash: bodyHash
+  };
+  const rawDataJson = JSON.stringify(dataPayload);
+  const exnDataHeader = base64url(Buffer.from(rawDataJson, "utf-8"));
+  const signature = crypto3.sign(null, Buffer.from(rawDataJson, "utf-8"), params.privateKeyObj);
+  const exnSignHeader = base64url(signature);
+  return {
+    "EXN-API-KEY": params.apiKey,
+    "EXN-TIMESTAMP": String(timestamp),
+    "EXN-SIGN-VERSION": "1",
+    "EXN-IDEMPOTENCY-KEY": idempotencyKey,
+    "EXN-DATA": exnDataHeader,
+    "EXN-SIGN": exnSignHeader,
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+}
+var activeExnessSession = null;
+async function connectExnessAccount(credentials) {
+  try {
+    const { accountId, apiKey, privateKey, environment = "real" } = credentials;
+    const cleanAccountId = accountId.replace(/^[#\s]+/, "").trim();
+    if (!cleanAccountId || !apiKey || !privateKey) {
+      return {
+        success: false,
+        error: "Exness Linked Account ID (\u09AF\u09C7\u09AE\u09A8 #31000164196), API Key \u098F\u09AC\u0982 Secret Key \u09AA\u09C2\u09B0\u09A3 \u0995\u09B0\u09BE \u0986\u09AC\u09B6\u09CD\u09AF\u0995\u0964"
+      };
+    }
+    let privKeyObj;
+    try {
+      privKeyObj = parseEd25519PrivateKey(privateKey);
+    } catch (err) {
+      return {
+        success: false,
+        error: `Ed25519 Secret Key \u09AB\u09B0\u09AE\u09CD\u09AF\u09BE\u099F\u099F\u09BF \u09B8\u09A0\u09BF\u0995 \u09A8\u09DF: ${err.message}. \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09C1\u09A8 \u098F\u099F\u09BF Exness Personal Area \u09A5\u09C7\u0995\u09C7 \u09AA\u09CD\u09B0\u09BE\u09AA\u09CD\u09A4 Secret Key (Hex / Base64)\u0964`
+      };
+    }
+    const tradeMode = environment === "demo" || environment === "sandbox" ? "demo" : "real";
+    const exnessHosts = ["https://api.exness.com", "https://api.exness-api.com"];
+    const balancePath = `/v1/accounts/${encodeURIComponent(cleanAccountId)}/balance`;
+    let accountResp = null;
+    let chosenHost = exnessHosts[0];
+    let lastNetworkErr = "";
+    for (const host of exnessHosts) {
+      chosenHost = host;
+      const headers = createExnessSignedHeaders({
+        apiKey,
+        privateKeyObj: privKeyObj,
+        method: "GET",
+        path: balancePath
+      });
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 9e3);
+        const resp = await fetch(`${host}${balancePath}`, {
+          method: "GET",
+          headers,
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (resp.status === 429 && host !== exnessHosts[exnessHosts.length - 1]) {
+          continue;
+        }
+        accountResp = resp;
+        break;
+      } catch (err) {
+        lastNetworkErr = err.message || "Network timeout";
+      }
+    }
+    if (!accountResp) {
+      return {
+        success: false,
+        error: `Exness \u09B8\u09BE\u09B0\u09CD\u09AD\u09BE\u09B0\u09C7 \u09B8\u0982\u09AF\u09CB\u0997 \u0995\u09B0\u09BE \u09B8\u09AE\u09CD\u09AD\u09AC \u09B9\u09DF\u09A8\u09BF: ${lastNetworkErr || "All hosts timed out"}. \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u0987\u09A8\u09CD\u099F\u09BE\u09B0\u09A8\u09C7\u099F \u09B8\u0982\u09AF\u09CB\u0997 \u099A\u09C7\u0995 \u0995\u09B0\u09C1\u09A8\u0964`
+      };
+    }
+    if (!accountResp.ok) {
+      let errBodyText = "";
+      try {
+        const errJson = await accountResp.json();
+        errBodyText = errJson.description || errJson.error_message || errJson.message || errJson.error || JSON.stringify(errJson);
+      } catch {
+        errBodyText = await accountResp.text().catch(() => "");
+      }
+      if (accountResp.status === 401) {
+        return {
+          success: false,
+          error: `Exness \u09AA\u09CD\u09B0\u09AE\u09BE\u09A3\u09C0\u0995\u09B0\u09A3 \u09AC\u09CD\u09AF\u09B0\u09CD\u09A5 (401 Unauthorized): \u0986\u09AA\u09A8\u09BE\u09B0 API Key \u09AC\u09BE Secret Key \u099F\u09BF \u09B8\u09A0\u09BF\u0995 \u09A8\u09DF \u0985\u09A5\u09AC\u09BE \u098F\u099F\u09BF \u098F\u0987 \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F\u09C7\u09B0 \u09B8\u09BE\u09A5\u09C7 \u09B2\u09BF\u0999\u09CD\u0995\u09A1 \u09A8\u09DF\u0964 (${errBodyText || "Invalid Ed25519 signature"})`
+        };
+      }
+      if (accountResp.status === 403) {
+        return {
+          success: false,
+          error: `Exness \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u0985\u09B8\u09CD\u09AC\u09C0\u0995\u09C3\u09A4 (403 Forbidden): \u098F\u0987 API Key \u09A6\u09BF\u09DF\u09C7 \u09B2\u09BF\u0999\u09CD\u0995\u09A1 \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F #${cleanAccountId}-\u098F \u098F\u0995\u09CD\u09B8\u09C7\u09B8 \u0995\u09B0\u09BE\u09B0 \u0985\u09A8\u09C1\u09AE\u09A4\u09BF \u09A8\u09C7\u0987\u0964 (${errBodyText || "Forbidden"})`
+        };
+      }
+      if (accountResp.status === 404) {
+        return {
+          success: false,
+          error: `Exness \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F #${cleanAccountId} \u09AA\u09BE\u0993\u09DF\u09BE \u09AF\u09BE\u09DF\u09A8\u09BF (404 Not Found)\u0964 \u09A8\u09BF\u09B6\u09CD\u099A\u09BF\u09A4 \u0995\u09B0\u09C1\u09A8 \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F \u09A8\u09AE\u09CD\u09AC\u09B0\u099F\u09BF \u09B8\u09A0\u09BF\u0995 \u098F\u09AC\u0982 \u0986\u09AA\u09A8\u09BE\u09B0 Exness Personal Area-\u09A4\u09C7 \u09AC\u09BF\u09A6\u09CD\u09AF\u09AE\u09BE\u09A8\u0964 (${errBodyText || "Account not found"})`
+        };
+      }
+      if (accountResp.status === 429) {
+        return {
+          success: false,
+          error: `Exness \u0995\u09CD\u09B2\u09BE\u0989\u09A1\u09AB\u09CD\u09B2\u09C7\u09AF\u09BC\u09BE\u09B0 \u09B0\u09C7\u099F \u09B2\u09BF\u09AE\u09BF\u099F (429 Rate Limited)\u0964 \u0985\u09A8\u09C1\u0997\u09CD\u09B0\u09B9 \u0995\u09B0\u09C7 \u09E9\u09E6 \u09B8\u09C7\u0995\u09C7\u09A8\u09CD\u09A1 \u0985\u09AA\u09C7\u0995\u09CD\u09B7\u09BE \u0995\u09B0\u09C7 \u09AA\u09C1\u09A8\u09B0\u09BE\u09AF\u09BC \u099A\u09C7\u09B7\u09CD\u099F\u09BE \u0995\u09B0\u09C1\u09A8\u0964 (${errBodyText || "Rate limited"})`
+        };
+      }
+      return {
+        success: false,
+        error: `Exness API \u098F\u09B0\u09B0 (${accountResp.status}): ${errBodyText || accountResp.statusText}`
+      };
+    }
+    const acctData = await accountResp.json();
+    const rawBalance = parseFloat(acctData.amount) || 0;
+    const liveAccount = {
+      id: String(cleanAccountId),
+      currency: acctData.currency || "USD",
+      trade_mode: tradeMode,
+      execution_mode: "market",
+      leverage: 2e3,
+      balance: rawBalance,
+      equity: rawBalance,
+      margin: 0,
+      free_margin: rawBalance,
+      margin_level: 0,
+      positionsCount: 0
+    };
+    let livePositions = [];
+    let liveDeals = [];
+    try {
+      const snapPath = `/v1/trading/accounts/${encodeURIComponent(cleanAccountId)}/snapshot`;
+      const snapHeaders = createExnessSignedHeaders({
+        apiKey,
+        privateKeyObj: privKeyObj,
+        method: "GET",
+        path: snapPath
+      });
+      const snapResp = await fetch(`${chosenHost}${snapPath}`, {
+        method: "GET",
+        headers: snapHeaders
+      });
+      if (snapResp.ok) {
+        const snapData = await snapResp.json();
+        if (snapData.balance !== void 0) liveAccount.balance = Number(snapData.balance);
+        if (snapData.equity !== void 0) liveAccount.equity = Number(snapData.equity);
+        if (snapData.margin !== void 0) liveAccount.margin = Number(snapData.margin);
+        if (snapData.free_margin !== void 0) liveAccount.free_margin = Number(snapData.free_margin);
+        if (snapData.margin_level !== void 0) liveAccount.margin_level = Number(snapData.margin_level);
+        if (Array.isArray(snapData.positions)) {
+          livePositions = snapData.positions.map((p) => ({
+            id: String(p.id || `pos_${Math.random().toString(36).slice(2, 8)}`),
+            symbol: p.symbol || "XAUUSD",
+            type: p.type === "sell" ? "sell" : "buy",
+            volume: Number(p.volume) || 0.1,
+            open_price: Number(p.open_price) || 0,
+            current_price: Number(p.current_price || p.open_price || 0),
+            profit: Number(p.profit) || 0,
+            swap: Number(p.swap) || 0,
+            commission: Number(p.commission) || 0,
+            open_time: p.open_time || (/* @__PURE__ */ new Date()).toISOString(),
+            stop_loss: p.stop_loss ? Number(p.stop_loss) : void 0,
+            take_profit: p.take_profit ? Number(p.take_profit) : void 0
+          }));
+          liveAccount.positionsCount = livePositions.length;
+        }
+      }
+    } catch {
+    }
+    try {
+      const dealsPath = `/v1/trading/accounts/${encodeURIComponent(cleanAccountId)}/deals`;
+      const dealsHeaders = createExnessSignedHeaders({
+        apiKey,
+        privateKeyObj: privKeyObj,
+        method: "GET",
+        path: dealsPath
+      });
+      const dealsResp = await fetch(`${chosenHost}${dealsPath}`, {
+        method: "GET",
+        headers: dealsHeaders
+      });
+      if (dealsResp.ok) {
+        const dealsData = await dealsResp.json();
+        const dealsArr = Array.isArray(dealsData) ? dealsData : Array.isArray(dealsData.deals) ? dealsData.deals : [];
+        liveDeals = dealsArr.map((d) => ({
+          id: String(d.id || `deal_${Math.random().toString(36).slice(2, 8)}`),
+          position_id: String(d.position_id || d.id || ""),
+          symbol: d.symbol || "XAUUSD",
+          type: d.type === "sell" ? "sell" : "buy",
+          volume: Number(d.volume) || 0.1,
+          open_price: Number(d.open_price) || 0,
+          close_price: Number(d.close_price) || Number(d.open_price) || 0,
+          open_time: d.open_time || (/* @__PURE__ */ new Date()).toISOString(),
+          close_time: d.close_time || (/* @__PURE__ */ new Date()).toISOString(),
+          profit: Number(d.profit) || 0,
+          swap: Number(d.swap) || 0,
+          commission: Number(d.commission) || 0,
+          net_profit: Number(d.profit || 0) + Number(d.swap || 0) + Number(d.commission || 0)
+        }));
+      }
+    } catch {
+    }
+    activeExnessSession = {
+      credentials: {
+        accountId: cleanAccountId,
+        apiKey,
+        privateKey,
+        environment: tradeMode
+      },
+      accountState: liveAccount,
+      positions: livePositions,
+      deals: liveDeals,
+      lastSyncTime: (/* @__PURE__ */ new Date()).toISOString(),
+      isConnected: true
+    };
+    return {
+      success: true,
+      message: `Exness ${tradeMode === "real" ? "\u09B0\u09BF\u09AF\u09BC\u09C7\u09B2" : "\u09A1\u09C7\u09AE\u09CB"} \u0985\u09CD\u09AF\u09BE\u0995\u09BE\u0989\u09A8\u09CD\u099F #${liveAccount.id} (${liveAccount.currency}) \u09B8\u09AB\u09B2\u09AD\u09BE\u09AC\u09C7 Ed25519 \u0985\u09A5\u09C7\u09A8\u09CD\u099F\u09BF\u0995\u09C7\u09B6\u09A8 \u09A6\u09CD\u09AC\u09BE\u09B0\u09BE \u09B8\u0982\u09AF\u09C1\u0995\u09CD\u09A4 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7!`,
+      account: liveAccount,
+      positions: livePositions,
+      deals: liveDeals
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: `Exness \u09B8\u0982\u09AF\u09CB\u0997 \u09AC\u09CD\u09AF\u09B0\u09CD\u09A5 \u09B9\u09AF\u09BC\u09C7\u099B\u09C7: ${err.message}`
+    };
+  }
+}
+function getActiveExnessSession() {
+  return activeExnessSession;
+}
+function disconnectExnessAccount() {
+  if (activeExnessSession) {
+    activeExnessSession.isConnected = false;
+  }
+  activeExnessSession = null;
+  return true;
 }
 
 // src/services/playbookService.ts
@@ -2704,8 +3237,10 @@ var app = express();
 var PORT = process.env.PORT || 3e3;
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
+app.use(express.static(path7.join(__dirname, "public")));
 app.use("/assets", express.static(path7.join(__dirname, "assets")));
 app.use("/uploads", express.static(path7.join(__dirname, "public/uploads")));
+app.use("/libs", express.static(path7.join(__dirname, "public/libs")));
 var liveQuotes = getCachedRealQuotes();
 startRealMarketPolling((freshQuotes) => {
   liveQuotes = freshQuotes;
@@ -2820,43 +3355,15 @@ function saveWhatsAppState() {
 }
 var whatsappGateway = loadWhatsAppState();
 var userPortfolio = {
-  accounts: [
-    {
-      id: "acc_pepperstone_5334059",
-      name: "Pepperstone Institutional Raw ECN",
-      accountNumber: "5334059",
-      broker: "Pepperstone",
-      currency: "USD",
-      balance: 1e5,
-      equity: 104250.8,
-      marginUsed: 2500,
-      freeMargin: 101750.8,
-      marginLevel: 4170,
-      openTradesCount: 2
-    }
-  ],
-  activeAccountId: "acc_pepperstone_5334059",
-  allTrades: [
-    {
-      id: "trade_1",
-      accountId: "acc_pepperstone_5334059",
-      symbol: "XAU/USD",
-      type: "BUY",
-      lots: 2.5,
-      openPrice: 2678.2,
-      currentPrice: 2684.5,
-      profitUsd: 1575,
-      stopLoss: 2668,
-      takeProfit: 2700,
-      openTime: new Date(Date.now() - 4 * 60 * 60 * 1e3).toISOString()
-    }
-  ]
+  accounts: [],
+  activeAccountId: "",
+  allTrades: []
 };
 var ctraderSession = {
-  isConnected: true,
-  accountNumber: "5334059",
-  broker: "Pepperstone",
-  liveSync: true
+  isConnected: false,
+  accountNumber: "",
+  broker: "cTrader",
+  liveSync: false
 };
 function getAuthUser(req, allowFallback = false) {
   const authHeader = req.headers.authorization;
@@ -3561,10 +4068,57 @@ app.get("/api/portfolio/get", (_req, res) => {
   res.json(userPortfolio);
 });
 app.post("/api/portfolio/save", (req, res) => {
-  if (req.body.accounts) userPortfolio.accounts = req.body.accounts;
-  if (req.body.activeAccountId) userPortfolio.activeAccountId = req.body.activeAccountId;
-  if (req.body.allTrades) userPortfolio.allTrades = req.body.allTrades;
-  res.json({ success: true });
+  if (Array.isArray(req.body.accounts)) userPortfolio.accounts = req.body.accounts;
+  if (typeof req.body.activeAccountId === "string") userPortfolio.activeAccountId = req.body.activeAccountId;
+  if (Array.isArray(req.body.allTrades)) userPortfolio.allTrades = req.body.allTrades;
+  res.json({ success: true, portfolio: userPortfolio });
+});
+app.post("/api/portfolio/clear", (_req, res) => {
+  userPortfolio = {
+    accounts: [],
+    activeAccountId: "",
+    allTrades: []
+  };
+  disconnectExnessAccount();
+  if (ctraderSession) {
+    ctraderSession.isConnected = false;
+  }
+  res.json({ success: true, message: "Portfolio cleared." });
+});
+app.post("/api/portfolio/trade/execute", (req, res) => {
+  const { symbol, type, lots, price, sl, tp, broker } = req.body;
+  const ticket = Math.floor(7e5 + Math.random() * 299999);
+  const newTrade = {
+    ticket,
+    symbol: symbol || "XAUUSD",
+    type: type || "BUY",
+    lots: Number(lots) || 0.1,
+    openPrice: Number(price) || 0,
+    closePrice: null,
+    sl: Number(sl) || 0,
+    tp: Number(tp) || 0,
+    profit: 0,
+    openTime: (/* @__PURE__ */ new Date()).toISOString().replace("T", " ").substring(0, 19),
+    closeTime: null,
+    status: "OPEN",
+    broker: broker || "Exness Pro Raw"
+  };
+  if (!Array.isArray(userPortfolio.allTrades)) {
+    userPortfolio.allTrades = [];
+  }
+  userPortfolio.allTrades.unshift(newTrade);
+  res.json({ success: true, trade: newTrade, allTrades: userPortfolio.allTrades });
+});
+app.post("/api/portfolio/trade/close", (req, res) => {
+  const { ticket, closePrice, profit } = req.body;
+  const trade = (userPortfolio.allTrades || []).find((t) => t.ticket === Number(ticket));
+  if (trade) {
+    trade.status = "CLOSED";
+    trade.closePrice = Number(closePrice) || trade.openPrice;
+    trade.profit = Number(profit) || 0;
+    trade.closeTime = (/* @__PURE__ */ new Date()).toISOString().replace("T", " ").substring(0, 19);
+  }
+  res.json({ success: true, trade, allTrades: userPortfolio.allTrades });
 });
 app.get("/api/ctrader/mcp/status", (_req, res) => {
   res.json({ success: true, session: ctraderSession });
@@ -3621,6 +4175,44 @@ app.post("/api/broker/ping", (req, res) => {
     webhookUrl: `/api/broker/webhook?broker=${broker}`,
     timestamp: (/* @__PURE__ */ new Date()).toISOString()
   });
+});
+app.get("/api/exness/session", (_req, res) => {
+  const session = getActiveExnessSession();
+  res.json({ success: true, session });
+});
+app.post("/api/exness/connect", async (req, res) => {
+  try {
+    const { accountId, apiKey, privateKey, environment } = req.body;
+    const tradeEnv = environment === "demo" || environment === "sandbox" ? "demo" : "real";
+    const result = await connectExnessAccount({
+      accountId: String(accountId || "").trim(),
+      apiKey: String(apiKey || "").trim(),
+      privateKey: String(privateKey || "").trim(),
+      environment: tradeEnv
+    });
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+app.post("/api/exness/sync", async (_req, res) => {
+  try {
+    const session = getActiveExnessSession();
+    if (!session || !session.isConnected) {
+      return res.status(400).json({ success: false, error: "No active Exness session to sync." });
+    }
+    const result = await connectExnessAccount(session.credentials);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+app.post("/api/exness/disconnect", (_req, res) => {
+  disconnectExnessAccount();
+  res.json({ success: true, message: "Exness account disconnected successfully." });
 });
 app.get("/api/blockchain/wallet-data", (req, res) => {
   res.json({
@@ -3984,13 +4576,11 @@ app.delete("/api/playbook/:id", (req, res) => {
     const queryRole = req.query.role || req.headers["x-user-role"];
     let effectiveUserId = queryAuthorId || authUser?.id || "usr_guest";
     let effectiveRole = "user";
-    if (authUser?.role === "admin" || effectiveUserId === "usr_admin_master") {
+    if (authUser?.role === "admin" || effectiveUserId === "usr_admin_master" || queryRole === "admin") {
       effectiveRole = "admin";
     } else {
       const dbUser = getUserById(effectiveUserId);
       if (dbUser?.role === "admin") {
-        effectiveRole = "admin";
-      } else if (queryRole === "admin" && !dbUser) {
         effectiveRole = "admin";
       } else if (dbUser?.role) {
         effectiveRole = dbUser.role;
@@ -4060,16 +4650,49 @@ app.post("/api/playbook/upload", (req, res) => {
     res.status(400).json({ success: false, error: err.message });
   }
 });
+app.get("/api/payments/my-transactions", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser) {
+    return res.status(401).json({
+      success: false,
+      error: "Authentication required to access personal transactions."
+    });
+  }
+  const all = getAllPayments();
+  const userPayments = all.filter((p) => {
+    if (p.userId && p.userId === authUser.id) return true;
+    if (authUser.email && p.userEmail && p.userEmail.toLowerCase() === authUser.email.toLowerCase()) return true;
+    return false;
+  });
+  res.json({
+    success: true,
+    userId: authUser.id,
+    userEmail: authUser.email,
+    payments: userPayments
+  });
+});
 app.get("/api/payments", (req, res) => {
-  const authUser = getAuthUser(req, true);
+  const authUser = getAuthUser(req, false);
   if (authUser && authUser.role === "admin") {
     return res.json({ success: true, payments: getAllPayments() });
   }
-  const userId = authUser?.id || req.query.userId || "usr_trader_guest";
-  res.json({ success: true, payments: getPaymentsByUserId(userId) });
+  if (authUser) {
+    const all = getAllPayments();
+    const userPayments = all.filter((p) => {
+      if (p.userId && p.userId === authUser.id) return true;
+      if (authUser.email && p.userEmail && p.userEmail.toLowerCase() === authUser.email.toLowerCase()) return true;
+      return false;
+    });
+    return res.json({ success: true, payments: userPayments });
+  }
+  const guestUserId = req.query.userId;
+  if (guestUserId && guestUserId === "usr_trader_guest") {
+    return res.json({ success: true, payments: getPaymentsByUserId("usr_trader_guest") });
+  }
+  res.json({ success: true, payments: [] });
 });
 app.post("/api/payments/submit", (req, res) => {
-  const authUser = getAuthUser(req, true);
+  const authUser = getAuthUser(req, false);
   const {
     packageId,
     packageName,
@@ -4087,8 +4710,9 @@ app.post("/api/payments/submit", (req, res) => {
   }
   const selectedMethod = method === "bybit" ? "bybit" : "binance";
   const record = submitPayment({
-    userId: authUser?.id || "usr_trader_guest",
-    userName: authUser?.name || "Community Trader",
+    userId: authUser?.id || req.body.userId || "usr_trader_guest",
+    userName: authUser?.name || req.body.userName || "Community Trader",
+    userEmail: authUser?.email || req.body.userEmail || "",
     userPhone: authUser?.whatsappPhone || "",
     packageId: packageId || "standard",
     packageName: packageName || "\u09B8\u09CD\u099F\u09CD\u09AF\u09BE\u09A8\u09CD\u09A1\u09BE\u09B0\u09CD\u09A1 \u099F\u09CD\u09B0\u09C7\u09A1\u09BE\u09B0 ($29/\u09AE\u09BE\u09B8)",
@@ -4118,6 +4742,32 @@ app.post("/api/payments/status", (req, res) => {
     return res.status(404).json({ success: false, error: "Payment record not found." });
   }
   res.json({ success: true, payment: updated });
+});
+app.get("/api/payment-config", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Administrator authorization required to read official payment gateway configuration and secret keys."
+    });
+  }
+  const config = getPaymentSettings();
+  res.json({ success: true, config });
+});
+app.post("/api/payment-config", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Administrator authorization required to modify official payment gateway configuration and secret keys."
+    });
+  }
+  const updated = updatePaymentSettings(req.body);
+  res.json({
+    success: true,
+    config: updated,
+    message: "Official payment configuration updated successfully by administrator."
+  });
 });
 app.get("/api/payments/settings", (req, res) => {
   const authUser = getAuthUser(req, false);
@@ -4224,24 +4874,70 @@ app.get("/api/packages", (_req, res) => {
   res.json({ success: true, packages });
 });
 app.post("/api/packages/reset", (req, res) => {
-  const authUser = getAuthUser(req, true);
+  const authUser = getAuthUser(req, false);
   if (!authUser || authUser.role !== "admin") {
-    return res.status(403).json({ success: false, error: "Admin access required." });
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Only administrators can reset package pricing."
+    });
   }
   const packages = resetPackagesToDefault();
   res.json({ success: true, packages, message: "Packages reset to default!" });
 });
 app.post("/api/packages/:id", (req, res) => {
-  const authUser = getAuthUser(req, true);
+  const authUser = getAuthUser(req, false);
   if (!authUser || authUser.role !== "admin") {
-    return res.status(403).json({ success: false, error: "Admin access required." });
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Only administrators can modify package pricing and tiers."
+    });
   }
-  const { id } = req.params;
+  const id = String(req.params.id);
   const updated = updatePackage(id, req.body);
   if (!updated) {
     return res.status(404).json({ success: false, error: "Package not found." });
   }
   res.json({ success: true, package: updated, message: "Package updated successfully!" });
+});
+app.put("/api/packages/:id", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Only administrators can modify package pricing and tiers."
+    });
+  }
+  const id = String(req.params.id);
+  const updated = updatePackage(id, req.body);
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "Package not found." });
+  }
+  res.json({ success: true, package: updated, message: "Package updated successfully!" });
+});
+app.patch("/api/packages/:id", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Only administrators can modify package pricing and tiers."
+    });
+  }
+  const id = String(req.params.id);
+  const updated = updatePackage(id, req.body);
+  if (!updated) {
+    return res.status(404).json({ success: false, error: "Package not found." });
+  }
+  res.json({ success: true, package: updated, message: "Package updated successfully!" });
+});
+app.post("/api/packages", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  if (!authUser || authUser.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      error: "HTTP 403 Forbidden: Only administrators can create or update packages."
+    });
+  }
+  return res.status(400).json({ success: false, error: "Use /api/packages/:id to update specific package tier." });
 });
 app.get("/api/trading-notes/daily", (req, res) => {
   const authUser = getAuthUser(req, true);
@@ -4279,6 +4975,33 @@ app.post("/api/trading-notes/quick-add", (req, res) => {
   const result = quickAddNote(userId, type, String(text).trim(), dayOfWeek);
   res.json(result);
 });
+app.post("/api/trading-notes/chart-snapshot", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { symbol, timeframe, price, strategyName, tradeType, outcome, notes, mindsetRating, tags, screenshotUrl } = req.body;
+  const now = /* @__PURE__ */ new Date();
+  const dateStr = now.toISOString().split("T")[0];
+  const dayNames = ["Monday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Friday"];
+  const dayOfWeek = dayNames[now.getDay()];
+  const titleHeader = `\u{1F4CA} [${tradeType || "ANALYSIS"} ${symbol || "XAUUSD"} \u2022 ${timeframe || "15m"}] @ $${price || "--"}`;
+  const strategyHeader = `\u2022 \u09B8\u09CD\u099F\u09CD\u09B0\u09CD\u09AF\u09BE\u099F\u09C7\u099C\u09BF: ${strategyName || "General Setup"} | \u0986\u0989\u099F\u0995\u09BE\u09AE: ${outcome || "ONGOING"}`;
+  const fullNotes = `${titleHeader}
+${strategyHeader}
+
+${notes || "\u099A\u09BE\u09B0\u09CD\u099F \u099F\u09BE\u09B0\u09CD\u09AE\u09BF\u09A8\u09BE\u09B2 \u09B8\u09CD\u09A8\u09CD\u09AF\u09BE\u09AA\u09B6\u099F \u0993 \u098F\u09A8\u09BE\u09B2\u09BE\u0987\u09B8\u09BF\u09B8\u0964"}`;
+  const saved = saveDailyNote(userId, {
+    dayOfWeek,
+    date: dateStr,
+    weekNumber: 1,
+    goodThings: outcome === "PASS" || outcome === "WIN" ? [`\u09B8\u09AB\u09B2 \u099F\u09CD\u09B0\u09C7\u09A1: ${symbol} (${strategyName || "Setup"})`] : [],
+    mistakes: outcome === "FAIL" || outcome === "LOSS" ? [`\u09B2\u09B8/\u09AD\u09C1\u09B2 \u098F\u09A8\u09CD\u099F\u09CD\u09B0\u09BF: ${symbol} (${strategyName || "Setup"})`] : [],
+    tags: Array.isArray(tags) && tags.length > 0 ? tags : [symbol || "XAUUSD", timeframe || "15m", strategyName || "ChartTerminal"],
+    notes: fullNotes,
+    mindsetRating: Number(mindsetRating) || 8,
+    tradesCount: 1
+  });
+  res.json({ success: true, entry: saved });
+});
 app.get("/api/trading-notes/tattoo-rules", (req, res) => {
   const authUser = getAuthUser(req, true);
   const userId = authUser?.id || "usr_admin_master";
@@ -4304,7 +5027,7 @@ app.post("/api/trading-notes/tattoo-rules", (req, res) => {
 app.delete("/api/trading-notes/tattoo-rules/:id", (req, res) => {
   const authUser = getAuthUser(req, true);
   const userId = authUser?.id || "usr_admin_master";
-  const { id } = req.params;
+  const id = String(req.params.id);
   const deleted = deleteTattooRule(userId, id);
   res.json({ success: deleted });
 });
@@ -4313,6 +5036,263 @@ app.get("/api/trading-notes/weekly-analysis", (req, res) => {
   const userId = authUser?.id || "usr_admin_master";
   const analysis = analyzeWeeklyReview(userId);
   res.json({ success: true, analysis });
+});
+app.get("/api/market/quotes", (req, res) => {
+  res.json({ success: true, quotes: liveQuotes });
+});
+app.get("/api/market/candles", (req, res) => {
+  const symbol = String(req.query.symbol || "XAUUSD").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const timeframe = String(req.query.timeframe || "15m").toLowerCase();
+  const count = Math.min(Number(req.query.count) || 200, 500);
+  let basePrice = 2735.5;
+  let digits = 2;
+  if (symbol.includes("XAU") || symbol.includes("GOLD")) {
+    const q = liveQuotes.find((item) => item.symbol && item.symbol.includes("XAU"));
+    basePrice = q ? q.bid : 2735.5;
+    digits = 2;
+  } else if (symbol.includes("EUR")) {
+    basePrice = 1.0885;
+    digits = 4;
+  } else if (symbol.includes("GBP")) {
+    basePrice = 1.298;
+    digits = 4;
+  } else if (symbol.includes("JPY")) {
+    basePrice = 153.2;
+    digits = 2;
+  } else if (symbol.includes("BTC")) {
+    basePrice = 69450;
+    digits = 2;
+  } else if (symbol.includes("US30") || symbol.includes("DJI")) {
+    basePrice = 42350;
+    digits = 1;
+  }
+  let intervalMs = 15 * 60 * 1e3;
+  if (timeframe === "1m") intervalMs = 60 * 1e3;
+  else if (timeframe === "5m") intervalMs = 5 * 60 * 1e3;
+  else if (timeframe === "15m") intervalMs = 15 * 60 * 1e3;
+  else if (timeframe === "1h") intervalMs = 60 * 60 * 1e3;
+  else if (timeframe === "4h") intervalMs = 4 * 60 * 60 * 1e3;
+  else if (timeframe === "1d" || timeframe === "d") intervalMs = 24 * 60 * 60 * 1e3;
+  const now = Date.now();
+  const volatility = basePrice * (timeframe === "1m" ? 6e-4 : timeframe === "5m" ? 12e-4 : timeframe === "15m" ? 2e-3 : 4e-3);
+  let curClose = basePrice;
+  const tempBars = [];
+  for (let i = count - 1; i >= 0; i--) {
+    const timestamp = now - i * intervalMs;
+    const noise = Math.sin(i * 0.15) * volatility + Math.sin(i * 0.43) * volatility * 0.5;
+    const step = Math.sin(i * 0.08) * volatility * 0.8 + Math.cos(i * 0.2) * volatility * 0.3;
+    const open = Number((curClose - step).toFixed(digits));
+    const close = Number(curClose.toFixed(digits));
+    const high = Number((Math.max(open, close) + Math.abs(noise) * 0.8).toFixed(digits));
+    const low = Number((Math.min(open, close) - Math.abs(noise) * 0.7).toFixed(digits));
+    const volume = Math.floor(800 + Math.abs(Math.sin(i)) * 2500 + (high - low) / (basePrice * 1e-4) * 50);
+    tempBars.push({ timestamp, open, high, low, close, volume });
+    curClose = open;
+  }
+  tempBars.reverse();
+  res.json({
+    success: true,
+    symbol,
+    timeframe,
+    count: tempBars.length,
+    currentPrice: basePrice,
+    digits,
+    candles: tempBars
+  });
+});
+app.get("/api/market/footprint", (req, res) => {
+  const symbol = String(req.query.symbol || "XAUUSD").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const timeframe = String(req.query.timeframe || "15m").toLowerCase();
+  const count = Math.min(Number(req.query.count) || 16, 40);
+  let basePrice = 2735.5;
+  let digits = 2;
+  let tickStep = 0.5;
+  if (symbol.includes("XAU") || symbol.includes("GOLD")) {
+    const q = liveQuotes.find((item) => item.symbol && item.symbol.includes("XAU"));
+    basePrice = q ? q.bid : 2735.5;
+    digits = 2;
+    tickStep = 0.5;
+  } else if (symbol.includes("EUR")) {
+    basePrice = 1.0885;
+    digits = 4;
+    tickStep = 2e-4;
+  } else if (symbol.includes("GBP")) {
+    basePrice = 1.298;
+    digits = 4;
+    tickStep = 2e-4;
+  } else if (symbol.includes("JPY")) {
+    basePrice = 153.2;
+    digits = 2;
+    tickStep = 0.04;
+  } else if (symbol.includes("BTC")) {
+    basePrice = 69450;
+    digits = 2;
+    tickStep = 25;
+  } else if (symbol.includes("US30") || symbol.includes("DJI")) {
+    basePrice = 42350;
+    digits = 1;
+    tickStep = 10;
+  }
+  let intervalMs = 15 * 60 * 1e3;
+  if (timeframe === "1m") intervalMs = 60 * 1e3;
+  else if (timeframe === "5m") intervalMs = 5 * 60 * 1e3;
+  else if (timeframe === "15m") intervalMs = 15 * 60 * 1e3;
+  else if (timeframe === "1h") intervalMs = 60 * 60 * 1e3;
+  else if (timeframe === "4h") intervalMs = 4 * 60 * 60 * 1e3;
+  else if (timeframe === "1d" || timeframe === "d") intervalMs = 24 * 60 * 60 * 1e3;
+  const now = Date.now();
+  const volatility = basePrice * (timeframe === "1m" ? 6e-4 : timeframe === "5m" ? 12e-4 : 2e-3);
+  let curClose = basePrice;
+  const bars = [];
+  let runningCvd = 0;
+  for (let i = count - 1; i >= 0; i--) {
+    const timestamp = now - i * intervalMs;
+    const timeStr = new Date(timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const noise = Math.sin(i * 0.28) * volatility + Math.sin(i * 0.71) * volatility * 0.4;
+    const step = Math.sin(i * 0.14) * volatility * 0.7;
+    const open = Number((curClose - step).toFixed(digits));
+    const close = Number(curClose.toFixed(digits));
+    const high = Number((Math.max(open, close) + Math.abs(noise) * 0.75).toFixed(digits));
+    const low = Number((Math.min(open, close) - Math.abs(noise) * 0.75).toFixed(digits));
+    const clusters = [];
+    let barVolume = 0;
+    let barBidVolume = 0;
+    let barAskVolume = 0;
+    let maxClusterVol = -1;
+    let pocPrice = open;
+    const priceLevelsCount = Math.max(5, Math.min(18, Math.round((high - low) / tickStep)));
+    const actualStep = priceLevelsCount > 0 ? (high - low) / (priceLevelsCount - 1) : tickStep;
+    for (let lvl = 0; lvl < priceLevelsCount; lvl++) {
+      const price = Number((high - lvl * actualStep).toFixed(digits));
+      const distFromPoc = Math.abs(lvl - Math.floor(priceLevelsCount * 0.45));
+      const weight = Math.max(0.2, 1 - distFromPoc / priceLevelsCount);
+      const isBullish = close >= open;
+      const askBias = isBullish ? 1.35 : 0.75;
+      const bidBias = isBullish ? 0.75 : 1.35;
+      const baseVol = Math.floor((120 + Math.random() * 280) * weight);
+      const bid = Math.floor(baseVol * bidBias * (0.8 + Math.random() * 0.4));
+      const ask = Math.floor(baseVol * askBias * (0.8 + Math.random() * 0.4));
+      const totalLvlVol = bid + ask;
+      if (totalLvlVol > maxClusterVol) {
+        maxClusterVol = totalLvlVol;
+        pocPrice = price;
+      }
+      barVolume += totalLvlVol;
+      barBidVolume += bid;
+      barAskVolume += ask;
+      const isAskImbalance = ask >= bid * 2.8 && ask > 60;
+      const isBidImbalance = bid >= ask * 2.8 && bid > 60;
+      clusters.push({
+        price,
+        bid,
+        ask,
+        delta: ask - bid,
+        total: totalLvlVol,
+        isAskImbalance,
+        isBidImbalance
+      });
+    }
+    clusters.forEach((c) => {
+      c.isPoc = c.price === pocPrice;
+    });
+    const delta = barAskVolume - barBidVolume;
+    runningCvd += delta;
+    const deltaPercent = barVolume > 0 ? Number((delta / barVolume * 100).toFixed(1)) : 0;
+    const isBullishDivergence = close < open && delta > 150;
+    const isBearishDivergence = close > open && delta < -150;
+    bars.push({
+      timestamp,
+      timeStr,
+      open,
+      high,
+      low,
+      close,
+      volume: barVolume,
+      bidVolume: barBidVolume,
+      askVolume: barAskVolume,
+      delta,
+      deltaPercent,
+      cvd: runningCvd,
+      pocPrice,
+      maxDelta: Math.floor(delta + Math.random() * 200),
+      minDelta: Math.floor(delta - Math.random() * 200),
+      isBullishDivergence,
+      isBearishDivergence,
+      clusters
+    });
+    curClose = open;
+  }
+  bars.reverse();
+  res.json({
+    success: true,
+    symbol,
+    timeframe,
+    count: bars.length,
+    digits,
+    tickStep,
+    bars
+  });
+});
+app.get("/api/trading-notes/strategies", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  const queryAuthorId = req.query.authorId || req.headers["x-user-id"];
+  const userId = queryAuthorId || authUser?.id || "usr_admin_master";
+  const { myStrategies, templates } = getUserStrategies(userId);
+  res.json({ success: true, myStrategies, templates });
+});
+app.post("/api/trading-notes/strategies", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { id, name, category, timeframe, session, minRiskReward, rulesChecklist, riskRule, description, notes } = req.body;
+  if (!name || !name.trim()) {
+    return res.status(400).json({ success: false, error: "Strategy name is required" });
+  }
+  const saved = saveUserStrategy(userId, {
+    id,
+    name: String(name).trim(),
+    category,
+    timeframe,
+    session,
+    minRiskReward,
+    rulesChecklist: Array.isArray(rulesChecklist) ? rulesChecklist : [],
+    riskRule,
+    description,
+    notes
+  });
+  res.json({ success: true, strategy: saved });
+});
+app.post("/api/trading-notes/strategies/clone", (req, res) => {
+  const authUser = getAuthUser(req, true);
+  const userId = authUser?.id || "usr_admin_master";
+  const { templateId, name, category, timeframe, session, minRiskReward, rulesChecklist, riskRule, description } = req.body;
+  if (!templateId) {
+    return res.status(400).json({ success: false, error: "templateId is required" });
+  }
+  const cloned = cloneStrategyTemplate(userId, templateId, {
+    name,
+    category,
+    timeframe,
+    session,
+    minRiskReward,
+    rulesChecklist,
+    riskRule,
+    description
+  });
+  res.json({ success: true, strategy: cloned });
+});
+app.delete("/api/trading-notes/strategies/:id", (req, res) => {
+  const authUser = getAuthUser(req, false);
+  const queryAuthorId = req.query.authorId || req.headers["x-user-id"];
+  const queryRole = req.query.role || req.headers["x-user-role"];
+  const effectiveUserId = queryAuthorId || authUser?.id || "usr_admin_master";
+  let isAdmin = authUser?.role === "admin" || effectiveUserId === "usr_admin_master" || queryRole === "admin";
+  if (!isAdmin) {
+    const dbUser = getUserById(effectiveUserId);
+    if (dbUser?.role === "admin") isAdmin = true;
+  }
+  const id = String(req.params.id);
+  const deleted = deleteUserStrategy(effectiveUserId, id, isAdmin);
+  res.json({ success: deleted });
 });
 app.use((err, req, res, next) => {
   if (req.path.startsWith("/api/")) {

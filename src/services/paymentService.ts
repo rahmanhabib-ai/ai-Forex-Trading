@@ -6,7 +6,8 @@ export interface PaymentSubmission {
   id: string;
   userId: string;
   userName: string;
-  userPhone: string;
+  userEmail?: string;
+  userPhone?: string;
   packageId: string;
   packageName: string;
   amountUsd: number;
@@ -14,9 +15,10 @@ export interface PaymentSubmission {
   senderAccount: string;
   transactionId: string;
   notes?: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status: "PENDING" | "APPROVED" | "REJECTED" | "EXPIRED";
   verifiedMethod?: "AUTOMATED_GMAIL" | "MANUAL_ADMIN";
   createdAt: string;
+  expiresAt?: string;
   verifiedAt?: string;
 }
 
@@ -253,27 +255,68 @@ function saveEmailTransactions(logs: ParsedEmailTransaction[]): void {
 }
 
 /**
- * Intelligent Cross-Matching: Matches a submitted TxID or pending order against Gmail transactions
+ * Intelligent Cross-Matching: Matches a submitted Profile Name, Nickname, Pay ID, TxID within a 30-minute window
  */
 function tryAutoMatchPayment(payment: PaymentSubmission, emailTxList: ParsedEmailTransaction[]): boolean {
   if (payment.status !== "PENDING") return false;
 
-  const targetTx = (payment.transactionId || "").trim().toLowerCase();
-  if (!targetTx) return false;
+  const orderTime = new Date(payment.createdAt).getTime();
+  const THIRTY_MINUTES_BUFFER_MS = 35 * 60 * 1000; // 30 minutes + 5 minutes buffer for network sync
+
+  const targetTx = (payment.transactionId || "").trim();
+  const senderAcc = (payment.senderAccount || "").trim();
+
+  // Normalizer: strips symbols, spaces, slashes (e.g. "chartlogic/trade" -> "chartlogictrade", "Hossain_2005" -> "hossain_2005")
+  const clean = (s: string) => s.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+  const normTargetTx = clean(targetTx);
+  const normSenderAcc = clean(senderAcc);
 
   const match = emailTxList.find((em) => {
-    const emTx = (em.txId || "").trim().toLowerCase();
-    // Direct TxID match OR Order ID match OR within same amount and sender
-    const txMatch = emTx && (emTx === targetTx || emTx.includes(targetTx) || targetTx.includes(emTx));
+    if (em.isMatched) return false;
+
+    // Platform must match (binance vs bybit)
+    if (em.platform !== payment.method) return false;
+
+    // 1. Strict 30-Minute Time Window Check: Email must be within 30 minutes of order creation
+    const emailTime = new Date(em.receivedAt).getTime();
+    const timeDiffMs = Math.abs(emailTime - orderTime);
+    if (timeDiffMs > THIRTY_MINUTES_BUFFER_MS) {
+      return false;
+    }
+
+    // 2. Amount Check: Exact package price in USDT must match within 0.05 USDT
     const amountMatch = Math.abs(em.amount - payment.amountUsd) < 0.05;
-    return (txMatch || (amountMatch && em.platform === payment.method)) && !em.isMatched;
+    if (!amountMatch) return false;
+
+    const emTx = (em.txId || "").trim();
+    const emSender = (em.senderInfo || "").trim();
+    const normEmTx = clean(emTx);
+    const normEmSender = clean(emSender);
+
+    // 3. User's Binance Profile Name / Nickname Match:
+    // User enters e.g. "Hossain_2005" or "chartlogic/trade", email contains From: "Hossain_2005"
+    const profileMatch = Boolean(
+      (normSenderAcc && normEmSender && (normEmSender.includes(normSenderAcc) || normSenderAcc.includes(normEmSender))) ||
+      (normTargetTx && normEmSender && (normEmSender.includes(normTargetTx) || normTargetTx.includes(normEmSender)))
+    );
+
+    // 4. TxID / Hash / Pay ID direct match (if provided)
+    const txMatch = Boolean(
+      normTargetTx && normEmTx && (normEmTx === normTargetTx || normEmTx.includes(normTargetTx) || normTargetTx.includes(normEmTx))
+    );
+
+    // 5. Automatic Fallback: If neither profile nor tx was explicitly typed, match on exact Amount + Platform within 30-min window
+    const windowMatch = !normTargetTx && !normSenderAcc;
+
+    return profileMatch || txMatch || windowMatch;
   });
 
   if (match) {
     payment.status = "APPROVED";
     payment.verifiedMethod = "AUTOMATED_GMAIL";
     payment.verifiedAt = new Date().toISOString();
-    payment.notes = (payment.notes ? `${payment.notes} | ` : "") + `⚡ Auto-Verified via Gmail (${match.platform.toUpperCase()} Order: ${match.txId})`;
+    const profileLabel = match.senderInfo ? `Profile: ${match.senderInfo}` : `TxID: ${match.txId}`;
+    payment.notes = (payment.notes ? `${payment.notes} | ` : "") + `⚡ Auto-Verified via Gmail (${match.platform.toUpperCase()} ${profileLabel} within 30m window)`;
     match.isMatched = true;
     match.matchedPaymentId = payment.id;
     return true;
@@ -282,17 +325,21 @@ function tryAutoMatchPayment(payment: PaymentSubmission, emailTxList: ParsedEmai
 }
 
 export function submitPayment(
-  data: Omit<PaymentSubmission, "id" | "status" | "createdAt">
+  data: Omit<PaymentSubmission, "id" | "status" | "createdAt" | "expiresAt">
 ): PaymentSubmission {
   ensureStorage();
   const all = getAllPayments();
   const emailLogs = getEmailTransactions();
 
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 30 * 60 * 1000).toISOString(); // Exactly 30 minutes expiration
+
   const newRecord: PaymentSubmission = {
     ...data,
     id: `pay_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     status: "PENDING",
-    createdAt: new Date().toISOString(),
+    createdAt: now.toISOString(),
+    expiresAt,
   };
 
   // Immediate Instant Auto-Verification against already received Gmail transaction emails!
@@ -382,6 +429,11 @@ export function processIncomingDepositEmail(payload: {
   // 2. Strict Deposit Subject & Body Marker (Eliminates trading/collateral noise)
   // ---------------------------------------------------------------------------
   const officialDepositMarkers = [
+    "payment receive successful",
+    "payment receive",
+    "payment received",
+    "incoming transfer",
+    "you received an incoming transfer",
     "deposit confirmed",
     "deposit successful",
     "you have received",
@@ -406,19 +458,25 @@ export function processIncomingDepositEmail(payload: {
 
   let platform: "binance" | "bybit" = isBybitSender ? "bybit" : "binance";
 
-  // 3. Extract Amount (e.g. "29.00 USDT", "Received 79 USDT", "Amount: 29 USDT")
+  // 3. Extract Amount (e.g. "29.00 USDT", "Received 79 USDT", "Amount: 0.1 USDT")
   let amount = 0;
-  const amountRegex = /(\d+(\.\d{1,4})?)\s*(USDT|USD)/i;
-  const matchAmount = subject.match(amountRegex) || body.match(amountRegex);
+  const amountRegex = /(?:Amount:\s*)?(\d+(?:\.\d{1,4})?)\s*(USDT|USD)/i;
+  const matchAmount = body.match(amountRegex) || subject.match(amountRegex);
   if (matchAmount && matchAmount[1]) {
     amount = parseFloat(matchAmount[1]);
   }
 
-  // 2. Extract TxID / Order ID / Hash
+  // 4. Extract Sender Info (e.g. "From: Hossain_2005" or "From: 94810239")
+  let senderInfo = "";
+  const senderMatch = body.match(/(?:From|Sender|Payer)[:\s]+([A-Za-z0-9_-]{3,32})/i);
+  if (senderMatch && senderMatch[1]) {
+    senderInfo = senderMatch[1].trim();
+  }
+
+  // 5. Extract TxID / Order ID / Hash
   let txId = "";
   const txRegexes = [
     /(?:TxID|Tx Hash|Transaction ID|Order ID|Transfer ID|Internal ID)[:\s]+([A-Za-z0-9_-]{6,64})/i,
-    /from\s+([0-9]{7,12})/i, // Binance Pay ID
     /Hash[:\s]+([A-Za-z0-9]{10,64})/i,
     /(TXB[0-9A-Z]+|BYB[0-9A-Z]+|[0-9]{8,14})/i,
   ];
@@ -431,15 +489,9 @@ export function processIncomingDepositEmail(payload: {
     }
   }
 
+  // If no on-chain hash was found (typical for Binance Pay internal transfer), use sender info or generated tag
   if (!txId) {
-    txId = `TX_${platform.toUpperCase()}_${Date.now().toString().slice(-8)}`;
-  }
-
-  // 3. Extract Sender Info
-  let senderInfo = "Verified User";
-  const senderMatch = body.match(/(?:from|sender|payer)[:\s]+([^\n\r,]+)/i);
-  if (senderMatch && senderMatch[1]) {
-    senderInfo = senderMatch[1].trim();
+    txId = senderInfo ? `BPAY_${senderInfo}` : `TX_${platform.toUpperCase()}_${Date.now().toString().slice(-8)}`;
   }
 
   const emailTx: ParsedEmailTransaction = {
@@ -448,7 +500,7 @@ export function processIncomingDepositEmail(payload: {
     amount: amount || 29,
     currency: "USDT",
     txId,
-    senderInfo,
+    senderInfo: senderInfo || "Verified User",
     receivedAt: payload.receivedAt || new Date().toISOString(),
     subject,
     isMatched: false,

@@ -10,7 +10,9 @@
         "@types/express": "^5.0.6",
         "@whiskeysockets/baileys": "^7.0.0-rc14",
         "cors": "^2.8.6",
+        "esbuild": "^0.28.2",
         "express": "^5.3.0",
+        "klinecharts": "9.6.0",
         "pino": "^10.4.0",
         "qrcode": "^1.5.4",
         "tsx": "^4.23.15",
@@ -394,6 +396,8 @@
     "jws": ["jws@4.0.1", "", { "dependencies": { "jwa": "^2.0.1", "safe-buffer": "^5.0.1" } }, "sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA=="],
 
     "keyv": ["keyv@5.6.0", "", { "dependencies": { "@keyv/serialize": "^1.1.1" } }, "sha512-CYDD3SOtsHtyXeEORYRx2qBtpDJFjRTGXUtmNEMGyzYOKj1TE3tycdlho7kA1Ufx9OYWZzg52QFBGALTirzDSw=="],
+
+    "klinecharts": ["klinecharts@9.6.0", "", {}, "sha512-8mVr2FT8P+QBM6dSTJj91ORUFbmIoU+ij3i7OLlnV4x4E+m/631V3DOfja2QL5y9tFeKLH6WO0dZQsTaOPp+0w=="],
 
     "libsignal": ["libsignal@6.0.0", "", { "dependencies": { "curve25519-js": "^0.0.4", "protobufjs": "^7.5.5" } }, "sha512-d/5V3YFtDljbFMufz4ncyUYGYhJl+vzAe+c2EFFBQ6bz1h8Q3IOMEGXYMzlibU60I+e8GagMMpji18iez3P1hA=="],
 

@@ -1,5 +1,5 @@
-// Comprehensive Broker Connection Engine (cTrader, Exness, NinjaTrader 8, Vantage Markets)
-// Updated with Live Webhook Bridge, Investor Credentials, and Blog/API Technical Guidance
+// Comprehensive Multi-Broker Connection Engine (cTrader, Exness, NinjaTrader 8, Vantage Markets)
+// Updated with Official Exness Trader API (v1.0.2 / OpenAPI 3.1.1) Ed25519 Request Signing
 
 function apt({
   config: t,
@@ -16,12 +16,13 @@ function apt({
     accounts: p,
     activeAccount: f,
     addAccount: g,
+    updateAccount: $,
     deleteAccount: y,
     importTradesToAccount: w,
     universalParseFileOrText: v
   } = Ay();
 
-  // Selected Broker tab
+  // Selected Broker tab: "ctrader" | "exness" | "ninjatrader" | "vantage"
   const [N, j] = b.useState(() =>
     f != null && f.broker.includes("Ninja")
       ? "ninjatrader"
@@ -35,7 +36,7 @@ function apt({
   // cTrader States
   const [_, M] = b.useState("");
   const [A, E] = b.useState(!1);
-  const [$, T] = b.useState(null);
+  const [statusMsg, setStatusMsg] = b.useState(null);
 
   // NinjaTrader States
   const [D, L] = b.useState("");
@@ -56,18 +57,44 @@ function apt({
   const vantageFileRef = b.useRef(null);
 
   // Exness States
+  const [exnessSubMode, setExnessSubMode] = b.useState("api"); // "api" | "webhook" | "investor" | "csv"
+  const [exnessApiEnv, setExnessApiEnv] = b.useState("demo"); // "real" | "demo"
+  const [exnessAcctNum, setExnessAcctNum] = b.useState("#31000164196");
+  const [exnessApiKey, setExnessApiKey] = b.useState("exnsk-03f7e7787e7e80fdd734a3ad6b4af3ce036db0379c342fe3dea483dfa433acb4");
+  const [exnessPrivKey, setExnessPrivKey] = b.useState("8365726ffe1e7311f71281482638b34068f3da34b2d14bbe38a7132b39622fde2e44c110da2acf1ea439ac1e42ffe74f2d3158fd9edb894a3645907e96c9a0a0");
+  const [showExnessPrivKey, setShowExnessPrivKey] = b.useState(!1);
+  const [showExnessApiKey, setShowExnessApiKey] = b.useState(!1);
+  const [exnessConnecting, setExnessConnecting] = b.useState(!1);
+  const [exnessLiveState, setExnessLiveState] = b.useState(null);
+
+  // Exness Webhook & Investor legacy states
   const [ke, K] = b.useState("");
   const [ae, ve] = b.useState("Exness");
   const [be, ee] = b.useState("1000");
   const [exnessServer, setExnessServer] = b.useState("Exness-Real19");
-  const [exnessAcctNum, setExnessAcctNum] = b.useState("EX-2094182");
   const [exnessInvestorPass, setExnessInvestorPass] = b.useState("");
   const [Ce, X] = b.useState([]);
   const exnessFileRef = b.useRef(null);
 
-  // Connection sub-mode for non-cTrader brokers: "webhook" | "investor" | "csv"
+  // Other brokers submode: "webhook" | "investor" | "csv"
   const [brokerSubMode, setBrokerSubMode] = b.useState("webhook");
   const [pingLoading, setPingLoading] = b.useState(!1);
+
+  // Check if Exness session is active on server
+  b.useEffect(() => {
+    let active = !0;
+    fetch("/api/exness/session")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data && data.session && data.session.isConnected) {
+          setExnessLiveState(data.session);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = !1;
+    };
+  }, []);
 
   // cTrader Config Parser
   const re = (Me) => {
@@ -100,11 +127,11 @@ function apt({
 
   // cTrader Connect
   const Pe = async () => {
-    T(null);
+    setStatusMsg(null);
     const { url: Ee, token: Xe, accountNumber: It } = re(_);
     if (!Xe) {
-      T({
-        text: 'অনুগ্রহ করে cTrader থেকে "Copy configuration" অথবা "Copy token" পেস্ট করুন। কোনো প্রি-লোডেড ডেমো ডাটা রাখা হয়নি।',
+      setStatusMsg({
+        text: 'অনুগ্রহ করে cTrader থেকে "Copy configuration" অথবা "Copy token" পেস্ট করুন।',
         type: "error"
       });
       return;
@@ -118,13 +145,13 @@ function apt({
         autoSyncIntervalSec: 5
       });
       l && l();
-      T({
+      setStatusMsg({
         text: "cTrader রিমোট MCP সার্ভারের সাথে সফলভাবে সংযোগ স্থাপিত হয়েছে! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...",
         type: "success"
       });
       u && setTimeout(() => u(), 600);
     } catch (et) {
-      T({
+      setStatusMsg({
         text:
           (et == null ? void 0 : et.message) ||
           "কানেক্ট করতে সমস্যা হয়েছে। টোকেন বা কনফিগারেশন চেক করুন।",
@@ -139,37 +166,22 @@ function apt({
       const Me = await navigator.clipboard.readText();
       Me &&
         (M(Me),
-        T({
-          text: "ক্লিপবোর্ড থেকে কনফিগারেশন পেস্ট করা হয়েছে। এখন নিচের সবুজ বাটনে ক্লিক করুন।",
+        setStatusMsg({
+          text: "ক্লিপবোর্ড থেকে কনফিগারেশন পেস্ট করা হয়েছে। এখন কানেক্ট বাটনে ক্লিক করুন।",
           type: "success"
         }));
     } catch {
-      T({
-        text: "ক্লিপবোর্ড অ্যাক্সেস পারমিশন পাওয়া যায়নি। অনুগ্রহ করে সরাসরি বক্সে পেস্ট (Ctrl+V) করুন।",
+      setStatusMsg({
+        text: "ক্লিপবোর্ড অ্যাক্সেস পারমিশন পাওয়া যায়নি। বক্সে সরাসরি পেস্ট করুন।",
         type: "error"
       });
     }
   };
 
-  // Disconnect & Delete
-  const Ie = async () => {
-    if (!f) {
-      a();
-      return;
-    }
-    const Me = f.name;
-    await y(f.id);
-    E(!1);
-    T({
-      text: `${Me} অ্যাকাউন্ট এবং এর সমস্ত ডাটা চিরতরে মুছে ফেলা হয়েছে (আউট)।`,
-      type: "success"
-    });
-  };
-
   // Webhook Ping Test
   const testWebhookPing = async (brokerKey) => {
     setPingLoading(!0);
-    T(null);
+    setStatusMsg(null);
     try {
       const res = await fetch("/api/broker/ping", {
         method: "POST",
@@ -178,7 +190,7 @@ function apt({
       });
       const data = await res.json();
       if (data.success) {
-        T({
+        setStatusMsg({
           text: `✓ ${brokerKey.toUpperCase()} Webhook গেটওয়ে অ্যাক্টিভ ও অনলাইন! পোর্টাল সফলভাবে রিসিভ মোডে আছে।`,
           type: "success"
         });
@@ -186,7 +198,7 @@ function apt({
         throw new Error(data.error || "Gateway ping failed");
       }
     } catch (err) {
-      T({
+      setStatusMsg({
         text: `Webhook পিং ব্যর্থ: ${err.message}`,
         type: "error"
       });
@@ -200,13 +212,267 @@ function apt({
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     const url = `${origin}/api/broker/webhook?broker=${brokerKey}`;
     navigator.clipboard && navigator.clipboard.writeText(url);
-    T({
+    setStatusMsg({
       text: `${brokerKey.toUpperCase()} Webhook URL ক্লিপবোর্ডে কপি করা হয়েছে!`,
       type: "success"
     });
   };
 
-  // Exness Connect (Investor Sync or Webhook Bridge)
+  // ---------------------------------------------------------------------------
+  // EXNESS TRADER API (Official v1.0.2 / OpenAPI 3.1.1) Connect & Live Sync
+  // ---------------------------------------------------------------------------
+  const connectExnessViaApi = async () => {
+    setStatusMsg(null);
+    if (!exnessAcctNum.trim() || !exnessApiKey.trim() || !exnessPrivKey.trim()) {
+      setStatusMsg({
+        text: "অনুগ্রহ করে Exness Account ID, API Key এবং Ed25519 Private Key পূরণ করুন।",
+        type: "error"
+      });
+      return;
+    }
+
+    setExnessConnecting(!0);
+    try {
+      const resp = await fetch("/api/exness/connect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accountId: exnessAcctNum.trim(),
+          apiKey: exnessApiKey.trim(),
+          privateKey: exnessPrivKey.trim(),
+          environment: exnessApiEnv
+        })
+      });
+
+      const data = await resp.json();
+      if (!resp.ok || !data.success) {
+        throw new Error(data.error || "Exness connection failed");
+      }
+
+      setExnessLiveState({
+        credentials: {
+          accountId: exnessAcctNum.trim(),
+          apiKey: exnessApiKey.trim(),
+          environment: exnessApiEnv
+        },
+        accountState: data.account,
+        positions: data.positions || [],
+        deals: data.deals || [],
+        isConnected: !0
+      });
+
+      // Synchronize into Portfolio Store
+      const acctId = `acc_exness_${data.account.id}`;
+      const existingAcct = p.find(
+        (Xe) => Xe.id === acctId || Xe.accountNumber === data.account.id || Xe.broker.includes("Exness")
+      );
+
+      let targetAcctId = acctId;
+      if (existingAcct) {
+        targetAcctId = existingAcct.id;
+        $ &&
+          $(targetAcctId, {
+            currentBalance: data.account.balance,
+            currentEquity: data.account.equity,
+            isConnected: !0,
+            accountNumber: data.account.id,
+            platform: "Exness OpenAPI v1.0.2",
+            lastConnected: "Ed25519 Cryptographic Sign Verified"
+          });
+      } else {
+        const created = g({
+          id: acctId,
+          name: `Exness Pro (${data.account.id})`,
+          broker: "Exness",
+          accountNumber: data.account.id,
+          platform: "Exness OpenAPI v1.0.2",
+          accountType: "Raw Spread / Pro",
+          currency: data.account.currency || "USD",
+          initialBalance: data.account.balance,
+          currentBalance: data.account.balance,
+          currentEquity: data.account.equity,
+          isConnected: !0,
+          source: "exness_trader_api",
+          lastConnected: "Ed25519 Cryptographic Sign Verified"
+        });
+        if (created && created.id) targetAcctId = created.id;
+      }
+
+      // Map Exness deals to standard format
+      if (Array.isArray(data.deals) && data.deals.length > 0) {
+        const mappedTrades = data.deals.map((deal, idx) => ({
+          id: `trade_exn_${deal.id || idx}`,
+          ticket: deal.id,
+          accountId: targetAcctId,
+          accountNumber: data.account.id,
+          broker: "Exness",
+          symbol: deal.symbol,
+          type: deal.type.toUpperCase() === "BUY" ? "BUY" : "SELL",
+          lots: deal.volume,
+          openPrice: deal.open_price,
+          closePrice: deal.close_price,
+          openTime: deal.open_time,
+          closeTime: deal.close_time,
+          profit: deal.profit,
+          grossProfit: deal.profit,
+          commission: deal.commission,
+          swap: deal.swap,
+          pips: 0,
+          status: "CLOSED",
+          source: "exness_api_sync",
+          notes: `Exness Deal #${deal.id}`
+        }));
+
+        w && w(targetAcctId, mappedTrades);
+        d && d(mappedTrades);
+      }
+
+      l && l();
+
+      setStatusMsg({
+        text: `✓ ${data.message || "Exness অ্যাকাউন্ট সফলভাবে সংযুক্ত হয়েছে!"} ব্যালেন্স: $${data.account.balance.toLocaleString()}, ইকুইটি: $${data.account.equity.toLocaleString()}`,
+        type: "success"
+      });
+
+      u && setTimeout(() => u(), 800);
+    } catch (err) {
+      setStatusMsg({
+        text: `Exness সংযোগ ব্যর্থ: ${err.message}`,
+        type: "error"
+      });
+    } finally {
+      setExnessConnecting(!1);
+    }
+  };
+
+  // Re-synchronize Live Exness Data via API
+  const syncExnessViaApi = async () => {
+    setStatusMsg(null);
+    setExnessConnecting(!0);
+    try {
+      const resp = await fetch("/api/exness/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.success) {
+        // Fallback to connect if session expired
+        return await connectExnessViaApi();
+      }
+
+      setExnessLiveState({
+        credentials: {
+          accountId: (data.account && data.account.id) || exnessAcctNum.trim(),
+          apiKey: exnessApiKey.trim(),
+          environment: exnessApiEnv
+        },
+        accountState: data.account,
+        positions: data.positions || [],
+        deals: data.deals || [],
+        isConnected: !0
+      });
+
+      const acctId = `acc_exness_${data.account.id}`;
+      const existingAcct = p.find(
+        (Xe) => Xe.id === acctId || Xe.accountNumber === data.account.id || Xe.broker.includes("Exness")
+      );
+
+      let targetAcctId = acctId;
+      if (existingAcct) {
+        targetAcctId = existingAcct.id;
+        $ &&
+          $(targetAcctId, {
+            currentBalance: data.account.balance,
+            currentEquity: data.account.equity,
+            isConnected: !0,
+            accountNumber: data.account.id,
+            platform: "Exness OpenAPI v1.0.2",
+            lastConnected: "Ed25519 Cryptographic Sign Verified"
+          });
+      }
+
+      if (Array.isArray(data.deals) && data.deals.length > 0) {
+        const mappedTrades = data.deals.map((deal, idx) => ({
+          id: `trade_exn_${deal.id || idx}`,
+          ticket: deal.id,
+          accountId: targetAcctId,
+          accountNumber: data.account.id,
+          broker: "Exness",
+          symbol: deal.symbol,
+          type: (deal.type || "").toUpperCase() === "BUY" ? "BUY" : "SELL",
+          lots: deal.volume,
+          openPrice: deal.open_price,
+          closePrice: deal.close_price,
+          openTime: deal.open_time,
+          closeTime: deal.close_time,
+          profit: deal.profit,
+          grossProfit: deal.profit,
+          commission: deal.commission,
+          swap: deal.swap,
+          pips: 0,
+          status: "CLOSED",
+          source: "exness_api_sync",
+          notes: `Exness Deal #${deal.id}`
+        }));
+
+        w && w(targetAcctId, mappedTrades);
+        d && d(mappedTrades);
+      }
+
+      l && l();
+
+      setStatusMsg({
+        text: `✓ ${data.message || "Exness ডাটা সফলভাবে সিঙ্ক হয়েছে!"} ব্যালেন্স: $${data.account.balance.toLocaleString()}, ইকুইটি: $${data.account.equity.toLocaleString()}`,
+        type: "success"
+      });
+    } catch (err) {
+      try {
+        await connectExnessViaApi();
+      } catch (connErr) {
+        setStatusMsg({
+          text: `Exness সিঙ্ক ব্যর্থ: ${err.message}`,
+          type: "error"
+        });
+      }
+    } finally {
+      setExnessConnecting(!1);
+    }
+  };
+
+  // Fill User Verified Exness Demo Credentials
+  const fillDemoExnessCredentials = () => {
+    setExnessApiEnv("demo");
+    setExnessAcctNum("#31000164196");
+    setExnessApiKey("exnsk-03f7e7787e7e80fdd734a3ad6b4af3ce036db0379c342fe3dea483dfa433acb4");
+    setExnessPrivKey("8365726ffe1e7311f71281482638b34068f3da34b2d14bbe38a7132b39622fde2e44c110da2acf1ea439ac1e42ffe74f2d3158fd9edb894a3645907e96c9a0a0");
+    setStatusMsg({
+      text: "⚡ আপনার Exness Demo অ্যাকাউন্ট #31000164196 এর আসল কী লোড করা হয়েছে! এখন 'কানেক্ট ও সিঙ্ক করুন' বাটনে চাপ দিন।",
+      type: "success"
+    });
+  };
+
+  // Disconnect Exness
+  const disconnectExnessLive = async () => {
+    try {
+      await fetch("/api/exness/disconnect", { method: "POST" });
+      setExnessLiveState(null);
+      const exnAcct = p.find((Xe) => Xe.broker === "Exness");
+      if (exnAcct) {
+        await y(exnAcct.id);
+      }
+      setStatusMsg({
+        text: "Exness অ্যাকাউন্ট ও সিঙ্ক ডাটা সফলভাবে ডিসকানেক্ট ও মুছে ফেলা হয়েছে।",
+        type: "success"
+      });
+    } catch (err) {
+      setStatusMsg({
+        text: `ডিসকানেক্ট করতে ব্যর্থ: ${err.message}`,
+        type: "error"
+      });
+    }
+  };
+
+  // Exness Connect (Legacy Investor Sync or Webhook Bridge)
   const connectExnessLive = (mode) => {
     const initialBal = parseFloat(be) || 1000;
     let existing = p.find((Xe) => Xe.broker === "Exness");
@@ -226,7 +492,7 @@ function apt({
         lastConnected: mode === "investor" ? "Investor Password Synced" : "Live Bridge Active"
       });
     }
-    T({
+    setStatusMsg({
       text: `Exness অ্যাকাউন্ট #${exnessAcctNum} সফলভাবে সংযুক্ত হয়েছে! লাইভ ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...`,
       type: "success"
     });
@@ -253,7 +519,7 @@ function apt({
         lastConnected: "NinjaScript Live Stream Active"
       });
     }
-    T({
+    setStatusMsg({
       text: `NinjaTrader 8 অ্যাকাউন্ট #${ntAcctNum} সফলভাবে সংযুক্ত হয়েছে!`,
       type: "success"
     });
@@ -280,7 +546,7 @@ function apt({
         lastConnected: "Vantage RAW ECN Synced"
       });
     }
-    T({
+    setStatusMsg({
       text: `Vantage Markets অ্যাকাউন্ট #${vantageAcctNum} সফলভাবে সংযুক্ত হয়েছে!`,
       type: "success"
     });
@@ -291,7 +557,7 @@ function apt({
   const ct = () => {
     const Me = U.length > 0 ? U : v(D, "ninjatrader.csv").trades;
     if (Me.length === 0) {
-      T({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে NinjaTrader CSV ফাইল বা টেক্সট দিন।", type: "error" });
+      setStatusMsg({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে NinjaTrader CSV ফাইল দিন।", type: "error" });
       return;
     }
     let Ee = p.find((Xe) => Xe.broker === "NinjaTrader");
@@ -312,7 +578,7 @@ function apt({
       }));
     w(Ee.id, Me);
     d && d(Me);
-    T({ text: `NinjaTrader থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
+    setStatusMsg({ text: `NinjaTrader থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
     le([]);
     L("");
     u && setTimeout(() => u(), 600);
@@ -321,7 +587,7 @@ function apt({
   const jt = () => {
     const Me = ie.length > 0 ? ie : v(G, "vantage.csv").trades;
     if (Me.length === 0) {
-      T({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে Vantage CSV ফাইল দিন।", type: "error" });
+      setStatusMsg({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে Vantage CSV ফাইল দিন।", type: "error" });
       return;
     }
     let Ee = p.find((Xe) => Xe.broker === "Vantage Markets");
@@ -342,7 +608,7 @@ function apt({
       }));
     w(Ee.id, Me);
     d && d(Me);
-    T({ text: `Vantage থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
+    setStatusMsg({ text: `Vantage থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
     je([]);
     Q("");
     u && setTimeout(() => u(), 600);
@@ -351,7 +617,7 @@ function apt({
   const $t = () => {
     const Me = Ce.length > 0 ? Ce : v(ke, "exness.csv").trades;
     if (Me.length === 0) {
-      T({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে Exness CSV ফাইল দিন।", type: "error" });
+      setStatusMsg({ text: "কোনো বৈধ ট্রেড ডাটা পাওয়া যায়নি। অনুগ্রহ করে Exness CSV ফাইল দিন।", type: "error" });
       return;
     }
     let Ee = p.find((Xe) => Xe.broker === "Exness");
@@ -372,7 +638,7 @@ function apt({
       }));
     w(Ee.id, Me);
     d && d(Me);
-    T({ text: `Exness থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
+    setStatusMsg({ text: `Exness থেকে সফলভাবে ${Me.length} টি ট্রেড আমদানি করা হয়েছে!`, type: "success" });
     X([]);
     K("");
     u && setTimeout(() => u(), 600);
@@ -384,7 +650,7 @@ function apt({
   return r.jsxs("div", {
     className: "space-y-6 text-slate-200",
     children: [
-      // 1. Broker Selector Top Bar
+      // 1. Broker Selector Top Bar: 4 Distinct Platforms
       r.jsxs("div", {
         className: "bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-3",
         children: [
@@ -395,11 +661,11 @@ function apt({
                 children: [
                   r.jsx("h3", {
                     className: "text-xs font-black uppercase tracking-wider text-cyan-400",
-                    children: "আপনার ব্রোকার নির্বাচন করুন (Select Your Single Broker)"
+                    children: "আপনার ব্রোকার প্ল্যাটফর্ম নির্বাচন করুন (Select Broker Platform)"
                   }),
                   r.jsx("p", {
                     className: "text-[11px] text-slate-400 mt-0.5",
-                    children: "যে প্ল্যাটফর্মে আপনি ট্রেড করছেন সেটি নির্বাচন করুন। cTrader, Exness, NinjaTrader ও Vantage লাইভ কানেক্ট সমর্থিত।"
+                    children: "যে প্ল্যাটফর্মে আপনি ট্রেড করছেন সেটি নির্বাচন করুন। cTrader, Exness, NinjaTrader ও Vantage লাইভ কানেকশন সমর্থিত।"
                   })
                 ]
               }),
@@ -414,8 +680,8 @@ function apt({
             className: "grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1",
             children: [
               { id: "ctrader", name: "cTrader", badge: "Spotware Open API / MCP", icon: El },
-              { id: "exness", name: "Exness", badge: "MT4/MT5 Webhook / Investor Sync", icon: Fr },
-              { id: "ninjatrader", name: "NinjaTrader 8", badge: "NinjaScript Live Bridge / CSV", icon: La },
+              { id: "exness", name: "Exness", badge: "Official Trader API v1.0.2", icon: Fr },
+              { id: "ninjatrader", name: "NinjaTrader 8", badge: "NinjaScript Bridge / CSV", icon: La },
               { id: "vantage", name: "Vantage Markets", badge: "MT4/MT5 Webhook Bridge / CSV", icon: Wn }
             ].map((Me) => {
               const Ee = N === Me.id,
@@ -463,10 +729,10 @@ function apt({
       }),
 
       // Status Notification Alert
-      $ &&
+      statusMsg &&
         r.jsxs("div", {
           className: `p-4 rounded-2xl border text-xs font-medium flex items-center justify-between gap-2 ${
-            $.type === "success"
+            statusMsg.type === "success"
               ? "bg-emerald-950/60 border-emerald-800 text-emerald-300"
               : "bg-rose-950/60 border-rose-800 text-rose-300"
           }`,
@@ -474,12 +740,12 @@ function apt({
             r.jsxs("div", {
               className: "flex items-center gap-2",
               children: [
-                $.type === "success" ? r.jsx(Pt, { className: "w-4 h-4" }) : r.jsx(As, { className: "w-4 h-4" }),
-                r.jsx("span", { children: $.text })
+                statusMsg.type === "success" ? r.jsx(Pt, { className: "w-4 h-4" }) : r.jsx(As, { className: "w-4 h-4" }),
+                r.jsx("span", { children: statusMsg.text })
               ]
             }),
             r.jsx("button", {
-              onClick: () => T(null),
+              onClick: () => setStatusMsg(null),
               className: "text-slate-400 hover:text-white text-xs cursor-pointer",
               children: "✕"
             })
@@ -560,220 +826,381 @@ function apt({
           ]
         }),
 
-      // TAB 2: EXNESS (Comprehensive Integration: Webhook Bridge + Investor Password + CSV)
+      // TAB 2: EXNESS (100% Official Trader API v1.0.2 / OpenAPI 3.1.1 — Real Live Data Only)
       N === "exness" &&
         r.jsxs("div", {
-          className: "bg-slate-900/90 border border-purple-500/30 rounded-3xl p-6 shadow-2xl space-y-6",
+          className: "bg-slate-900/90 border border-yellow-500/30 rounded-3xl p-6 shadow-2xl space-y-6",
           children: [
             r.jsxs("div", {
-              className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800",
+              className: "flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800",
               children: [
                 r.jsxs("div", {
                   children: [
-                    r.jsx("span", {
-                      className: "px-2.5 py-0.5 rounded bg-purple-500/20 text-purple-300 text-xs font-black uppercase tracking-wider border border-purple-500/30",
-                      children: "Exness MT4 / MT5 Integration"
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("span", {
+                          className: "px-2.5 py-0.5 rounded bg-yellow-500/20 text-yellow-300 text-xs font-black uppercase tracking-wider border border-yellow-500/30",
+                          children: "Exness Trader API v1.0.2"
+                        }),
+                        r.jsx("span", {
+                          className: "px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] font-bold border border-emerald-500/30",
+                          children: "Ed25519 Request Signing"
+                        }),
+                        r.jsx("span", {
+                          className: "px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 text-[10px] font-bold border border-blue-500/30",
+                          children: "OpenAPI 3.1.1"
+                        })
+                      ]
                     }),
-                    r.jsx("h3", { className: "text-base font-black text-white mt-1", children: "এক্সনেস লাইভ কানেকশন ও ডাটা সিঙ্ক" }),
-                    r.jsx("p", { className: "text-xs text-slate-400 mt-0.5", children: "ওয়েবহুক ব্রিজ EA, রিড-অনলি ইনভেস্টর পাসওয়ার্ড অথবা হিস্টোরি স্টেটমেন্ট" })
+                    r.jsx("h3", { className: "text-base font-black text-white mt-1.5", children: "Exness অফিসিয়াল API সংযোগ ও রিয়েল ডাটা সিঙ্ক" }),
+                    r.jsx("p", { className: "text-xs text-slate-400 mt-0.5", children: "শতভাগ রিয়েল লাইভ সিঙ্ক্রোনাইজেশন — কোনো ফেক বা ডামি তথ্য নয়। সরাসরি Exness Personal Area API Key দিয়ে কানেক্ট করুন।" })
                   ]
                 }),
-
-                // Sub-mode tabs
                 r.jsxs("div", {
-                  className: "flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800",
+                  className: "flex items-center gap-2",
                   children: [
-                    [
-                      { id: "webhook", label: "⚡ লাইভ ওয়েবহুক ব্রিজ" },
-                      { id: "investor", label: "🔑 ইনভেস্টর পাসওয়ার্ড" },
-                      { id: "csv", label: "📄 CSV স্টেটমেন্ট" }
-                    ].map((mode) =>
-                      r.jsx(
-                        "button",
-                        {
-                          type: "button",
-                          key: mode.id,
-                          onClick: () => setBrokerSubMode(mode.id),
-                          className: `px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            brokerSubMode === mode.id
-                              ? "bg-purple-600 text-white shadow"
-                              : "text-slate-400 hover:text-slate-200"
-                          }`,
-                          children: mode.label
-                        }
-                      )
-                    )
+                    r.jsx("span", { className: "text-[11px] font-bold text-slate-400", children: "অ্যাকাউন্টের ধরণ:" }),
+                    r.jsx("button", {
+                      type: "button",
+                      onClick: () => setExnessApiEnv("real"),
+                      className: `px-3.5 py-1.5 rounded-xl text-xs font-black cursor-pointer transition flex items-center gap-1.5 ${
+                        exnessApiEnv === "real"
+                          ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/30"
+                          : "bg-slate-950 text-slate-400 hover:text-white border border-slate-800"
+                      }`,
+                      children: [r.jsx("span", { className: "w-2 h-2 rounded-full bg-emerald-300 animate-pulse" }), "Real Account (লাইভ)"]
+                    }),
+                    r.jsx("button", {
+                      type: "button",
+                      onClick: () => setExnessApiEnv("demo"),
+                      className: `px-3.5 py-1.5 rounded-xl text-xs font-black cursor-pointer transition flex items-center gap-1.5 ${
+                        exnessApiEnv === "demo"
+                          ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30"
+                          : "bg-slate-950 text-slate-400 hover:text-white border border-slate-800"
+                      }`,
+                      children: [r.jsx("span", { className: "w-2 h-2 rounded-full bg-amber-300" }), "Demo Account (ডেমো)"]
+                    })
                   ]
                 })
               ]
             }),
 
-            // Submode A: Live Webhook Bridge
-            brokerSubMode === "webhook" &&
+            // Active Exness Session Live Card if Connected
+            exnessLiveState &&
+              exnessLiveState.isConnected &&
               r.jsxs("div", {
-                className: "space-y-4",
+                className: "p-4 rounded-2xl bg-gradient-to-r from-yellow-950/40 via-slate-900 to-slate-900 border border-yellow-500/40 space-y-3",
                 children: [
                   r.jsxs("div", {
-                    className: "bg-slate-950/80 border border-purple-500/20 p-4 rounded-2xl space-y-3",
+                    className: "flex items-center justify-between",
                     children: [
-                      r.jsxs("div", {
-                        className: "flex items-center justify-between",
-                        children: [
-                          r.jsx("span", { className: "text-xs font-bold text-purple-300", children: "আপনার এক্সনেস টার্মিনাল Webhook URL:" }),
-                          r.jsx("button", {
-                            type: "button",
-                            onClick: () => copyWebhookUrl("exness"),
-                            className: "text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer",
-                            children: [r.jsx(iu("Copy"), { className: "w-3 h-3" }), "URL কপি করুন"]
-                          })
-                        ]
-                      }),
                       r.jsxs("div", {
                         className: "flex items-center gap-2",
                         children: [
-                          r.jsx("input", {
-                            readOnly: !0,
-                            value: `${currentOrigin}/api/broker/webhook?broker=exness`,
-                            className: "w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-purple-300 focus:outline-none"
+                          r.jsx("span", { className: "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" }),
+                          r.jsx("span", {
+                            className: "text-xs font-black text-white",
+                            children: `Exness #${exnessLiveState.accountState.id} অ্যাক্টিভ`
+                          }),
+                          r.jsx("span", {
+                            className: `px-2 py-0.5 text-[10px] font-black uppercase rounded ${
+                              exnessLiveState.accountState.trade_mode === "real"
+                                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                                : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                            }`,
+                            children: exnessLiveState.accountState.trade_mode === "real" ? "REAL LIVE" : "DEMO TRIAL"
+                          }),
+                          r.jsx("span", {
+                            className: "px-2 py-0.5 bg-yellow-500/20 text-yellow-300 text-[10px] font-mono rounded",
+                            children: exnessLiveState.accountState.currency
+                          })
+                        ]
+                      }),
+                      r.jsxs("div", {
+                        className: "flex items-center gap-3",
+                        children: [
+                          r.jsx("button", {
+                            type: "button",
+                            onClick: syncExnessViaApi,
+                            disabled: exnessConnecting,
+                            className: "text-xs text-yellow-400 hover:text-yellow-300 font-bold flex items-center gap-1 cursor-pointer disabled:opacity-50",
+                            children: [r.jsx(On, { className: `w-3 h-3 ${exnessConnecting ? "animate-spin" : ""}` }), "পুনরায় সিঙ্ক (Re-sync)"]
                           }),
                           r.jsx("button", {
                             type: "button",
-                            onClick: () => testWebhookPing("exness"),
-                            disabled: pingLoading,
-                            className: "px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-xl text-xs font-bold whitespace-nowrap cursor-pointer transition",
-                            children: pingLoading ? "টেস্টিং..." : "পিং টেস্ট করুন"
+                            onClick: disconnectExnessLive,
+                            className: "text-xs text-rose-400 hover:text-rose-300 font-bold cursor-pointer",
+                            children: "ডিসকানেক্ট ও সম্পূর্ণ মুছুন"
                           })
                         ]
-                      }),
-                      r.jsx("p", {
-                        className: "text-[11px] text-slate-400 leading-relaxed",
-                        children:
-                          "💡 নির্দেশিকা: Exness টার্মিনাল (MT4/MT5)-এ Tools > Options > Expert Advisors-এ এই Webhook URL টি পেস্ট করুন। আপনার Exness একাউন্টের প্রতিটি লাইভ এন্ট্রি ও ক্লোজ হওয়া ট্রেড সরাসরি সেকেন্ডের মধ্যে এই পোর্টালে সিঙ্ক হবে।"
                       })
                     ]
                   }),
-
                   r.jsxs("div", {
-                    className: "flex items-center justify-between pt-2",
+                    className: "grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs",
                     children: [
-                      r.jsx("span", { className: "text-xs text-slate-400", children: "এক ক্লিকে আপনার এক্সনেস একাউন্ট প্রোফাইল তৈরি করুন" }),
-                      r.jsx("button", {
-                        type: "button",
-                        onClick: () => connectExnessLive("webhook"),
-                        className: "px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
-                        children: "লাইভ ব্রিজ একাউন্ট কানেক্ট করুন"
+                      r.jsxs("div", {
+                        className: "p-2.5 bg-slate-950/70 rounded-xl border border-slate-800",
+                        children: [
+                          r.jsx("div", { className: "text-[10px] text-slate-400 uppercase font-bold", children: "রিয়েল ব্যালেন্স" }),
+                          r.jsxs("div", { className: "text-sm font-black text-white font-mono mt-0.5", children: [`$${(exnessLiveState.accountState.balance || 0).toLocaleString()}`] })
+                        ]
+                      }),
+                      r.jsxs("div", {
+                        className: "p-2.5 bg-slate-950/70 rounded-xl border border-slate-800",
+                        children: [
+                          r.jsx("div", { className: "text-[10px] text-slate-400 uppercase font-bold", children: "রিয়েল ইকুইটি" }),
+                          r.jsxs("div", { className: "text-sm font-black text-emerald-400 font-mono mt-0.5", children: [`$${(exnessLiveState.accountState.equity || 0).toLocaleString()}`] })
+                        ]
+                      }),
+                      r.jsxs("div", {
+                        className: "p-2.5 bg-slate-950/70 rounded-xl border border-slate-800",
+                        children: [
+                          r.jsx("div", { className: "text-[10px] text-slate-400 uppercase font-bold", children: "ফ্রি মার্জিন" }),
+                          r.jsxs("div", { className: "text-sm font-black text-cyan-400 font-mono mt-0.5", children: [`$${(exnessLiveState.accountState.free_margin || 0).toLocaleString()}`] })
+                        ]
+                      }),
+                      r.jsxs("div", {
+                        className: "p-2.5 bg-slate-950/70 rounded-xl border border-slate-800",
+                        children: [
+                          r.jsx("div", { className: "text-[10px] text-slate-400 uppercase font-bold", children: "খোলা পজিশন" }),
+                          r.jsxs("div", { className: "text-sm font-black text-yellow-400 font-mono mt-0.5", children: [`${(exnessLiveState.positions || []).length} টি`] })
+                        ]
                       })
                     ]
                   })
                 ]
               }),
 
-            // Submode B: Investor Password Sync
-            brokerSubMode === "investor" &&
-              r.jsxs("div", {
-                className: "space-y-4",
-                children: [
-                  r.jsxs("div", {
-                    className: "grid grid-cols-1 sm:grid-cols-3 gap-3",
-                    children: [
-                      r.jsxs("div", {
-                        className: "space-y-1",
-                        children: [
-                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Exness সার্ভার নাম:" }),
-                          r.jsx("input", {
-                            value: exnessServer,
-                            onChange: (e) => setExnessServer(e.target.value),
-                            placeholder: "Exness-Real19",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
-                          })
-                        ]
-                      }),
-                      r.jsxs("div", {
-                        className: "space-y-1",
-                        children: [
-                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "একাউন্ট নম্বর (MT5/MT4 Login):" }),
-                          r.jsx("input", {
-                            value: exnessAcctNum,
-                            onChange: (e) => setExnessAcctNum(e.target.value),
-                            placeholder: "2094182",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
-                          })
-                        ]
-                      }),
-                      r.jsxs("div", {
-                        className: "space-y-1",
-                        children: [
-                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "রিড-অনলি ইনভেস্টর পাসওয়ার্ড:" }),
-                          r.jsx("input", {
-                            type: "password",
-                            value: exnessInvestorPass,
-                            onChange: (e) => setExnessInvestorPass(e.target.value),
-                            placeholder: "••••••••",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-purple-500"
-                          })
-                        ]
-                      })
-                    ]
-                  }),
+            // Official Exness Personal Area API Form (Matching Screenshot)
+            r.jsxs("div", {
+              className: "space-y-4",
+              children: [
+                // Personal Area Scope Summary Card (matching screenshot)
+                r.jsxs("div", {
+                  className: "p-4 bg-slate-950/80 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs",
+                  children: [
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("span", { className: "text-[11px] text-slate-400 block", children: "Scope:" }),
+                        r.jsx("span", { className: "font-bold text-white flex items-center gap-1 mt-0.5", children: [r.jsx("span", { className: "text-emerald-400", children: "✓" }), "Trading: Full access"] })
+                      ]
+                    }),
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("span", { className: "text-[11px] text-slate-400 block", children: "API Protocol:" }),
+                        r.jsx("span", { className: "font-mono font-bold text-yellow-300 block mt-0.5", children: "Ed25519 Cryptographic Sign (v1)" })
+                      ]
+                    }),
+                    r.jsxs("div", {
+                      children: [
+                        r.jsx("span", { className: "text-[11px] text-slate-400 block", children: "Selected Mode:" }),
+                        r.jsx("span", {
+                          className: `font-bold block mt-0.5 ${exnessApiEnv === "real" ? "text-emerald-400" : "text-amber-400"}`,
+                          children: exnessApiEnv === "real" ? "🟢 Real Live Account (আসল টাকা)" : "🟡 Demo Account (ভার্চুয়াল প্র্যাকটিস)"
+                        })
+                      ]
+                    })
+                  ]
+                }),
 
-                  r.jsxs("div", {
-                    className: "p-3.5 bg-slate-950/70 border border-slate-800 rounded-xl text-[11px] text-slate-400 leading-relaxed",
-                    children: [
-                      r.jsx("span", { className: "font-bold text-purple-300 block mb-1", children: "🔒 নিরাপদ রিড-অনলি এক্সেস:" }),
-                      "ইনভেস্টর পাসওয়ার্ড দিয়ে শুধুমাত্র ট্রেড ও ব্যালেন্স দেখা যায়, কিন্তু কখনোই কোনো ট্রেড ওপেন বা টাকা উইথড্র করা সম্ভব নয়। এটি ১০০% নিরাপদ।"
-                    ]
-                  }),
+                // Quick Demo Preset Button
+                r.jsxs("div", {
+                  className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 bg-yellow-500/10 border border-yellow-500/30 rounded-xl",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-2",
+                      children: [
+                        r.jsx("span", { className: "text-base", children: "🎯" }),
+                        r.jsx("span", {
+                          className: "text-xs font-bold text-yellow-300",
+                          children: "আপনার Exness Demo অ্যাকাউন্ট #31000164196 এর Ed25519 কী লোড করা আছে"
+                        })
+                      ]
+                    }),
+                    r.jsx("button", {
+                      type: "button",
+                      onClick: fillDemoExnessCredentials,
+                      className: "px-3 py-1 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-lg cursor-pointer transition shadow-sm text-center",
+                      children: "কী রিলোড করুন"
+                    })
+                  ]
+                }),
 
-                  r.jsxs("div", {
-                    className: "flex justify-end pt-2",
-                    children: [
-                      r.jsx("button", {
-                        type: "button",
-                        onClick: () => connectExnessLive("investor"),
-                        className: "px-7 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
-                        children: "ইনভেস্টর লাইভ অ্যাকাউন্ট সিঙ্ক করুন"
+                // 1. Linked account(s) Input (Red border highlighted matching screenshot)
+                r.jsxs("div", {
+                  className: "space-y-1.5",
+                  children: [
+                    r.jsx("label", {
+                      className: "text-xs font-black text-slate-200 flex items-center justify-between",
+                      children: [
+                        r.jsxs("span", { children: ["Linked account(s) ", r.jsx("span", { className: "text-rose-400", children: "*" })] }),
+                        r.jsx("span", { className: "text-[11px] text-slate-400 font-normal", children: "যেমন: #31000164196 বা 31000164196" })
+                      ]
+                    }),
+                    r.jsx("div", {
+                      className: "rounded-2xl border-2 border-rose-500/80 hover:border-rose-500 focus-within:border-rose-500 p-0.5 bg-slate-950 transition-all shadow-sm shadow-rose-950/30",
+                      children: r.jsx("input", {
+                        value: exnessAcctNum,
+                        onChange: (e) => setExnessAcctNum(e.target.value),
+                        placeholder: "#31000164196",
+                        className: "w-full bg-transparent px-3.5 py-2.5 text-xs font-mono font-bold text-white focus:outline-none"
                       })
-                    ]
-                  })
-                ]
-              }),
+                    }),
+                    r.jsx("p", { className: "text-[11px] text-slate-400", children: "💡 Exness Personal Area-তে যে ট্রেডিং অ্যাকাউন্ট নম্বরটির জন্য এই API Key তৈরি করা হয়েছে।" })
+                  ]
+                }),
 
-            // Submode C: CSV Statement Paste
-            brokerSubMode === "csv" &&
-              r.jsxs("div", {
-                className: "space-y-4",
-                children: [
-                  r.jsxs("div", {
-                    className: "space-y-1.5",
-                    children: [
-                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Exness Closed Orders CSV টেক্সট পেস্ট করুন:" }),
-                      r.jsx("textarea", {
-                        value: ke,
-                        onChange: (Me) => {
-                          K(Me.target.value);
-                          const Ee = v(Me.target.value, "exness.csv");
-                          X(Ee.trades);
-                        },
-                        rows: 4,
-                        placeholder: "Position Id, Open Time, Close Time, Symbol, Direction, Volume, Profit...",
-                        className: "w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono focus:outline-none focus:border-purple-500"
-                      })
-                    ]
-                  }),
-                  r.jsxs("div", {
-                    className: "flex items-center justify-between pt-2",
-                    children: [
-                      r.jsx("span", { className: "text-xs text-purple-300 font-bold", children: Ce.length > 0 ? `সনাক্তকৃত ট্রেড: ${Ce.length} টি` : "" }),
-                      r.jsxs("button", {
-                        type: "button",
-                        onClick: $t,
-                        className: "px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-purple-600/20",
-                        children: [r.jsx(Fr, { className: "w-4 h-4" }), r.jsx("span", { children: "এক্সনেস স্টেটমেন্ট ইমপোর্ট করুন" })]
-                      })
-                    ]
-                  })
-                ]
-              })
+                // 2. API Key Input (Red border highlighted matching screenshot)
+                r.jsxs("div", {
+                  className: "space-y-1.5",
+                  children: [
+                    r.jsxs("label", {
+                      className: "text-xs font-black text-slate-200 flex items-center justify-between",
+                      children: [
+                        r.jsxs("span", { children: ["API Key ", r.jsx("span", { className: "text-rose-400", children: "*" })] }),
+                        r.jsx("span", { className: "text-[11px] text-slate-400 font-normal", children: "Exness PA থেকে প্রাপ্ত Public Key (EXN-API-KEY)" })
+                      ]
+                    }),
+                    r.jsxs("div", {
+                      className: "rounded-2xl border-2 border-rose-500/80 hover:border-rose-500 focus-within:border-rose-500 p-0.5 bg-slate-950 flex items-center transition-all shadow-sm shadow-rose-950/30",
+                      children: [
+                        r.jsx("input", {
+                          type: showExnessApiKey ? "text" : "password",
+                          value: exnessApiKey,
+                          onChange: (e) => setExnessApiKey(e.target.value),
+                          placeholder: "••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+                          className: "w-full bg-transparent px-3.5 py-2.5 text-xs font-mono text-white focus:outline-none"
+                        }),
+                        r.jsx("button", {
+                          type: "button",
+                          onClick: () => setShowExnessApiKey(!showExnessApiKey),
+                          title: showExnessApiKey ? "লুকান" : "প্রদর্শন করুন",
+                          className: "px-2.5 text-slate-400 hover:text-white cursor-pointer transition text-xs",
+                          children: showExnessApiKey ? "👁️" : "🙈"
+                        }),
+                        r.jsx("button", {
+                          type: "button",
+                          onClick: () => {
+                            if (exnessApiKey) {
+                              navigator.clipboard && navigator.clipboard.writeText(exnessApiKey);
+                              setStatusMsg({ text: "API Key ক্লিপবোর্ডে কপি করা হয়েছে!", type: "success" });
+                            }
+                          },
+                          title: "কপি করুন",
+                          className: "pr-3 pl-1 text-slate-400 hover:text-white cursor-pointer transition text-xs",
+                          children: "📋"
+                        })
+                      ]
+                    })
+                  ]
+                }),
+
+                // 3. Secret Key Input (Red border highlighted matching screenshot)
+                r.jsxs("div", {
+                  className: "space-y-1.5",
+                  children: [
+                    r.jsxs("label", {
+                      className: "text-xs font-black text-slate-200 flex items-center justify-between",
+                      children: [
+                        r.jsxs("span", { children: ["Secret Key ", r.jsx("span", { className: "text-rose-400", children: "*" })] }),
+                        r.jsx("span", { className: "text-[11px] text-slate-400 font-normal", children: "Ed25519 Secret Key (Base64 / Hex)" })
+                      ]
+                    }),
+                    r.jsxs("div", {
+                      className: "rounded-2xl border-2 border-rose-500/80 hover:border-rose-500 focus-within:border-rose-500 p-0.5 bg-slate-950 flex items-center transition-all shadow-sm shadow-rose-950/30",
+                      children: [
+                        r.jsx("input", {
+                          type: showExnessPrivKey ? "text" : "password",
+                          value: exnessPrivKey,
+                          onChange: (e) => setExnessPrivKey(e.target.value),
+                          placeholder: "••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+                          className: "w-full bg-transparent px-3.5 py-2.5 text-xs font-mono text-white focus:outline-none"
+                        }),
+                        r.jsx("button", {
+                          type: "button",
+                          onClick: () => setShowExnessPrivKey(!showExnessPrivKey),
+                          title: showExnessPrivKey ? "লুকান" : "প্রদর্শন করুন",
+                          className: "px-2.5 text-slate-400 hover:text-white cursor-pointer transition text-xs",
+                          children: showExnessPrivKey ? "👁️" : "🙈"
+                        }),
+                        r.jsx("button", {
+                          type: "button",
+                          onClick: () => {
+                            if (exnessPrivKey) {
+                              navigator.clipboard && navigator.clipboard.writeText(exnessPrivKey);
+                              setStatusMsg({ text: "Secret Key ক্লিপবোর্ডে কপি করা হয়েছে!", type: "success" });
+                            }
+                          },
+                          title: "কপি করুন",
+                          className: "pr-3 pl-1 text-slate-400 hover:text-white cursor-pointer transition text-xs",
+                          children: "📋"
+                        })
+                      ]
+                    })
+                  ]
+                }),
+
+                // 4. Save your key now warning notice (Exact replica of screenshot amber box)
+                r.jsxs("div", {
+                  className: "p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-start gap-3 text-xs leading-relaxed",
+                  children: [
+                    r.jsx("span", { className: "text-lg text-amber-400 mt-0.5", children: "⚠️" }),
+                    r.jsxs("div", {
+                      className: "space-y-1",
+                      children: [
+                        r.jsx("span", { className: "font-black text-amber-300 block text-xs", children: "Save your key now" }),
+                        r.jsx("p", {
+                          className: "text-slate-300 text-[11px]",
+                          children: "This key grants access to your account, so we'll never show it again. Make a copy now and keep it secure."
+                        }),
+                        r.jsx("p", {
+                          className: "text-amber-200/90 text-[11px] font-semibold pt-1 border-t border-amber-500/20",
+                          children: "🔒 ১০০% রিয়েল লাইভ সিঙ্ক্রোনাইজেশন: কোনো ডামি বা ফেক তথ্য তৈরি হবে না। আপনার আসল ব্যালেন্স, ইকুইটি ও ওপেন ট্রেড সরাসরি Exness সার্ভার থেকে সাইন ভেরিফাই হয়ে আসবে। ভুল তথ্য দিলে সরাসরি Exness এরর দেখাবে।"
+                        })
+                      ]
+                    })
+                  ]
+                }),
+
+                // 5. Single-Account Replacement Policy Notice
+                r.jsxs("div", {
+                  className: "p-3 bg-slate-950/70 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-center gap-2",
+                  children: [
+                    r.jsx("span", { className: "text-base", children: "ℹ️" }),
+                    r.jsx("span", {
+                      children: "Single-Account Policy: নতুন Exness অ্যাকাউন্ট কানেক্ট করলে আগের Exness অ্যাকাউন্ট ও তার হিস্ট্রি সম্পূর্ণ মুছে গিয়ে নতুনটি ইনস্ট্যান্ট যুক্ত হবে।"
+                    })
+                  ]
+                }),
+
+                // 6. Connect Button
+                r.jsxs("div", {
+                  className: "flex flex-col sm:flex-row items-center justify-between gap-3 pt-2",
+                  children: [
+                    r.jsx("p", {
+                      className: "text-[11px] text-slate-400",
+                      children: "* কানেক্ট বাটনে চাপ দেওয়ার পর ব্যাকএন্ড Ed25519 রিকোয়েস্ট সাইন করে Exness API-এ কল পাঠাবে।"
+                    }),
+                    r.jsxs("button", {
+                      type: "button",
+                      onClick: connectExnessViaApi,
+                      disabled: exnessConnecting,
+                      className: "w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-yellow-500/20 cursor-pointer disabled:opacity-50 transition-all uppercase tracking-wider",
+                      children: [
+                        r.jsx(On, { className: `w-4 h-4 ${exnessConnecting ? "animate-spin" : ""}` }),
+                        r.jsx("span", {
+                          children: exnessConnecting
+                            ? "Exness সার্ভার যাচাই হচ্ছে..."
+                            : `কানেক্ট ও সিঙ্ক করুন (${exnessApiEnv === "real" ? "Real Live" : "Demo"})`
+                        })
+                      ]
+                    })
+                  ]
+                })
+              ]
+            })
           ]
         }),
 
@@ -905,7 +1332,7 @@ function apt({
                             L(et);
                             const Ht = v(et, "ninjatrader.csv");
                             le(Ht.trades);
-                            T({ text: `${Ht.trades.length} টি ট্রেড সনাক্ত করা হয়েছে।`, type: "success" });
+                            setStatusMsg({ text: `${Ht.trades.length} টি ট্রেড সনাক্ত করা হয়েছে।`, type: "success" });
                           }
                         }),
                           Xe.readAsText(Me.dataTransfer.files[0]);
@@ -929,7 +1356,7 @@ function apt({
                                 L(et);
                                 const Ht = v(et, "ninjatrader.csv");
                                 le(Ht.trades);
-                                T({ text: `${Ht.trades.length} টি ট্রেড সনাক্ত করা হয়েছে।`, type: "success" });
+                                setStatusMsg({ text: `${Ht.trades.length} টি ট্রেড সনাক্ত করা হয়েছে।`, type: "success" });
                               }
                             }),
                               Xe.readAsText(Me.target.files[0]);
@@ -937,13 +1364,13 @@ function apt({
                         }
                       }),
                       r.jsx("div", {
-                        className: "w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/30",
-                        children: r.jsx(Tm, { className: "w-6 h-6" })
+                        className: "w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center",
+                        children: r.jsx(iu("FileText"), { className: "w-6 h-6" })
                       }),
                       r.jsxs("div", {
                         children: [
-                          r.jsx("p", { className: "text-sm font-black text-white", children: "NinjaTrader CSV ফাইল এখানে ড্রপ করুন বা ক্লিক করুন" }),
-                          r.jsx("p", { className: "text-xs text-slate-400 mt-1", children: ".csv বা .tsv ফাইল" })
+                          r.jsx("p", { className: "text-sm font-bold text-white", children: "NinjaTrader Performance CSV ফাইল ড্রপ করুন" }),
+                          r.jsx("p", { className: "text-xs text-slate-400 mt-1", children: "বা ব্রাউজ করতে এখানে ক্লিক করুন (বা নিচে টেক্সট পেস্ট করুন)" })
                         ]
                       })
                     ]
@@ -952,7 +1379,7 @@ function apt({
                   r.jsxs("div", {
                     className: "space-y-1.5",
                     children: [
-                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "অথবা সরাসরি CSV টেক্সট পেস্ট করুন:" }),
+                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "বা সরাসরি CSV / TSV টেক্সট পেস্ট করুন:" }),
                       r.jsx("textarea", {
                         value: D,
                         onChange: (Me) => {
@@ -960,8 +1387,8 @@ function apt({
                           const Ee = v(Me.target.value, "ninjatrader.csv");
                           le(Ee.trades);
                         },
-                        rows: 3,
-                        placeholder: "Trade #, Instrument, Account, Strategy, Market pos., Qty, Entry price, Exit price...",
+                        rows: 4,
+                        placeholder: "Trade #, Instrument, Account, Strategy, Market pos., Qty, Entry price, Exit price, Profit...",
                         className: "w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono focus:outline-none focus:border-amber-500"
                       })
                     ]
@@ -970,12 +1397,12 @@ function apt({
                   r.jsxs("div", {
                     className: "flex items-center justify-between pt-2",
                     children: [
-                      r.jsx("span", { className: "text-xs text-amber-300 font-bold", children: U.length > 0 ? `সনাক্তকৃত ট্রেড: ${U.length} টি` : "" }),
+                      r.jsx("span", { className: "text-xs text-amber-400 font-bold", children: U.length > 0 ? `সনাক্তকৃত ট্রেড: ${U.length} টি` : "" }),
                       r.jsxs("button", {
                         type: "button",
                         onClick: ct,
-                        className: "px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-amber-500/20",
-                        children: [r.jsx(La, { className: "w-4 h-4" }), r.jsx("span", { children: "নিনজা ট্রেডার স্টেটমেন্ট ইমপোর্ট করুন" })]
+                        className: "px-6 py-3 bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-amber-600/20",
+                        children: [r.jsx(La, { className: "w-4 h-4" }), r.jsx("span", { children: "নিনজা ট্রেডার হিস্ট্রি আমদানি করুন" })]
                       })
                     ]
                   })
@@ -984,10 +1411,10 @@ function apt({
           ]
         }),
 
-      // TAB 4: VANTAGE MARKETS
+      // TAB 4: VANTAGE MARKETS (MT4/MT5 Webhook + Investor + CSV)
       N === "vantage" &&
         r.jsxs("div", {
-          className: "bg-slate-900/90 border border-emerald-500/30 rounded-3xl p-6 shadow-2xl space-y-6",
+          className: "bg-slate-900/90 border border-rose-500/30 rounded-3xl p-6 shadow-2xl space-y-6",
           children: [
             r.jsxs("div", {
               className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800",
@@ -995,11 +1422,11 @@ function apt({
                 r.jsxs("div", {
                   children: [
                     r.jsx("span", {
-                      className: "px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider border border-emerald-500/30",
-                      children: "Vantage Markets ECN"
+                      className: "px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-xs font-black uppercase tracking-wider border border-rose-500/30",
+                      children: "Vantage Markets Live Bridge"
                     }),
-                    r.jsx("h3", { className: "text-base font-black text-white mt-1", children: "ভ্যানটেজ লাইভ কানেকশন ও রিপোর্ট" }),
-                    r.jsx("p", { className: "text-xs text-slate-400 mt-0.5", children: "MT4/MT5 Webhook Bridge অথবা RAW ECN রিপোর্ট স্টেটমেন্ট" })
+                    r.jsx("h3", { className: "text-base font-black text-white mt-1", children: "ভ্যান্টেজ মার্কেটস লাইভ কানেকশন ও স্টেটমেন্ট" }),
+                    r.jsx("p", { className: "text-xs text-slate-400 mt-0.5", children: "RAW ECN MT4/MT5 Webhook ব্রিজ, ইনভেস্টর পাসওয়ার্ড অথবা হিস্ট্রি রিপোর্ট" })
                   ]
                 }),
 
@@ -1007,9 +1434,9 @@ function apt({
                   className: "flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800",
                   children: [
                     [
-                      { id: "webhook", label: "⚡ লাইভ Webhook ব্রিজ" },
-                      { id: "investor", label: "🔑 ইনভেস্টর সিঙ্ক" },
-                      { id: "csv", label: "📄 ECN রিপোর্ট" }
+                      { id: "webhook", label: "⚡ লাইভ ওয়েবহুক ব্রিজ" },
+                      { id: "investor", label: "🔑 ইনভেস্টর পাসওয়ার্ড" },
+                      { id: "csv", label: "📄 CSV স্টেটমেন্ট" }
                     ].map((mode) =>
                       r.jsx(
                         "button",
@@ -1019,7 +1446,7 @@ function apt({
                           onClick: () => setBrokerSubMode(mode.id),
                           className: `px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                             brokerSubMode === mode.id
-                              ? "bg-emerald-600 text-white shadow"
+                              ? "bg-rose-600 text-white shadow"
                               : "text-slate-400 hover:text-slate-200"
                           }`,
                           children: mode.label
@@ -1037,12 +1464,12 @@ function apt({
                 className: "space-y-4",
                 children: [
                   r.jsxs("div", {
-                    className: "bg-slate-950/80 border border-emerald-500/20 p-4 rounded-2xl space-y-3",
+                    className: "bg-slate-950/80 border border-rose-500/20 p-4 rounded-2xl space-y-3",
                     children: [
                       r.jsxs("div", {
                         className: "flex items-center justify-between",
                         children: [
-                          r.jsx("span", { className: "text-xs font-bold text-emerald-300", children: "Vantage MT4/MT5 Webhook Endpoint:" }),
+                          r.jsx("span", { className: "text-xs font-bold text-rose-300", children: "Vantage Live Webhook Endpoint:" }),
                           r.jsx("button", {
                             type: "button",
                             onClick: () => copyWebhookUrl("vantage"),
@@ -1057,13 +1484,13 @@ function apt({
                           r.jsx("input", {
                             readOnly: !0,
                             value: `${currentOrigin}/api/broker/webhook?broker=vantage`,
-                            className: "w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none"
+                            className: "w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-rose-300 focus:outline-none"
                           }),
                           r.jsx("button", {
                             type: "button",
                             onClick: () => testWebhookPing("vantage"),
                             disabled: pingLoading,
-                            className: "px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 rounded-xl text-xs font-bold whitespace-nowrap cursor-pointer transition",
+                            className: "px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold whitespace-nowrap cursor-pointer transition",
                             children: pingLoading ? "টেস্টিং..." : "পিং টেস্ট"
                           })
                         ]
@@ -1071,7 +1498,7 @@ function apt({
                       r.jsx("p", {
                         className: "text-[11px] text-slate-400 leading-relaxed",
                         children:
-                          "💡 নির্দেশিকা: Vantage Markets-এর MT4/MT5 টার্মিনালে এই Webhook URL টি বসিয়ে দিন। RAW ECN সার্ভারের সব ডিল স্বয়ংক্রিয়ভাবে লাইভ রেকর্ড হবে।"
+                          "💡 নির্দেশিকা: Vantage MT4/MT5 টার্মিনালে এই Webhook URL টি যুক্ত করুন। আপনার ভ্যান্টেজ RAW ECN একাউন্টের লাইভ ট্রেড সাথে সাথে এই ড্যাশবোর্ডে প্রবাহিত হবে।"
                       })
                     ]
                   }),
@@ -1079,19 +1506,19 @@ function apt({
                   r.jsxs("div", {
                     className: "flex items-center justify-between pt-2",
                     children: [
-                      r.jsx("span", { className: "text-xs text-slate-400", children: "Vantage লাইভ একাউন্ট যুক্ত করুন" }),
+                      r.jsx("span", { className: "text-xs text-slate-400", children: "Vantage Markets একাউন্ট যুক্ত করুন" }),
                       r.jsx("button", {
                         type: "button",
                         onClick: () => connectVantageLive("webhook"),
-                        className: "px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
-                        children: "ভ্যানটেজ একাউন্ট কানেক্ট করুন"
+                        className: "px-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
+                        children: "ভ্যান্টেজ একাউন্ট কানেক্ট করুন"
                       })
                     ]
                   })
                 ]
               }),
 
-            // Investor sync
+            // Investor Password
             brokerSubMode === "investor" &&
               r.jsxs("div", {
                 className: "space-y-4",
@@ -1107,19 +1534,19 @@ function apt({
                             value: vantageServer,
                             onChange: (e) => setVantageServer(e.target.value),
                             placeholder: "VantageFX-Live 1",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-rose-500"
                           })
                         ]
                       }),
                       r.jsxs("div", {
                         className: "space-y-1",
                         children: [
-                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "একাউন্ট নম্বর:" }),
+                          r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "অ্যাকাউন্ট নম্বর:" }),
                           r.jsx("input", {
                             value: vantageAcctNum,
                             onChange: (e) => setVantageAcctNum(e.target.value),
                             placeholder: "881290",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-rose-500"
                           })
                         ]
                       }),
@@ -1132,27 +1559,28 @@ function apt({
                             value: vantageInvestorPass,
                             onChange: (e) => setVantageInvestorPass(e.target.value),
                             placeholder: "••••••••",
-                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-emerald-500"
+                            className: "w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-rose-500"
                           })
                         ]
                       })
                     ]
                   }),
+
                   r.jsxs("div", {
                     className: "flex justify-end pt-2",
                     children: [
                       r.jsx("button", {
                         type: "button",
                         onClick: () => connectVantageLive("investor"),
-                        className: "px-7 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
-                        children: "ভ্যানটেজ ইনভেস্টর সিঙ্ক করুন"
+                        className: "px-7 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer",
+                        children: "ইনভেস্টর অ্যাকাউন্ট সিঙ্ক করুন"
                       })
                     ]
                   })
                 ]
               }),
 
-            // CSV Import
+            // CSV Upload
             brokerSubMode === "csv" &&
               r.jsxs("div", {
                 className: "space-y-4",
@@ -1160,7 +1588,7 @@ function apt({
                   r.jsxs("div", {
                     className: "space-y-1.5",
                     children: [
-                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Vantage CSV বা রিপোর্ট পেস্ট করুন:" }),
+                      r.jsx("label", { className: "text-xs font-bold text-slate-300", children: "Vantage Closed Orders CSV টেক্সট পেস্ট করুন:" }),
                       r.jsx("textarea", {
                         value: G,
                         onChange: (Me) => {
@@ -1169,20 +1597,20 @@ function apt({
                           je(Ee.trades);
                         },
                         rows: 4,
-                        placeholder: "Ticket, Open Time, Type, Size, Item, Price, S/L, T/P, Close Time, Price, Commission, Profit...",
-                        className: "w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                        placeholder: "Position Id, Open Time, Close Time, Symbol, Direction, Volume, Profit...",
+                        className: "w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white font-mono focus:outline-none focus:border-rose-500"
                       })
                     ]
                   }),
                   r.jsxs("div", {
                     className: "flex items-center justify-between pt-2",
                     children: [
-                      r.jsx("span", { className: "text-xs text-emerald-300 font-bold", children: ie.length > 0 ? `সনাক্তকৃত ট্রেড: ${ie.length} টি` : "" }),
+                      r.jsx("span", { className: "text-xs text-rose-300 font-bold", children: ie.length > 0 ? `সনাক্তকৃত ট্রেড: ${ie.length} টি` : "" }),
                       r.jsxs("button", {
                         type: "button",
                         onClick: jt,
-                        className: "px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-emerald-500/20",
-                        children: [r.jsx(Wn, { className: "w-4 h-4" }), r.jsx("span", { children: "ভ্যানটেজ স্টেটমেন্ট ইমপোর্ট করুন" })]
+                        className: "px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white font-black text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-rose-600/20",
+                        children: [r.jsx(Wn, { className: "w-4 h-4" }), r.jsx("span", { children: "ভ্যান্টেজ হিস্ট্রি রিপোর্ট আমদানি করুন" })]
                       })
                     ]
                   })
@@ -1191,53 +1619,47 @@ function apt({
           ]
         }),
 
-      // 5. Technical Reality & Blog Guidance Banner (Exness, Ninja, Vantage API Truth)
+      // Technical Architecture Knowledge Section
       r.jsxs("div", {
-        className: "bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4",
+        className: "bg-slate-900/60 border border-slate-800/80 rounded-3xl p-6 text-xs text-slate-400 space-y-3",
         children: [
           r.jsxs("div", {
-            className: "flex items-center gap-3 pb-3 border-b border-slate-800",
+            className: "flex items-center gap-2 text-slate-200 font-bold",
             children: [
-              r.jsx("div", { className: "p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20", children: r.jsx(iu("Compass"), { className: "w-5 h-5" }) }),
-              r.jsxs("div", {
-                children: [
-                  r.jsx("h4", { className: "text-sm font-black text-white", children: "ব্লগ ও ব্রোকার এপিআই বাস্তব সত্যতা (Broker API Technical Reality Guide)" }),
-                  r.jsx("p", { className: "text-xs text-slate-400", children: "Exness, NinjaTrader, Vantage এবং cTrader এপিআই আর্কিটেকচার কিভাবে কাজ করে:" })
-                ]
-              })
+              r.jsx("span", { className: "text-base", children: "📚" }),
+              r.jsx("span", { children: "ব্রোকার এপিআই ও কানেকশন স্থাপত্য গাইড (Broker Connectivity Architecture)" })
             ]
           }),
-
           r.jsxs("div", {
-            className: "grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed text-slate-300",
+            className: "grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-[11px] leading-relaxed",
             children: [
               r.jsxs("div", {
                 className: "p-4 bg-slate-950/60 rounded-2xl border border-slate-800 space-y-1.5",
                 children: [
-                  r.jsx("span", { className: "font-bold text-purple-400 block", children: "১. Exness এপিআই এর বাস্তবতা:" }),
+                  r.jsx("span", { className: "font-bold text-yellow-400 block", children: "১. Exness Trader API (v1.0.2 / OpenAPI 3.1.1):" }),
                   r.jsx("p", {
                     children:
-                      "Exness সরাসরি কোনো রিটেল পাবলিক REST API ক্লাউডে উন্মুক্ত করে না (Exness চলে MetaTrader 4 ও 5 এর ওপর)। ব্লগে যা আলোচিত হয় তা মূলত Exness B2B প্রাতিষ্ঠানিক FIX API অথবা Webhook ব্রিজ। আমাদের সিস্টেমে দেওয়া MT4/MT5 Webhook Bridge EA অথবা রিড-অনলি Investor Password ব্যবহার করে Exness একাউন্ট ১০০% লাইভ সিঙ্ক করা সম্ভব।"
+                      "আমাদের সিস্টেমে এখন Exness Trader API এর প্রাতিষ্ঠানিক Ed25519 ক্রিপ্টোগ্রাফিক রিকোয়েস্ট সাইনিং সরাসরি বাস্তবায়িত হয়েছে। এর ফলে আপনার Account ID, API Key এবং Ed25519 Private Key দিয়ে ক্লাউড-টু-ক্লাউড লাইভ ব্যালেন্স, ইকুইটি, ওপেন পজিশন ও ডিল হিস্ট্রি সরাসরি সিঙ্ক করা যায়।"
                   })
                 ]
               }),
               r.jsxs("div", {
                 className: "p-4 bg-slate-950/60 rounded-2xl border border-slate-800 space-y-1.5",
                 children: [
-                  r.jsx("span", { className: "font-bold text-amber-400 block", children: "২. NinjaTrader 8 কানেক্টিভিটি:" }),
+                  r.jsx("span", { className: "font-bold text-cyan-400 block", children: "২. cTrader Spotware Open API:" }),
                   r.jsx("p", {
                     children:
-                      "NinjaTrader মূলত উইন্ডোজ ডেক্সটপ ট্রেডিং ইঞ্জিন। এর কোনো ক্লাউড ওয়েব API নেই, তবে এতে NinjaScript C# Webhook এবং ATI (Automated Trading Interface) রয়েছে। এর মাধ্যমে প্রতিটি লাইভ অর্ডার ও পজিশন মুহূর্তের মধ্যে আমাদের সিস্টেমে অটো-পুশ করা যায়।"
+                      "cTrader তৈরি করেছে Spotware, যা বিশ্বের প্রথম রিটেল ওপেন API (Spotware Open API 2.0 ও MCP Gateway) প্রোভাইড করে। ক্লাউড টোকেন বা কনফিগারেশন পেস্ট করে সরাসরি সেকেন্ডের মধ্যে লাইভ ব্যালেন্স ও পজিশন সিঙ্ক করা যায়।"
                   })
                 ]
               }),
               r.jsxs("div", {
                 className: "p-4 bg-slate-950/60 rounded-2xl border border-slate-800 space-y-1.5",
                 children: [
-                  r.jsx("span", { className: "font-bold text-cyan-400 block", children: "৩. cTrader কেন সবচেয়ে সহজ?" }),
+                  r.jsx("span", { className: "font-bold text-amber-400 block", children: "৩. NinjaTrader ও Vantage Markets:" }),
                   r.jsx("p", {
                     children:
-                      "cTrader তৈরি করেছে Spotware, যারা বিশ্বের প্রথম রিটেল ওপেন API (Spotware Open API 2.0 ও MCP Gateway) প্রোভাইড করে। এজন্য কোনো মেটাট্রেডার বা অতিরিক্ত EA সফটওয়্যার ছাড়াই সরাসরি টোকেন দিয়ে ক্লাউড-টু-ক্লাউড লাইভ সিঙ্ক করা যায়।"
+                      "উইন্ডোজ ডেক্সটপ বা মেটাট্রেডার প্ল্যাটফর্মের জন্য NinjaScript C# Webhook, ATI Socket এবং MT4/MT5 Webhook Bridge রয়েছে। এছাড়া ট্রেড পারফরম্যান্স CSV ড্রপ বা পেস্ট করে সম্পূর্ণ হিস্ট্রি সিঙ্ক করা সম্ভব।"
                   })
                 ]
               })

@@ -8,6 +8,7 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
 
   // Active top-level tab for Admin: "checkout" | "settings" | "email_logs"
   const [adminTab, setAdminTab] = b.useState("checkout");
+  const [userView, setUserView] = b.useState(initPkg ? "checkout" : "history");
 
   // Client Checkout States
   const [activeMethod, setActiveMethod] = b.useState("binance");
@@ -93,6 +94,43 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
     return () => clearInterval(interval);
   }, []);
 
+  const [waitingPayment, setWaitingPayment] = b.useState(null);
+  const [timeLeftSeconds, setTimeLeftSeconds] = b.useState(1800);
+
+  // Fast polling & 30-minute timer for pending payment
+  b.useEffect(() => {
+    if (!waitingPayment || waitingPayment.status !== "PENDING") return;
+    const pollInterval = setInterval(() => {
+      fetch("/api/payments")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success && d.payments) {
+            const current = d.payments.find((p) => p.id === waitingPayment.id);
+            if (current && current.status !== "PENDING") {
+              setWaitingPayment(current);
+              refreshData();
+            }
+          }
+        })
+        .catch(() => {});
+    }, 4000);
+
+    const timer = setInterval(() => {
+      setTimeLeftSeconds((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(pollInterval);
+      clearInterval(timer);
+    };
+  }, [waitingPayment]);
+
   const handleCopy = (text, key) => {
     try {
       navigator.clipboard.writeText(text);
@@ -103,12 +141,19 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
 
   const handleSubmitProof = async (ev) => {
     if (ev) ev.preventDefault();
-    if (!transactionId.trim()) {
-      alert(s("অনুগ্রহ করে ট্রানজেকশন আইডি / হ্যাশ (TxID) লিখুন।", "Please enter your Transaction ID (TxID)."));
+    const finalProfile = senderAccount.trim() || transactionId.trim();
+    if (!finalProfile) {
+      alert(
+        activeMethod === "binance"
+          ? s("অনুগ্রহ করে আপনার বাইনান্স প্রোফাইল নাম / নিকনেম (যেমন: Hossain_2005) লিখুন।", "Please enter your Binance Profile Name or Nickname.")
+          : s("অনুগ্রহ করে আপনার বাইবিট ইউআইডি বা ট্রান্সফার আইডি লিখুন।", "Please enter your Bybit UID or Transfer ID.")
+      );
       return;
     }
     setIsSubmitting(true);
     setSubmitResult(null);
+
+    const finalTx = transactionId.trim() || finalProfile;
 
     try {
       const res = await fetch("/api/payments/submit", {
@@ -119,19 +164,21 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
           packageName: selectedPkg.name,
           amountUsd: selectedPkg.usd,
           method: activeMethod,
-          senderAccount: senderAccount.trim(),
-          transactionId: transactionId.trim(),
+          senderAccount: finalProfile,
+          transactionId: finalTx,
           notes: notes.trim(),
         }),
       });
       const data = await res.json();
-      if (data.success) {
-        const isAutoApproved = data.payment && data.payment.status === "APPROVED";
+      if (data.success && data.payment) {
+        const isAutoApproved = data.payment.status === "APPROVED";
+        setWaitingPayment(data.payment);
+        setTimeLeftSeconds(1800);
         setSubmitResult({
           success: true,
           message: isAutoApproved
             ? s("⚡ অভিনন্দন! জিমেইল ভেরিফিকেশনের মাধ্যমে আপনার পেমেন্ট তাৎক্ষণিক অনুমোদিত (Approved) হয়েছে!", "⚡ Congratulations! Instant auto-approval verified via Gmail!")
-            : s("ক্রিপ্টো পেমেন্ট প্রমাণ জমা হয়েছে! সিস্টেম স্বয়ংক্রিয়ভাবে জিমেইল নোটিফিকেশনের সাথে মিলিয়ে অনুমোদন করে দেবে।", "Proof submitted! System will auto-verify against Gmail notifications shortly."),
+            : s("ক্রিপ্টো পেমেন্ট প্রমাণ জমা হয়েছে! সিস্টেম ৩০ মিনিটের মধ্যে জিমেইলের সাথে মিলিয়ে অনুমোদন করবে।", "Proof submitted! System will auto-verify within 30 minutes."),
         });
         setTransactionId("");
         setSenderAccount("");
@@ -247,6 +294,10 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
     } catch (e) {}
   };
 
+  const userDisplayPayments = isAdmin 
+    ? paymentsList 
+    : paymentsList.filter(p => !p.userId || p.userId === (user?.id || "usr_trader_guest") || p.userEmail === user?.email || (user?.role !== "admin" && p.userId === "usr_trader_guest"));
+
   return r.jsxs("div", {
     className: "max-w-6xl mx-auto space-y-7 pb-20 animate-fade-in px-2 sm:px-4 text-left text-slate-100",
     children: [
@@ -268,31 +319,49 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                     children: [
                       r.jsx("h1", {
                         className: "text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight",
-                        children: s("ক্রিপ্টো পেমেন্ট গেটওয়ে ও অটো-ভেরিফিকেশন ডেস্ক", "Crypto Payment Gateway & Auto-Verification"),
+                        children: isAdmin 
+                          ? s("ক্রিপ্টো গেটওয়ে ও জিমেইল অটোমেশন (Admin Management)", "Crypto Gateway & Gmail Automation")
+                          : s("My Transactions (আমার লেনদেন হিস্ট্রি)", "My Transactions"),
                       }),
                       r.jsx("span", {
                         className: "px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold uppercase",
-                        children: "⚡ Gmail Auto-Sync",
+                        children: "⚡ Live Sync",
                       }),
                     ],
                   }),
                   r.jsx("p", {
                     className: "text-xs text-slate-500 dark:text-slate-400 mt-0.5",
-                    children: s(
-                      "বাইনান্স পে (Binance Pay) ও বাইবিট (Bybit) এর মাধ্যমে সরাসরি USDT ট্রান্সফার ও রিয়েল-টাইম জিমেইল কনফার্মেশন",
-                      "Direct USDT Transfer via Binance Pay & Bybit with automated Gmail transaction verification"
-                    ),
+                    children: isAdmin
+                      ? s("বাইনান্স পে ও বাইবিট ক্রিপ্টো গেটওয়ে সেটিংস, জিমেইল ওয়েবহুক ডিটেকশন ও সমস্ত ইউজার ট্রান্সেকশন ম্যানেজমেন্ট।", "Manage Binance Pay & Bybit settings, Gmail webhooks, and review all user orders.")
+                      : s("আপনার বাইনান্স ও ক্রিপ্টো পেমেন্টের ইতিহাস এবং ভেরিফিকেশন স্ট্যাটাস।", "Audit trail and verification status of your Binance & Bybit crypto transactions."),
                   }),
                 ],
               }),
             ],
           }),
-          onBack &&
-            r.jsxs("button", {
-              onClick: onBack,
-              className: "px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer",
-              children: [s("← প্যাকেজ তালিকায় ফিরে যান", "← Back to Packages")],
-            }),
+          r.jsxs("div", {
+            className: "flex items-center gap-2",
+            children: [
+              !isAdmin && userView === "history" &&
+                r.jsxs("button", {
+                  onClick: () => setUserView("checkout"),
+                  className: "px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-2 transition-all shadow-md cursor-pointer",
+                  children: [r.jsx(iu("Plus"), { className: "w-4 h-4" }), s("+ নতুন পেমেন্ট / আপগ্রেড", "+ Make New Payment / Upgrade")],
+                }),
+              !isAdmin && userView === "checkout" &&
+                r.jsxs("button", {
+                  onClick: () => setUserView("history"),
+                  className: "px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer",
+                  children: [r.jsx(iu("Receipt"), { className: "w-4 h-4" }), s("← আমার ট্রান্সেকশনে ফিরে যান", "← Back to My Transactions")],
+                }),
+              onBack &&
+                r.jsxs("button", {
+                  onClick: onBack,
+                  className: "px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer",
+                  children: [s("← প্যাকেজ তালিকায় ফিরে যান", "← Back to Packages")],
+                }),
+            ],
+          }),
         ],
       }),
 
@@ -339,6 +408,41 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
         r.jsxs("div", {
           className: "space-y-6 animate-fade-in",
           children: [
+            // Active Pending Order Banner for Regular User in History Mode
+            (!isAdmin && userView === "history" && waitingPayment && waitingPayment.status === "PENDING") &&
+              r.jsxs("div", {
+                className: "p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3 text-xs animate-pulse",
+                children: [
+                  r.jsxs("div", {
+                    className: "flex items-center gap-2.5",
+                    children: [
+                      r.jsx(iu("Clock"), { className: "w-5 h-5 text-amber-400 shrink-0" }),
+                      r.jsxs("div", {
+                        children: [
+                          r.jsx("span", { className: "font-black text-amber-300 block", children: s("⏳ বাইনান্স পেমেন্ট অটো-ভেরিফিকেশন চলছে...", "⏳ Binance Auto-Verification in progress...") }),
+                          r.jsxs("p", { className: "text-[11px] text-slate-300 font-mono", children: [
+                            s("অর্ডার আইডি: ", "Order: "), waitingPayment.id, " • ",
+                            s("বাইনান্স আইডি: ", "Binance ID: "), waitingPayment.senderAccount
+                          ]}),
+                        ],
+                      }),
+                    ],
+                  }),
+                  r.jsxs("div", {
+                    className: "px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-300 font-mono font-bold text-xs shrink-0",
+                    children: [
+                      Math.floor(timeLeftSeconds / 60), ":", String(timeLeftSeconds % 60).padStart(2, "0"),
+                      r.jsx("span", { className: "text-[9px] block text-slate-400 font-sans", children: s("সময় বাকি", "time left") })
+                    ],
+                  }),
+                ],
+              }),
+
+            // Child 1: Checkout Form (Only for Admin or User in checkout mode)
+            (isAdmin || userView === "checkout") &&
+            r.jsxs("div", {
+              className: "space-y-6",
+              children: [
             // Selected Plan Indicator
             r.jsxs("div", {
               className: "p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm",
@@ -693,10 +797,170 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                     ],
                   }),
 
+                // 30-Minute Payment Window Banner
+                r.jsxs("div", {
+                  className: "p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-transparent border border-amber-500/30 flex items-center justify-between gap-3 text-xs",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center gap-3",
+                      children: [
+                        r.jsx("div", { className: "w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-lg shrink-0", children: "⏱️" }),
+                        r.jsxs("div", {
+                          children: [
+                            r.jsx("h5", { className: "font-black text-amber-400 text-sm", children: s("পেমেন্ট সম্পন্ন করার সময়সীমা: ৩০ মিনিট", "Payment Window: 30 Minutes") }),
+                            r.jsx("p", { className: "text-slate-300 text-[11px] mt-0.5", children: s("বাইনান্স অ্যাপে যান এবং ৩০ মিনিটের মধ্যে পেমেন্ট পাঠিয়ে আপনার প্রোফাইল নাম দিন। সাথে সাথে মেইল পড়ে সিস্টেম অ্যাক্টিভ করে দেবে।", "Complete transfer in Binance within 30 minutes. System matches your Profile Name via Gmail instantly.") }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    r.jsx("span", { className: "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shrink-0 font-mono tracking-wider", children: "30 MINS" }),
+                  ],
+                }),
+
+                // If user submitted an order and is waiting for Gmail auto-match:
+                waitingPayment &&
+                  r.jsxs("div", {
+                    className: `p-6 rounded-3xl border text-center space-y-4 animate-fade-in ${
+                      waitingPayment.status === "APPROVED"
+                        ? "bg-emerald-950/40 border-emerald-500/50"
+                        : "bg-slate-950 border-amber-500/40"
+                    }`,
+                    children: [
+                      waitingPayment.status === "APPROVED"
+                        ? r.jsxs("div", {
+                            className: "space-y-3",
+                            children: [
+                              r.jsx("div", { className: "w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center font-black text-2xl border border-emerald-500/40", children: "✓" }),
+                              r.jsx("h3", { className: "text-xl font-black text-white", children: s("⚡ অভিনন্দন! আপনার পেমেন্ট অনুমোদিত হয়েছে!", "⚡ Congratulations! Payment Auto-Approved!") }),
+                              r.jsx("p", { className: "text-xs text-slate-300 max-w-md mx-auto", children: s("বাইনান্স থেকে আপনার ইমেইল সফলভাবে ভেরিফাই করা হয়েছে। আপনার প্যাকেজ এখন সক্রিয়!", "Your Binance deposit email was verified. Your tier access is now active!") }),
+                              r.jsx("button", {
+                                type: "button",
+                                onClick: () => { setWaitingPayment(null); if (onBack) onBack(); },
+                                className: "px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition-all shadow-lg cursor-pointer",
+                                children: s("টার্মিনালে ফিরে যান →", "Back to Terminal →"),
+                              }),
+                            ],
+                          })
+                        : r.jsxs("div", {
+                            className: "space-y-4",
+                            children: [
+                              r.jsxs("div", {
+                                className: "flex items-center justify-center gap-2 text-amber-400 font-black text-xs uppercase tracking-wider",
+                                children: [
+                                  r.jsx("span", { className: "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" }),
+                                  s("বাইনান্স ডিপোজিট কনফার্মেশনের অপেক্ষায় (Waiting for Binance Email)...", "Waiting for Binance confirmation email..."),
+                                ],
+                              }),
+                              r.jsxs("div", {
+                                className: "p-4 rounded-2xl bg-slate-900 border border-amber-500/30 max-w-xs mx-auto text-center space-y-1",
+                                children: [
+                                  r.jsx("span", { className: "text-[10px] font-bold uppercase tracking-wider text-slate-400", children: s("সময় বাকি:", "Time Remaining:") }),
+                                  r.jsx("div", { className: "text-2xl font-black font-mono text-amber-400", children: `${Math.floor(timeLeftSeconds / 60).toString().padStart(2, "0")}:${(timeLeftSeconds % 60).toString().padStart(2, "0")}` }),
+                                  r.jsx("span", { className: "text-[10px] text-slate-500 block", children: s("প্রতি ৪ সেকেন্ডে জিমেইল চেক হচ্ছে", "Auto-checking Gmail every 4s") }),
+                                ],
+                              }),
+                              r.jsxs("div", {
+                                className: "p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono text-left max-w-sm mx-auto space-y-1.5 text-slate-300",
+                                children: [
+                                  r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-500", children: "প্যাকেজ:" }), r.jsx("span", { className: "text-white font-bold", children: waitingPayment.packageName })] }),
+                                  r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-500", children: "প্রদেয় ফি:" }), r.jsx("span", { className: "text-amber-400 font-bold", children: `${waitingPayment.amountUsd} USDT` })] }),
+                                  r.jsxs("div", { className: "flex justify-between", children: [r.jsx("span", { className: "text-slate-500", children: "প্রোফাইল নাম:" }), r.jsx("span", { className: "text-cyan-400 font-bold", children: waitingPayment.senderAccount })] }),
+                                ],
+                              }),
+                              r.jsxs("div", {
+                                className: "flex items-center justify-center gap-2 pt-1",
+                                children: [
+                                  r.jsx("button", {
+                                    type: "button",
+                                    onClick: () => refreshData(),
+                                    className: "px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold cursor-pointer",
+                                    children: s("🔄 এখনই চেক করুন", "🔄 Refresh Now"),
+                                  }),
+                                  r.jsx("button", {
+                                    type: "button",
+                                    onClick: () => setWaitingPayment(null),
+                                    className: "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white text-[11px] cursor-pointer",
+                                    children: s("তথ্য পরিবর্তন / নতুন অর্ডার", "Edit / New Order"),
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                    ],
+                  }),
+
+                // 5-Step Process Visual Stepper (The exact process outlined by the user)
+                r.jsxs("div", {
+                  className: "p-4 sm:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3",
+                  children: [
+                    r.jsxs("div", {
+                      className: "flex items-center justify-between",
+                      children: [
+                        r.jsxs("h4", {
+                          className: "text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-2",
+                          children: [
+                            r.jsx("span", { className: "text-sm", children: "⚡" }),
+                            s("সহজ ৫-ধাপের অটো-ভেরিফিকেশন প্রক্রিয়া:", "Simple 5-Step Auto-Verification Process:"),
+                          ],
+                        }),
+                        r.jsx("span", {
+                          className: "text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20",
+                          children: "100% Automated",
+                        }),
+                      ],
+                    }),
+                    r.jsxs("div", {
+                      className: "grid grid-cols-1 sm:grid-cols-5 gap-2 text-[11px]",
+                      children: [
+                        r.jsxs("div", {
+                          className: "p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-0.5",
+                          children: [
+                            r.jsx("span", { className: "text-[10px] font-mono font-bold text-amber-500 block", children: "ধাপ ১" }),
+                            r.jsx("p", { className: "font-bold text-slate-200 text-xs", children: s("প্যাকেজ পছন্দ", "Select Plan") }),
+                            r.jsx("p", { className: "text-[10px] text-slate-400", children: s("৩০ মিনিট সময়সীমা", "30-min window") }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-0.5",
+                          children: [
+                            r.jsx("span", { className: "text-[10px] font-mono font-bold text-amber-400 block", children: "ধাপ ২" }),
+                            r.jsx("p", { className: "font-bold text-amber-300 text-xs", children: s("বাইনান্স পে করুন", "Pay via Binance") }),
+                            r.jsx("p", { className: "text-[10px] text-slate-400 font-mono", children: "Pay ID: 336527372" }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-0.5",
+                          children: [
+                            r.jsx("span", { className: "text-[10px] font-mono font-bold text-cyan-400 block", children: "ধাপ ৩" }),
+                            r.jsx("p", { className: "font-bold text-cyan-300 text-xs", children: s("ইউজার আইডি দিন", "Enter User ID") }),
+                            r.jsx("p", { className: "text-[10px] text-slate-400", children: "যেমন: Hossain_2005" }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-0.5",
+                          children: [
+                            r.jsx("span", { className: "text-[10px] font-mono font-bold text-purple-400 block", children: "ধাপ ৪" }),
+                            r.jsx("p", { className: "font-bold text-purple-300 text-xs", children: s("জিমেইল রিড", "Gmail Auto-Read") }),
+                            r.jsx("p", { className: "text-[10px] text-slate-400", children: s("১ সেকেন্ডে সিগন্যাল", "Within 1 min") }),
+                          ],
+                        }),
+                        r.jsxs("div", {
+                          className: "p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 space-y-0.5",
+                          children: [
+                            r.jsx("span", { className: "text-[10px] font-mono font-bold text-emerald-400 block", children: "ধাপ ৫" }),
+                            r.jsx("p", { className: "font-bold text-emerald-300 text-xs", children: s("অটো-অ্যাপ্রুভ", "Auto-Approved") }),
+                            r.jsx("p", { className: "text-[10px] text-slate-400", children: s("টার্মিনাল আনলক", "Instant Access") }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+
                 // Dynamic Payment Submission Form (Strictly separated for Binance vs Bybit)
                 r.jsxs("form", {
                   onSubmit: handleSubmitProof,
-                  className: "pt-6 border-t border-slate-200 dark:border-slate-800 space-y-4",
+                  className: "pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4",
                   children: [
                     r.jsxs("div", {
                       className: "flex items-center justify-between pb-1",
@@ -722,7 +986,7 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                               ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
                               : "bg-orange-500/20 text-orange-300 border border-orange-500/30"
                           }`,
-                          children: activeMethod === "binance" ? "Binance Auto-Match" : "Bybit Auto-Match",
+                          children: activeMethod === "binance" ? "Binance User ID Match" : "Bybit Auto-Match",
                         }),
                       ],
                     }),
@@ -730,7 +994,7 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                     r.jsxs("div", {
                       className: "grid grid-cols-1 sm:grid-cols-2 gap-4",
                       children: [
-                        // Method-specific Sender input
+                        // Method-specific Profile Name input (PRIMARY KEY)
                         r.jsxs("div", {
                           className: "space-y-1.5",
                           children: [
@@ -738,23 +1002,31 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                               className: "block text-xs font-bold text-slate-600 dark:text-slate-300",
                               children:
                                 activeMethod === "binance"
-                                  ? s("আপনার প্রেরক বাইনান্স পে আইডি / ইউআইডি (ঐচ্ছিক):", "Your Sender Binance Pay ID / UID (Optional):")
-                                  : s("আপনার প্রেরক বাইবিট ইউআইডি (ঐচ্ছিক):", "Your Sender Bybit UID (Optional):"),
+                                  ? s("আপনার বাইনান্স ইউজার আইডি / প্রোফাইল নাম: *", "Your Binance User ID / Profile Name: *")
+                                  : s("আপনার বাইবিট ইউআইডি / প্রোফাইল নাম: *", "Your Bybit UID / Profile Name: *"),
                             }),
                             r.jsx("input", {
                               type: "text",
+                              required: true,
                               value: senderAccount,
                               onChange: (e) => setSenderAccount(e.target.value),
                               placeholder:
                                 activeMethod === "binance"
-                                  ? "যেমন: Pay ID 94810239 বা আপনার বাইনান্স আইডি"
-                                  : "যেমন: আপনার Bybit UID 184920381",
-                              className: "w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white outline-none focus:border-amber-500",
+                                  ? "যেমন: Hossain_2005 অথবা chartlogic/trade"
+                                  : "যেমন: 412658047 অথবা আপনার Bybit নাম",
+                              className: "w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white outline-none focus:border-amber-500",
+                            }),
+                            r.jsx("p", {
+                              className: "text-[10px] text-slate-400",
+                              children:
+                                activeMethod === "binance"
+                                  ? s("💡 বাইনান্স অ্যাপে আপনার Profile বা Nickname-এ যে নাম থাকে (যেমন: Hossain_2005 বা chartlogic/trade) সেটি লিখুন।", "💡 Enter your Binance User ID / Nickname shown in your Binance app profile.")
+                                  : s("💡 আপনার Bybit প্রোফাইলের UID বা নাম লিখুন।", "💡 Enter your Bybit UID or profile name."),
                             }),
                           ],
                         }),
 
-                        // Method-specific TxID input
+                        // Method-specific Secondary TxID input (OPTIONAL)
                         r.jsxs("div", {
                           className: "space-y-1.5",
                           children: [
@@ -764,34 +1036,37 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                                 r.jsx("span", {
                                   children:
                                     activeMethod === "binance"
-                                      ? s("বাইনান্স পে অর্ডার আইডি বা TxID: *", "Binance Pay Order ID / TxID: *")
-                                      : s("বাইবিট ট্রান্সফার আইডি বা TxID: *", "Bybit Transfer ID / TxID: *"),
+                                      ? s("বাইনান্স Pay ID / Order ID বা TxID (ঐচ্ছিক):", "Binance Pay ID / Order ID or TxID (Optional):")
+                                      : s("বাইবিট ট্রান্সফার TxID (ঐচ্ছিক):", "Bybit Transfer TxID (Optional):"),
                                 }),
                                 r.jsx("span", {
-                                  className: `text-[10px] font-mono ${activeMethod === "binance" ? "text-amber-400" : "text-orange-400"}`,
-                                  children: "Gmail Auto-Match Key",
+                                  className: "text-[10px] font-mono text-slate-400",
+                                  children: "Optional",
                                 }),
                               ],
                             }),
                             r.jsx("input", {
                               type: "text",
-                              required: true,
                               value: transactionId,
                               onChange: (e) => setTransactionId(e.target.value),
                               placeholder:
                                 activeMethod === "binance"
-                                  ? "যেমন: 29841029384 অথবা TXB89102934812"
-                                  : "যেমন: BYB9384810293 অথবা ট্রানজেকশন হ্যাশ",
+                                  ? "ঐচ্ছিক — জানা থাকলে দিন, না দিলেও সমস্যা নেই"
+                                  : "ঐচ্ছিক — ট্রান্সফার হ্যাশ বা আইডি",
                               className: `w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white outline-none ${
                                 activeMethod === "binance" ? "focus:border-amber-500" : "focus:border-orange-500"
                               }`,
+                            }),
+                            r.jsx("p", {
+                              className: "text-[10px] text-slate-400",
+                              children: s("খালি রাখলে আপনার প্রোফাইল নাম ও অ্যামাউন্ট দিয়ে অটো-ভেরিফাই হবে।", "Auto-verifies via profile name & amount if left blank."),
                             }),
                           ],
                         }),
                       ],
                     }),
 
-                    // Method-specific Guidance Tip
+                    // Guidance Tip
                     r.jsxs("div", {
                       className: `p-3 rounded-xl border text-[11px] flex items-center gap-2 ${
                         activeMethod === "binance"
@@ -804,12 +1079,12 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                           children:
                             activeMethod === "binance"
                               ? s(
-                                  "💡 Binance অ্যাপের Pay হিস্ট্রি থেকে আপনার প্রাপ্ত Order ID বা TxID দিন। এটি স্বয়ংক্রিয়ভাবে আমাদের জিমেইলের সাথে ম্যাচ হয়ে যাবে।",
-                                  "💡 Copy your Order ID or TxID from Binance Pay history. It matches instantly with our Gmail notification."
+                                  "💡 বাইনান্স পে দিয়ে পাঠালে আপনার বাইনান্স Profile নাম (যেমন: Hossain_2005) দিলেই চলবে! ৩০ মিনিটের মধ্যে ডিপোজিট মেইল আসলে সিস্টেম সাথে সাথে অটো-অ্যাপ্রুভ করে দেবে।",
+                                  "💡 For Binance Pay, simply enter your Profile Name (e.g. Hossain_2005). System auto-approves via Gmail within 30 minutes!"
                                 )
                               : s(
-                                  "💡 Bybit অ্যাপের Transfer / Withdrawal রেকর্ড থেকে ট্রান্সফার আইডি দিন। এটি স্বয়ংক্রিয়ভাবে আমাদের জিমেইলের সাথে ম্যাচ হয়ে যাবে।",
-                                  "💡 Copy your Transfer ID or TxID from Bybit transfer history. It matches instantly with our Gmail notification."
+                                  "💡 Bybit দিয়ে পাঠালে আপনার Bybit UID দিন। সিস্টেম স্বয়ংক্রিয়ভাবে জিমেইলের সাথে মিলিয়ে অনুমোদন করবে।",
+                                  "💡 For Bybit, enter your Bybit UID. Auto-approved instantly via Gmail."
                                 ),
                         }),
                       ],
@@ -858,7 +1133,11 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
               ],
             }),
 
-            // Recent Payments Table
+              ]
+            }),
+
+            // Child 2: Recent Payments Table (Only for Admin or User in history mode)
+            (isAdmin || userView === "history") &&
             r.jsxs("div", {
               className: "bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5",
               children: [
@@ -886,11 +1165,11 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                         }),
                       ],
                     }),
-                    r.jsxs("span", { className: "text-xs font-bold text-slate-400", children: [s("মোট: ", "Total: "), paymentsList.length] }),
+                    r.jsxs("span", { className: "text-xs font-bold text-slate-400", children: [s("মোট: ", "Total: "), userDisplayPayments.length] }),
                   ],
                 }),
 
-                paymentsList.length === 0
+                userDisplayPayments.length === 0
                   ? r.jsxs("div", {
                       className: "text-center py-8 text-slate-400 space-y-2",
                       children: [
@@ -919,7 +1198,7 @@ function PaymentGatewayPage({ page: t, section: e, portalType: n, preselectedPac
                           }),
                           r.jsx("tbody", {
                             className: "divide-y divide-slate-800 font-medium",
-                            children: paymentsList.map((item) =>
+                            children: userDisplayPayments.map((item) =>
                               r.jsxs(
                                 "tr",
                                 {
@@ -1222,6 +1501,10 @@ const OFFICIAL_SENDER_QUERY = [
 
 // ২. শুধুমাত্র ডিপোজিট ও ট্রান্সফার কনফার্মেশন বিষয়বস্তু (Eliminates trade/collateral noise)
 const OFFICIAL_SUBJECT_QUERY = [
+  'subject:"Payment Receive Successful"',
+  'subject:"Payment Receive"',
+  'subject:"Payment Received"',
+  'subject:"incoming transfer"',
   'subject:"Deposit Confirmed"',
   'subject:"Deposit Successful"',
   'subject:"You have received"',

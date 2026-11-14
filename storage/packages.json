@@ -64,7 +64,8 @@
     "isActive": true,
     "isTestingMode": false,
     "testingNotice": "",
-    "isPopular": true
+    "isPopular": true,
+    "priceMonthly": 29
   },
   {
     "id": "vip_pro",

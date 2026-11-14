@@ -12,8 +12,8 @@
   "webhookSecret": "forex_ai_crypto_verify_secret_2026",
   "autoVerificationEnabled": true,
   "syncIntervalSeconds": 60,
-  "lastSyncAt": "2026-10-31T08:47:22.197Z",
-  "totalAutoApprovedCount": 2,
+  "lastSyncAt": "2026-11-02T11:05:28.673Z",
+  "totalAutoApprovedCount": 4,
   "hideBep20": true,
   "hideEmailFromUsers": true
 }
